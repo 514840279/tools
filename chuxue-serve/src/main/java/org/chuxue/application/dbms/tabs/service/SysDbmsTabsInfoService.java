@@ -10,6 +10,7 @@ import org.chuxue.application.common.base.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,13 +28,13 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service("sysDbmsTabsInfoService")
 public class SysDbmsTabsInfoService extends BaseServiceImpl<SysDbmsTabsInfo> implements BaseService<SysDbmsTabsInfo> {
-
+	
 	//
-	private static final Logger logger = LoggerFactory.getLogger(SysDbmsTabsInfoService.class);
-
+	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsInfoService.class);
+	
 	@Autowired
-	private RestTemplate restTemplate;
-
+	private RestTemplate		restTemplate;
+	
 	/**
 	 * 方法名： findAllByTableUuid
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -44,13 +45,12 @@ public class SysDbmsTabsInfoService extends BaseServiceImpl<SysDbmsTabsInfo> imp
 	 * @throws
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Cacheable(cacheNames = "test", key = "targetClass + methodName +#p0")
 	public BaseResult<Page<SysDbmsTabsInfo>> findAllByTableUuid(Pagination<SysDbmsTabsInfo> vo) {
 		logger.info("微服务访问{}开始。", vo.getInfo().getJdbcUuid());
 		List<SysDbmsTabsInfo> list = findAll(vo.getInfo());
 		vo.setList(list);
-		ResponseEntity<BaseResult> result = restTemplate.postForEntity(
-				"http://" + vo.getInfo().getJdbcUuid() + "/data/sysDbmsTabsInfo/findAllByTableUuid", vo,
-				BaseResult.class);
+		ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + vo.getInfo().getJdbcUuid() + "/data/sysDbmsTabsInfo/findAllByTableUuid", vo, BaseResult.class);
 		if (result.getStatusCode().value() == 200) {
 			System.out.println(result.getBody());
 			return result.getBody();
@@ -58,7 +58,7 @@ public class SysDbmsTabsInfoService extends BaseServiceImpl<SysDbmsTabsInfo> imp
 			logger.error("微服务访问失败：{}异常。", vo.getInfo().getJdbcUuid());
 			return null;
 		}
-
+		
 	}
-
+	
 }

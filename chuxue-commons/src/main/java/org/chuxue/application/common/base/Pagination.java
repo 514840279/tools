@@ -1,5 +1,6 @@
 package org.chuxue.application.common.base;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,22 +19,26 @@ import org.springframework.data.domain.Sort.Order;
  * 时 间 ： 2018年3月1日 下午10:19:40
  * 版 本 ： V1.0
  */
-public class Pagination<T> {
+public class Pagination<T> implements Serializable {
 	
-	public Integer				pageNumber	= 10;
-	public Integer				pageSize	= 1;
+	/**
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	 */
+	private static final long	serialVersionUID	= 1L;
+	public Integer				pageNumber			= 10;
+	public Integer				pageSize			= 1;
 	public String				uuid;
 	public String				username;
 	List<T>						list;
 	List<SearchParameters>		searchList;
 	List<SortParameters>		sortList;
 	public T					info;
-	public Map<String, String>	map			= new HashMap<>();
+	public Map<String, String>	map					= new HashMap<>();
 	
 	/**
 	 * 方法名 ： getInfo
 	 * 功 能 ： 返回变量 info 的值
-	 * 
+	 *
 	 * @return: T
 	 */
 	public T getInfo() {
@@ -51,7 +56,7 @@ public class Pagination<T> {
 	/**
 	 * 方法名 ： getPageNumber
 	 * 功 能 ： 返回变量 pageNumber 的值
-	 * 
+	 *
 	 * @return: Integer
 	 */
 	public Integer getPageNumber() {
@@ -69,7 +74,7 @@ public class Pagination<T> {
 	/**
 	 * 方法名 ： getPageSize
 	 * 功 能 ： 返回变量 pageSize 的值
-	 * 
+	 *
 	 * @return: Integer
 	 */
 	public Integer getPageSize() {
@@ -87,7 +92,7 @@ public class Pagination<T> {
 	/**
 	 * 方法名 ： getUuid
 	 * 功 能 ： 返回变量 uuid 的值
-	 * 
+	 *
 	 * @return: String
 	 */
 	public String getUuid() {
@@ -105,7 +110,7 @@ public class Pagination<T> {
 	/**
 	 * 方法名 ： getList
 	 * 功 能 ： 返回变量 list 的值
-	 * 
+	 *
 	 * @return: List<T>
 	 */
 	public List<T> getList() {
@@ -123,7 +128,7 @@ public class Pagination<T> {
 	/**
 	 * 方法名 ： getUsername
 	 * 功 能 ： 返回变量 username 的值
-	 * 
+	 *
 	 * @return: String
 	 */
 	public String getUsername() {
@@ -153,7 +158,7 @@ public class Pagination<T> {
 	/**
 	 * 方法名 ： getSearchList
 	 * 功 能 ： 返回变量 searchList 的值
-	 * 
+	 *
 	 * @return: List<SearchParameters>
 	 */
 	public List<SearchParameters> getSearchList() {
@@ -171,7 +176,7 @@ public class Pagination<T> {
 	/**
 	 * 方法名 ： getSortList
 	 * 功 能 ： 返回变量 sortList 的值
-	 * 
+	 *
 	 * @return: List<SortParameters>
 	 */
 	public List<SortParameters> getSortList() {
