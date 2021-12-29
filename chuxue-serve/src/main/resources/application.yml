@@ -1,0 +1,15 @@
+server:
+  port: 8002
+  servlet:    context-path: /serve
+  
+
+spring:
+  application:    name: chuxue-serve
+  banner:    charset: utf-8
+  profiles:
+    active:
+    - nacos
+    - h2
+    - hikari
+    - redis
+
