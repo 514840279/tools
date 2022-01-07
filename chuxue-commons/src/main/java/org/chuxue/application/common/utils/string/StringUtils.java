@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -363,23 +365,28 @@ public class StringUtils {
 		if (isNullOrNone(str)) {
 			return "";
 		}
-		str.replaceAll("\"", "＂");
-		return str.replaceAll("\"", "＂");
+		return str.replace("\"", "＂");
 	}
 	
 	public static final String convertMoney(double money) {
 		java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
 		return df.format(money);
 	}
-	
+
 	public static final String getRandColorCode() {
 		String r = null;
 		String g = null;
 		String b = null;
-		Random random = new Random();
-		r = Integer.toHexString(random.nextInt(256)).toUpperCase();
-		g = Integer.toHexString(random.nextInt(256)).toUpperCase();
-		b = Integer.toHexString(random.nextInt(256)).toUpperCase();
+		Random random = null;
+		try {
+			random = SecureRandom.getInstanceStrong();
+			
+			r = Integer.toHexString(random.nextInt(256)).toUpperCase();
+			g = Integer.toHexString(random.nextInt(256)).toUpperCase();
+			b = Integer.toHexString(random.nextInt(256)).toUpperCase();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 		return r + g + b;
 	}
 	
@@ -568,7 +575,13 @@ public class StringUtils {
 	 * @return true: 字符串null或空文字, false: 字符串不是null也不是空文字
 	 */
 	public static boolean isEmpty(String str) {
-		return isNull(str) || trim(str).length() == 0;
+		if (!isNull(str)) {
+			str = trim(str);
+			if (str != null) {
+				return str.length() == 0;
+			}
+		}
+		return true;
 	}
 	
 	/**
@@ -681,6 +694,9 @@ public class StringUtils {
 	 * @return trim后的文字列
 	 */
 	public static String trim(String orgstr) {
+		if (orgstr == null || orgstr.isEmpty()) {
+			return null;
+		}
 		while (orgstr.startsWith(" ") || orgstr.startsWith("　")) {
 			orgstr = orgstr.substring(1);
 		}
@@ -702,7 +718,7 @@ public class StringUtils {
 	
 	/***
 	 * MD5加密 生成32位md5码
-	 * 
+	 *
 	 * @param 待加密字符串
 	 * @return 返回32位md5码
 	 */
@@ -731,7 +747,7 @@ public class StringUtils {
 	
 	/**
 	 * SHA加密 生成40位SHA码
-	 * 
+	 *
 	 * @param 待加密字符串
 	 * @return 返回40位SHA码
 	 */
@@ -934,20 +950,25 @@ public class StringUtils {
 		char[] str = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 		
 		StringBuffer pwd = new StringBuffer("");
-		Random r = new Random();
-		while (count < pwdLen) {
-			// 生成随机数，取绝对值，防止 生成负数，
-			i = Math.abs(r.nextInt(maxNum)); // 生成的数最大为36-1
-			if (i >= 0 && i < str.length) {
-				if (i % 2 == 0) {
-					pwd.append(Character.toUpperCase(str[i]));
-				} else {
-					pwd.append(str[i]);
+		Random rand = null;
+		try {
+			rand = SecureRandom.getInstanceStrong();
+			
+			while (count < pwdLen) {
+				// 生成随机数，取绝对值，防止 生成负数，
+				i = Math.abs(rand.nextInt(maxNum)); // 生成的数最大为36-1
+				if (i >= 0 && i < str.length) {
+					if (i % 2 == 0) {
+						pwd.append(Character.toUpperCase(str[i]));
+					} else {
+						pwd.append(str[i]);
+					}
+					count++;
 				}
-				count++;
 			}
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
-		
 		return pwd.toString();
 	}
 	
@@ -965,14 +986,20 @@ public class StringUtils {
 		char[] str = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 		
 		StringBuffer pwd = new StringBuffer("");
-		Random r = new Random();
-		while (count < numLen) {
-			// 生成随机数，取绝对值，防止 生成负数，
-			i = Math.abs(r.nextInt(maxNum)); // 生成的数最大为10-1
-			if (i >= 0 && i < str.length) {
-				pwd.append(str[i]);
-				count++;
+		Random rand = null;
+		try {
+			rand = SecureRandom.getInstanceStrong();
+			while (count < numLen) {
+				// 生成随机数，取绝对值，防止 生成负数，
+				i = Math.abs(rand.nextInt(maxNum)); // 生成的数最大为10-1
+				if (i >= 0 && i < str.length) {
+					pwd.append(str[i]);
+					count++;
+				}
 			}
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return pwd.toString();

@@ -16,7 +16,7 @@ public class StringToDate {
 	
 	public static Date getDate(String str) {
 		SimpleDateFormat sdf = null;
-		if (str == null && "".equals(str)) {
+		if (str == null || str.trim().isEmpty()) {
 			return null;
 		} else {
 			str = str.replace("暂无信息", "").trim();

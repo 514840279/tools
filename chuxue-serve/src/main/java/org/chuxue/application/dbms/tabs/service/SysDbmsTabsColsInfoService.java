@@ -31,21 +31,19 @@ import org.springframework.stereotype.Service;
  * V1.0
  */
 @Service("sysDbmsTabsColsInfoService")
-public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsInfo>
-		implements BaseService<SysDbmsTabsColsInfo> {
-	private static final Logger logger = LoggerFactory.getLogger(SysDbmsTabsColsInfoService.class);
+public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsInfo> implements BaseService<SysDbmsTabsColsInfo> {
+	private static final Logger		logger	= LoggerFactory.getLogger(SysDbmsTabsColsInfoService.class);
 	//
 	@Autowired
-	private SysDbmsTabsColsInfoDao sysDbmsTabsColsInfoDao;
+	private SysDbmsTabsColsInfoDao	sysDbmsTabsColsInfoDao;
 	@Autowired
-	private SysDbmsTabsInfoDao sysDbmsTabsInfoDao;
+	private SysDbmsTabsInfoDao		sysDbmsTabsInfoDao;
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	JdbcTemplate					jdbcTemplate;
 
 	// 分页查询
-	public Page<SysDbmsTabsColsInfo> findAllByTableUuid(int pageNumber, int pageSize, String searchText,
-			String tableUuid) {
+	public Page<SysDbmsTabsColsInfo> findAllByTableUuid(int pageNumber, int pageSize, String searchText, String tableUuid) {
 		logger.info(tableUuid, SysDbmsTabsColsInfoService.class);
 		// Page<SysDbmsTabsColsInfo> list =
 		// sysDbmsTabsColsInfoDao.findAllByTableUuid(tableUuid);
@@ -67,17 +65,18 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 	// 更新
 	public void change(SysDbmsTabsColsInfo info) {
 		try {
-			SysDbmsTabsInfo tab = sysDbmsTabsInfoDao.findById(info.getTabsUuid()).get();
-			Optional<SysDbmsTabsColsInfo> old = sysDbmsTabsColsInfoDao.findById(info.getUuid());
-			if (old != null && old.isPresent()) {
-				String sql = "alter table " + tab.getTabsName() + " CHANGE " + old.get().getColsName() + " "
-						+ info.getColsName() + " " + info.getColsType() + "(" + info.getColsLength() + ")";
-				jdbcTemplate.execute(sql);
-			} else {
+			Optional<SysDbmsTabsInfo> op = sysDbmsTabsInfoDao.findById(info.getTabsUuid());
+			if (op.isPresent()) {
+				SysDbmsTabsInfo tab = op.get();
+				Optional<SysDbmsTabsColsInfo> old = sysDbmsTabsColsInfoDao.findById(info.getUuid());
+				if (old.isPresent()) {
+					String sql = "alter table " + tab.getTabsName() + " CHANGE " + old.get().getColsName() + " " + info.getColsName() + " " + info.getColsType() + "(" + info.getColsLength() + ")";
+					jdbcTemplate.execute(sql);
+				} else {
 
-				String sql = "alter table " + tab.getTabsName() + " add " + info.getColsName() + " "
-						+ info.getColsType() + "(" + info.getColsLength() + ")";
-				jdbcTemplate.execute(sql);
+					String sql = "alter table " + tab.getTabsName() + " add " + info.getColsName() + " " + info.getColsType() + "(" + info.getColsLength() + ")";
+					jdbcTemplate.execute(sql);
+				}
 			}
 		} finally {
 			sysDbmsTabsColsInfoDao.save(info);
@@ -92,8 +91,7 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 			for (SysDbmsTabsColsInfo SysDbmsTabsColsInfo : list) {
 				try {
 					// alter table user DROP COLUMN new2;
-					String sql = "alter table " + tab.get().getTabsName() + " DROP COLUMN "
-							+ SysDbmsTabsColsInfo.getColsName();
+					String sql = "alter table " + tab.get().getTabsName() + " DROP COLUMN " + SysDbmsTabsColsInfo.getColsName();
 					jdbcTemplate.execute(sql);
 				} finally {
 					sysDbmsTabsColsInfoDao.delete(SysDbmsTabsColsInfo);

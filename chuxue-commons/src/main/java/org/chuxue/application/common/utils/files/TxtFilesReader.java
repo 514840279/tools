@@ -43,6 +43,13 @@ public class TxtFilesReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e1) {
+				}
+			}
 		}
 		try {
 			System.out.println("以字节为单位读取文件内容，一次读多个字节：");
@@ -89,6 +96,15 @@ public class TxtFilesReader {
 			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		try {
 			System.out.println("以字符为单位读取文件内容，一次读多个字节：");
@@ -126,7 +142,7 @@ public class TxtFilesReader {
 	
 	/**
 	 * 以行为单位读取文件，常用于读面向行的格式化文件
-	 * 
+	 *
 	 * @return
 	 */
 	public static List<String> readFileByLines(String fileName) {
@@ -137,9 +153,10 @@ public class TxtFilesReader {
 		File file = new File(fileName);
 		BufferedReader reader = null;
 		List<String> list = null;
+		InputStreamReader read = null;
 		try {
 			System.out.println("以行为单位读取文件内容，一次读一整行：");
-			InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
+			read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
 			reader = new BufferedReader(read);
 			String tempString = null;
 			// int line = 1;
@@ -155,6 +172,12 @@ public class TxtFilesReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
+			if (read != null) {
+				try {
+					read.close();
+				} catch (IOException e1) {
+				}
+			}
 			if (reader != null) {
 				try {
 					reader.close();
@@ -184,9 +207,10 @@ public class TxtFilesReader {
 		File file = new File(fileName);
 		BufferedReader reader = null;
 		String tempString = null;
+		InputStreamReader read = null;
 		try {
 			System.out.println("以行为单位读取文件内容，一次读一整行：");
-			InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
+			read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
 			reader = new BufferedReader(read);
 			tempString = reader.readLine();
 			
@@ -196,6 +220,12 @@ public class TxtFilesReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
+			if (read != null) {
+				try {
+					read.close();
+				} catch (IOException e1) {
+				}
+			}
 			if (reader != null) {
 				try {
 					reader.close();
@@ -213,7 +243,7 @@ public class TxtFilesReader {
 	 * 3：读取到输入流后，需要读取生成字节流
 	 * 4：一行一行的输出。readline()。
 	 * 备注：需要考虑的是异常情况
-	 * 
+	 *
 	 * @param filePath
 	 */
 	public static List<String> readTxtFile(String filePath) {
@@ -222,17 +252,20 @@ public class TxtFilesReader {
 	
 	public static List<String> readTxtFile(String filePath, String encoding) {
 		List<String> strList = new ArrayList<String>();
+		InputStreamReader read = null;
+		BufferedReader bufferedReader = null;
 		try {
 			File file = new File(filePath);
 			if (file.isFile() && file.exists()) { // 判断文件是否存在
-				InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
-				BufferedReader bufferedReader = new BufferedReader(read);
+				read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
+				bufferedReader = new BufferedReader(read);
 				String lineTxt = null;
 				strList = new ArrayList<String>();
 				while ((lineTxt = bufferedReader.readLine()) != null) {
 					// System.out.println(lineTxt);
 					strList.add(lineTxt);
 				}
+				bufferedReader.close();
 				read.close();
 			} else {
 				System.out.println("找不到指定的文件");
@@ -240,6 +273,22 @@ public class TxtFilesReader {
 		} catch (Exception e) {
 			System.out.println("读取文件内容出错");
 			e.printStackTrace();
+		} finally {
+			try {
+				if (read != null) {
+					read.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (bufferedReader != null) {
+					bufferedReader.close();
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return strList;
 		
@@ -303,23 +352,35 @@ public class TxtFilesReader {
 	public static String readToString(String fileName, String encoding) {
 		File file = new File(fileName.trim());
 		Long filelength = file.length();
-		byte[] filecontent = new byte[filelength.intValue()];
+		byte[] filecontent = new byte[filelength.intValue() > 1000 ? 1000 : filelength.intValue()];
+		FileInputStream in = null;
 		try {
-			FileInputStream in = new FileInputStream(file);
-			in.read(filecontent);
+			in = new FileInputStream(file);
+			StringBuffer sb = new StringBuffer();
+			while ((in.read(filecontent)) > 0) {
+				sb.append(new String(filecontent, encoding));
+			}
 			in.close();
+
+			return sb.toString();
+		} catch (UnsupportedEncodingException e) {
+			System.err.println("The OS does not support " + encoding);
+			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		try {
-			return new String(filecontent, encoding);
-		} catch (UnsupportedEncodingException e) {
-			System.err.println("The OS does not support " + encoding);
-			e.printStackTrace();
-			return null;
-		}
+		return null;
 	}
 	
 }

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 版 本 ： V1.0
  */
 public class JSONUtils<T> {
-	
+
 	/**
 	 * 将json转化为Map
 	 *
@@ -31,7 +31,7 @@ public class JSONUtils<T> {
 		Map<String, Object> mapTypes = JSON.parseObject(jsonString);
 		return mapTypes;
 	}
-	
+
 	/**
 	 * 将json转化为实体obj
 	 *
@@ -39,31 +39,19 @@ public class JSONUtils<T> {
 	 * @param obj
 	 * @return
 	 */
-	public static <T> Object stringToObj(String jsonStr, Class<T> obj) {
-		T t = null;
+	public static <T> T stringToObj(String jsonStr, Class<T> obj) {
+		if (jsonStr == null || jsonStr.isEmpty()) {
+			return null;
+		}
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			t = objectMapper.readValue(jsonStr, obj);
+			T t = objectMapper.readValue(jsonStr, obj);
+			return t;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return t;
-	}
-	
-	/**
-	 * 将json转化为实体obj
-	 *
-	 * @param jsonStr
-	 * @param obj
-	 * @return
-	 */
-	public static <T> void stringToObj(String jsonStr, T t, Class<T> obj) {
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			t = objectMapper.readValue(jsonStr, obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		return null;
+
 	}
 	
 	/**
@@ -77,10 +65,10 @@ public class JSONUtils<T> {
 		JSONObject jsonObj = new JSONObject(json);
 		return "<xml>" + XML.toString(jsonObj) + "</xml>";
 	}
-	
+
 	/**
 	 * xml to json
-	 * 
+	 *
 	 * @param xml
 	 * @return
 	 */

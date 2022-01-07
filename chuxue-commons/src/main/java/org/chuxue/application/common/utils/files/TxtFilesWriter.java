@@ -13,7 +13,7 @@ import java.io.IOException;
  * 版 本 ： V1.0
  */
 public class TxtFilesWriter {
-	
+
 	/**
 	 * 拼接写入
 	 * 方法名： appendWriteToFile
@@ -25,6 +25,7 @@ public class TxtFilesWriter {
 	 * @throws
 	 */
 	public static void appendWriteToFile(String data, String filepath) {
+		FileWriter fileWritter = null;
 		try {
 			String path = filepath.substring(0, filepath.lastIndexOf("\\") > 0 ? filepath.lastIndexOf("\\") : filepath.lastIndexOf("/") > 0 ? filepath.lastIndexOf("/") : filepath.length());
 			File dir = new File(path);
@@ -37,15 +38,24 @@ public class TxtFilesWriter {
 				file.createNewFile();
 			}
 			// true = append file
-			FileWriter fileWritter = new FileWriter(filepath, true);
+			fileWritter = new FileWriter(filepath, true);
 			fileWritter.write(data + "\r\n");
 			fileWritter.flush();
 			fileWritter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (fileWritter != null) {
+				try {
+					fileWritter.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
-	
+
 	/**
 	 * 重新写入文件
 	 * 方法名： writeToFile
@@ -57,6 +67,7 @@ public class TxtFilesWriter {
 	 * @throws
 	 */
 	public static void writeToFile(String data, String filepath) {
+		FileWriter fileWritter = null;
 		try {
 			String path = filepath.substring(0, filepath.lastIndexOf("\\") > 0 ? filepath.lastIndexOf("\\") : filepath.lastIndexOf("/") > 0 ? filepath.lastIndexOf("/") : filepath.length());
 			File dir = new File(path);
@@ -69,12 +80,21 @@ public class TxtFilesWriter {
 				file.createNewFile();
 			}
 			// true = append file
-			FileWriter fileWritter = new FileWriter(filepath);
+			fileWritter = new FileWriter(filepath);
 			fileWritter.write(data + "\r\n");
 			fileWritter.flush();
 			fileWritter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (fileWritter != null) {
+				try {
+					fileWritter.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsGenerateCodeInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
@@ -36,9 +37,9 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	private SysDbmsTabsColsInfoDao	sysDbmsTabsColsInfoDao;
 	@Autowired
 	private SysDbmsTabsInfoDao		sysDbmsTabsInfoDao;
-
+	
 	public String					OUTPUTFILE	= "outputfile";
-
+	
 	/**
 	 * @throws FileNotFoundException
 	 *             方法名 generate
@@ -63,120 +64,122 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 			colsInfo.setTabsUuid(sysDbmsGenerateCodeInfo.getUuid());
 			Example<SysDbmsTabsColsInfo> example = Example.of(colsInfo);
 			List<SysDbmsTabsColsInfo> colsInfos = sysDbmsTabsColsInfoDao.findAll(example);
-
+			
 			SysDbmsTabsInfo tabsInfo = new SysDbmsTabsInfo();
-			tabsInfo = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getUuid()).get();
-
-			// 实体类生成
-			if (sysDbmsGenerateCodeInfo.getGenerateEntity() == 1) {
-				file = new File(pathtempString + "/po");
-				if (!file.exists()) {
-					file.mkdirs();
+			Optional<SysDbmsTabsInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getUuid());
+			if (op.isPresent()) {
+				tabsInfo = op.get();
+				
+				// 实体类生成
+				if (sysDbmsGenerateCodeInfo.getGenerateEntity() == 1) {
+					file = new File(pathtempString + "/po");
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					GenerateEntity.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/po");
 				}
-				GenerateEntity.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/po");
-			}
-			// dao类生成
-			if (sysDbmsGenerateCodeInfo.getGenerateDao() == 1) {
-				file = new File(pathtempString + "/dao");
-				if (!file.exists()) {
-					file.mkdirs();
+				// dao类生成
+				if (sysDbmsGenerateCodeInfo.getGenerateDao() == 1) {
+					file = new File(pathtempString + "/dao");
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					getGenerateDao(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/dao");
 				}
-				getGenerateDao(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/dao");
-			}
-			// service类生成
-			if (sysDbmsGenerateCodeInfo.getGenerateService() == 1) {
-				file = new File(pathtempString + "/service");
-				if (!file.exists()) {
-					file.mkdirs();
+				// service类生成
+				if (sysDbmsGenerateCodeInfo.getGenerateService() == 1) {
+					file = new File(pathtempString + "/service");
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					getGenerateService(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/service");
 				}
-				getGenerateService(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/service");
-			}
-			// controller类生成
-			if (sysDbmsGenerateCodeInfo.getGenerateController() == 1) {
-				file = new File(pathtempString + "/controller");
-				if (!file.exists()) {
-					file.mkdirs();
+				// controller类生成
+				if (sysDbmsGenerateCodeInfo.getGenerateController() == 1) {
+					file = new File(pathtempString + "/controller");
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					getGenerateController(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/controller");
 				}
-				getGenerateController(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/controller");
-			}
-
-			String thirdString = "";
-			String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-			for (int i = 0; i < 3; i++) {
-				thirdString += subpathString[i] + ".";
-			}
-			// html类生成
-			if (sysDbmsGenerateCodeInfo.getGenerateHtml() == 1) {
-				// static 资源文件路径
-				pathtempString = path + "/src/main/resources/static/pages/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
-				file = new File(pathtempString);
-				if (!file.exists()) {
-					file.mkdirs();
+				
+				String thirdString = "";
+				String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
+				for (int i = 0; i < 3; i++) {
+					thirdString += subpathString[i] + ".";
 				}
 				// html类生成
-				GenerateHtml.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-				// js类生成
-				GenerateJs.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-			}
-
-			// detailhtml类生成
-			if (sysDbmsGenerateCodeInfo.getGenerateDetail() == 1) {
-				// templates 模板路径
-				pathtempString = path + "/src/main/resources/templates/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
-				file = new File(pathtempString);
-				if (!file.exists()) {
-					file.mkdirs();
+				if (sysDbmsGenerateCodeInfo.getGenerateHtml() == 1) {
+					// static 资源文件路径
+					pathtempString = path + "/src/main/resources/static/pages/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
+					file = new File(pathtempString);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					// html类生成
+					GenerateHtml.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					// js类生成
+					GenerateJs.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 				}
-				GenerateHtml.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-
-				// js类生成
-				// static 资源文件路径
-				pathtempString = path + "/src/main/resources/static/pages/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
-				file = new File(pathtempString);
-				if (!file.exists()) {
-					file.mkdirs();
+				
+				// detailhtml类生成
+				if (sysDbmsGenerateCodeInfo.getGenerateDetail() == 1) {
+					// templates 模板路径
+					pathtempString = path + "/src/main/resources/templates/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
+					file = new File(pathtempString);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					GenerateHtml.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					
+					// js类生成
+					// static 资源文件路径
+					pathtempString = path + "/src/main/resources/static/pages/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
+					file = new File(pathtempString);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					GenerateJs.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 				}
-				GenerateJs.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-			}
-
-			// Sql 语句
-			if (sysDbmsGenerateCodeInfo.getGenerateSql() == 1) {
-				// sql 脚本文件路径
-				pathtempString = path + "/src/main/resources/sql/";
-				file = new File(pathtempString);
-				if (!file.exists()) {
-					file.mkdirs();
+				
+				// Sql 语句
+				if (sysDbmsGenerateCodeInfo.getGenerateSql() == 1) {
+					// sql 脚本文件路径
+					pathtempString = path + "/src/main/resources/sql/";
+					file = new File(pathtempString);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					// Sql ddl 语句
+					GenerateSql.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					// Sql ddl 语句
+					GenerateSql.generateOracle(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					// Sql 管理员权限 语句
+					GenerateSql.generateConfig(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 				}
-				// Sql ddl 语句
-				GenerateSql.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-				// Sql ddl 语句
-				GenerateSql.generateOracle(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-				// Sql 管理员权限 语句
-				GenerateSql.generateConfig(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-			}
-
-			// 数据文当 接口文档 功能介绍
-			if (sysDbmsGenerateCodeInfo.getGenerateDoc() == 1) {
-				// sql 脚本文件路径
-				try {
-					pathtempString = path + "/数据结构.xlsx";
-					GenerateDoc.generateXlsx(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-					pathtempString = path + "/数据结构.xls";
-					GenerateDoc.generateXls(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-				} catch (IOException e) {
-					e.printStackTrace();
+				
+				// 数据文当 接口文档 功能介绍
+				if (sysDbmsGenerateCodeInfo.getGenerateDoc() == 1) {
+					// sql 脚本文件路径
+					try {
+						pathtempString = path + "/数据结构.xlsx";
+						GenerateDoc.generateXlsx(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+						pathtempString = path + "/数据结构.xls";
+						GenerateDoc.generateXls(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
-
 		// 打包文件
 		FileOutputStream fos1 = new FileOutputStream(new File(path + ".zip"));
 		CompressFile.toZip(path, fos1, true);
-
+		
 		// 清空 文件夹
 		FileDelete.delFolder(path);
 	}
-
+	
 	/**
 	 * 方法名 getGenerateController
 	 * 功能 生成controller
@@ -201,7 +204,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		stringBuilder.append("import " + thirdString + "common.base.BaseControllerImpl;\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".service." + sysDbmsGenerateCodeInfo.getClassName() + "Service;\r\n");
-
+		
 		stringBuilder.append("import org.slf4j.Logger;\r\n");
 		stringBuilder.append("import org.slf4j.LoggerFactory;\r\n");
 		stringBuilder.append("import org.springframework.beans.factory.annotation.Autowired;\r\n");
@@ -241,12 +244,12 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		stringBuilder.append("	}\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Controller.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-
+	
 	/**
 	 * 方法名 getGenerateService
 	 * 功能 service层代码生成
@@ -293,12 +296,12 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}\r\n");
 		stringBuilder.append("");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Service.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-
+	
 	/**
 	 * 方法名 getGenerateDao
 	 * 功能 dao层代码生成
@@ -337,11 +340,11 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		stringBuilder.append("	\r\n");
 		stringBuilder.append("}\r\n");
 		stringBuilder.append("");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Dao.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
-
+		
 	}
-
+	
 }
