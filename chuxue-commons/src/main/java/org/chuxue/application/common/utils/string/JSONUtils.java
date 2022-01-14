@@ -2,8 +2,11 @@ package org.chuxue.application.common.utils.string;
 
 import java.util.Map;
 
+import org.chuxue.application.common.base.BaseException;
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JSONUtils<T> {
 
+	private static final Logger logger = LoggerFactory.getLogger(JSONUtils.class);
+	
 	/**
 	 * 将json转化为Map
 	 *
@@ -31,7 +36,7 @@ public class JSONUtils<T> {
 		Map<String, Object> mapTypes = JSON.parseObject(jsonString);
 		return mapTypes;
 	}
-
+	
 	/**
 	 * 将json转化为实体obj
 	 *
@@ -48,12 +53,12 @@ public class JSONUtils<T> {
 			T t = objectMapper.readValue(jsonStr, obj);
 			return t;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("stringToObj:", e.getMessage());
+			throw new BaseException(-1, e.getMessage());
 		}
-		return null;
-
+		
 	}
-	
+
 	/**
 	 * json to xml
 	 *
@@ -65,7 +70,7 @@ public class JSONUtils<T> {
 		JSONObject jsonObj = new JSONObject(json);
 		return "<xml>" + XML.toString(jsonObj) + "</xml>";
 	}
-
+	
 	/**
 	 * xml to json
 	 *

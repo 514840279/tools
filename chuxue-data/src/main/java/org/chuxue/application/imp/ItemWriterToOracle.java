@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.chuxue.application.common.utils.dbutils.OracleConnUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
@@ -23,16 +25,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 
-	public String	tableName	= "qy法人单位1";
-	public long		size		= 0;
-	public String	idName		= "id";
-
+	private static final Logger	logger		= LoggerFactory.getLogger(ItemWriterToOracle.class);
+	
+	private String				tableName	= "qy法人单位1";
+	private long				size		= 0;
+	private String				idName		= "id";
+	
 	@Override
 	public void write(List<? extends Map<String, Object>> items) throws Exception {
-
+		
 //		JdbcBatchItemWriter<Map<String, Object>> writer = new JdbcBatchItemWriter<>();
 //		DataSource dataSource = DataSourceBuilder.create().driverClassName("com.mysql.cj.jdbc.Driver").url("jdbc:mysql:///application?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false").username("root").password("514840279@qq.com").build();
-
+	
 //		writer.setDataSource(dataSource);
 		Connection conn = null;
 		Statement statement = null;
@@ -43,7 +47,7 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 			//
 			Iterator<? extends Map<String, Object>> map = items.iterator();
 			while (map.hasNext()) {
-
+				
 				StringBuilder stringBuilder = new StringBuilder();
 				Map<String, Object> row = map.next();
 				Set<String> set = row.keySet();
@@ -106,7 +110,7 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 						}
 						stringBuilder.append("')");
 						statement.execute(stringBuilder.toString());
-
+						
 						// 更新语句
 						columns = set.iterator();
 						StringBuilder updateBuilder = null;
@@ -128,23 +132,23 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 										if (ex.getErrorCode() == 1704) {
 											/* 修改原字段名name为name_tmp */
 											statement.execute("alter table " + tableName + " rename column " + columnName + " to name_tmp");
-
+											
 											/* 增加一个和原字段名同名的字段name */
 											statement.execute("alter table " + tableName + " add " + columnName + " clob");
-
+											
 											/* 方式二: */
 											statement.execute("update " + tableName + " set " + columnName + " =trim(name_tmp)");
-
+											
 											/* 更新完，删除原字段name_tmp */
 											statement.execute("alter table " + tableName + "  drop column name_tmp");
-
+											
 											statement.execute(updateBuilder.toString());
 										}
 									}
 								}
 							}
 						}
-
+						
 					} else
 					// 表创建
 					if (e.getErrorCode() == 942) {
@@ -158,19 +162,19 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 							}
 						}
 						createStringBuilder.append(")");
-						System.out.println(createStringBuilder.toString());
+						logger.info(createStringBuilder.toString());
 						statement.execute(createStringBuilder.toString());
 						statement.execute(stringBuilder.toString());
 					} else {
-						e.printStackTrace();
+						logger.error(e.getMessage());
 					}
-
+					
 				} catch (Exception e2) {
-					e2.printStackTrace();
+					logger.error(e2.getMessage());
 				}
 			}
 			size += items.size();
-			System.out.println(size);
+			logger.info("数量:{}", size);
 			OracleConnUtils.close(conn);
 		} finally {
 			if (statement != null) {
@@ -181,5 +185,5 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 			}
 		}
 	}
-
+	
 }

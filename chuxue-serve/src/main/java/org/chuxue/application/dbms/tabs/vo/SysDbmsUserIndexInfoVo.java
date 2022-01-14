@@ -14,5 +14,10 @@ import org.chuxue.application.common.base.Pagination;
  * 版 本 ： V1.0
  */
 public class SysDbmsUserIndexInfoVo extends Pagination<SysDbmsUserIndexInfo> {
-
+	
+	/**
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	 */
+	private static final long serialVersionUID = 1L;
+	
 }

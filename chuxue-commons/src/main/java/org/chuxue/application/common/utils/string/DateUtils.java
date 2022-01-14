@@ -7,21 +7,26 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.chuxue.application.common.base.BaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 日期相关的共通方法的提供类。
  */
 public final class DateUtils {
 
+	private static final Logger	logger					= LoggerFactory.getLogger(DateUtils.class);
+	
 	/**
 	 * 日期格式：yyyy-MM-dd
 	 */
-	public static String		YYYYMMDD				= "yyyy-MM-dd";
+	public static final String	YYYYMMDD				= "yyyy-MM-dd";
 	/**
 	 * 日期格式：yyyy-MM-dd HH:mm
 	 */
-	public static String		YYYYMMDDHHmm			= "yyyy-MM-dd HH:mm";
-
+	public static final String	YYYYMMDDHHmm			= "yyyy-MM-dd HH:mm";
+	
 	/**
 	 * 仅显示年月日，例如 2015-08-11.
 	 */
@@ -30,63 +35,63 @@ public final class DateUtils {
 	 * 显示年月日时分秒，例如 2015-08-11 09:51:53.
 	 */
 	public static final String	DATETIME_FORMAT			= "yyyy-MM-dd HH:mm:ss";
-
+	
 	/**
 	 * 仅显示时分秒，例如 09:51:53.
 	 */
 	public static final String	TIME_FORMAT				= "HH:mm:ss";
-
+	
 	/**
 	 * 每天的毫秒数 8640000.
 	 */
 	public static final long	MILLISECONDS_PER_DAY	= 86400000L;
-
+	
 	/**
 	 * 每周的天数.
 	 */
 	public static final long	DAYS_PER_WEEK			= 7L;
-
+	
 	/**
 	 * 每小时毫秒数.
 	 */
 	public static final long	MILLISECONDS_PER_HOUR	= 3600000L;
-
+	
 	/**
 	 * 每分钟秒数.
 	 */
 	public static final long	SECONDS_PER_MINUTE		= 60L;
-
+	
 	/**
 	 * 每小时秒数.
 	 */
 	public static final long	SECONDS_PER_HOUR		= 3600L;
-
+	
 	/**
 	 * 每天秒数.
 	 */
 	public static final long	SECONDS_PER_DAY			= 86400L;
-
+	
 	/**
 	 * 每个月秒数，默认每月30天.
 	 */
 	public static final long	SECONDS_PER_MONTH		= 2592000L;
-
+	
 	/**
 	 * 每年秒数，默认每年365天.
 	 */
 	public static final long	SECONDS_PER_YEAR		= 31536000L;
-
+	
 	/**
 	 * 常用的时间格式.
 	 */
 	private static String[]		parsePatterns			= { "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm" };
-
+	
 	/**
 	 * 构造函数。
 	 */
 	private DateUtils() {
 	}
-
+	
 	/**
 	 * 取得AP系统时间。
 	 *
@@ -95,7 +100,7 @@ public final class DateUtils {
 	public static Date getSystemDate() {
 		return new Date();
 	}
-
+	
 	/**
 	 * 取得AP系统时间，不包括时分秒。
 	 *
@@ -106,7 +111,7 @@ public final class DateUtils {
 		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
 		return DateUtils.convertString2Date(DateUtils.convertDate2String(calendar.getTime(), "yyyyMMdd"), "yyyyMMdd");
 	}
-
+	
 	/**
 	 * 取得AP系统时间，不包括时分秒。
 	 *
@@ -115,10 +120,10 @@ public final class DateUtils {
 	public static String getStringDate() {
 		Calendar calendar = getSystemCalendar();
 		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
-
+		
 		return DateUtils.convertDate2String(calendar.getTime(), "yyyyMMdd");
 	}
-
+	
 	/**
 	 * 取得AP系统时间。
 	 *
@@ -127,7 +132,7 @@ public final class DateUtils {
 	public static Date getDateTime() {
 		return getSystemDate();
 	}
-
+	
 	/**
 	 * 取得AP系统时间。
 	 *
@@ -136,7 +141,7 @@ public final class DateUtils {
 	public static Calendar getSystemCalendar() {
 		return Calendar.getInstance();
 	}
-
+	
 	/**
 	 * 系统日期的年月日时分秒毫秒的文字列，取得方法。
 	 *
@@ -146,7 +151,7 @@ public final class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		return sdf.format(getSystemDate());
 	}
-
+	
 	/**
 	 * 参数的字符串使用指定的格式转换日期型的方法。
 	 *
@@ -165,11 +170,11 @@ public final class DateUtils {
 		try {
 			calendar.setTime(sdf.parse(str.trim()));
 		} catch (ParseException ex) {
-			throw new RuntimeException(ex);
+			throw new BaseException(-1, ex.getMessage());
 		}
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期型使用指定的格式转换字符串的方法。
 	 *
@@ -186,7 +191,7 @@ public final class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		return sdf.format(date);
 	}
-
+	
 	/**
 	 * 取得参数日期的年
 	 *
@@ -202,7 +207,7 @@ public final class DateUtils {
 		calendar.setTime(date);
 		return calendar.get(Calendar.YEAR);
 	}
-
+	
 	/**
 	 * 取得参数日期的月
 	 *
@@ -218,7 +223,7 @@ public final class DateUtils {
 		calendar.setTime(date);
 		return calendar.get(Calendar.MONTH) + 1;
 	}
-
+	
 	/**
 	 * 取得参数日期的日
 	 *
@@ -233,9 +238,9 @@ public final class DateUtils {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.DATE);
-
+		
 	}
-
+	
 	/**
 	 * 取得参数日期的时
 	 *
@@ -251,7 +256,7 @@ public final class DateUtils {
 		calendar.setTime(date);
 		return calendar.get(Calendar.HOUR_OF_DAY);
 	}
-
+	
 	/**
 	 * 取得参数日期的分
 	 *
@@ -267,7 +272,7 @@ public final class DateUtils {
 		calendar.setTime(date);
 		return calendar.get(Calendar.MINUTE);
 	}
-
+	
 	/**
 	 * 取得参数日期的秒
 	 *
@@ -283,7 +288,7 @@ public final class DateUtils {
 		calendar.setTime(date);
 		return calendar.get(Calendar.SECOND);
 	}
-
+	
 	/**
 	 * 参数的日期被指定的年加算的方法。
 	 *
@@ -302,7 +307,7 @@ public final class DateUtils {
 		calendar.add(Calendar.YEAR, year);
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期被指定的月加算的方法。
 	 *
@@ -321,7 +326,7 @@ public final class DateUtils {
 		calendar.add(Calendar.MONTH, month);
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期被指定的日加算的方法。
 	 *
@@ -340,7 +345,7 @@ public final class DateUtils {
 		calendar.add(Calendar.DATE, day);
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期被指定的时加算的方法。
 	 *
@@ -359,7 +364,7 @@ public final class DateUtils {
 		calendar.add(Calendar.HOUR_OF_DAY, hour);
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期被指定的分加算的方法。
 	 *
@@ -378,7 +383,7 @@ public final class DateUtils {
 		calendar.add(Calendar.MINUTE, min);
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期被指定的秒加算的方法。
 	 *
@@ -397,7 +402,7 @@ public final class DateUtils {
 		calendar.add(Calendar.SECOND, second);
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期取得当月的首日
 	 *
@@ -414,7 +419,7 @@ public final class DateUtils {
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 参数的日期取得当月的末日
 	 *
@@ -430,10 +435,10 @@ public final class DateUtils {
 		calendar.setTime(date);
 		calendar.set(Calendar.DATE, 1);
 		calendar.roll(Calendar.DATE, -1);
-
+		
 		return calendar.getTime();
 	}
-
+	
 	/**
 	 * 字符串是否是正确日期格式的判定
 	 *
@@ -456,7 +461,7 @@ public final class DateUtils {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * 获取前后时间的日差的方法。
 	 *
@@ -469,7 +474,7 @@ public final class DateUtils {
 	public static int dateDiff(Date stateDate, Date endDate) {
 		return (int) ((endDate.getTime() - stateDate.getTime()) / (1000 * 60 * 60 * 24));
 	}
-
+	
 	/**
 	 * 判断是否是闰年的方法。
 	 *
@@ -484,7 +489,7 @@ public final class DateUtils {
 			return false;
 		}
 	}
-
+	
 	/**
 	 * 从日期FROM到日期TO的天数
 	 *
@@ -496,11 +501,11 @@ public final class DateUtils {
 	 * @return int 天数
 	 */
 	public static int getDaysIn2Day(String dateStrFrom, String dateStrTo) {
-
+		
 		if (StringUtils.isEmpty(dateStrFrom) || StringUtils.isEmpty(dateStrTo)) {
 			return 0;
 		}
-
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar fromCalendar = Calendar.getInstance();
 		Calendar toCalendar = Calendar.getInstance();
@@ -511,10 +516,10 @@ public final class DateUtils {
 			throw new RuntimeException(ex);
 		}
 		long day = (toCalendar.getTime().getTime() - fromCalendar.getTime().getTime()) / (24 * 60 * 60 * 1000);
-
+		
 		return ConvUtils.convToInt(day);
 	}
-
+	
 	/**
 	 * 比较两个日期大小
 	 *
@@ -531,7 +536,7 @@ public final class DateUtils {
 			return 0;
 		}
 	}
-
+	
 	public static Date formatStr2Date(String dateStr, String pattern) {
 		if (StringUtils.isEmpty(dateStr)) {
 			return null;
@@ -544,12 +549,12 @@ public final class DateUtils {
 		try {
 			retDate = sdf.parse(dateStr);
 		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
+			logger.error("formatStr2Date:", e.getMessage());
+			throw new BaseException(-1, e.getMessage());
 		}
 		return retDate;
 	}
-
+	
 	/**
 	 * 得到当前日期字符串.
 	 *
@@ -559,7 +564,7 @@ public final class DateUtils {
 	public static String getDateStr() {
 		return getDate(DateUtils.DATE_FORMAT);
 	}
-
+	
 	/**
 	 * 得到当前时间字符串.
 	 *
@@ -569,7 +574,7 @@ public final class DateUtils {
 	public static String getTime() {
 		return formatDate(new Date(), DateUtils.TIME_FORMAT);
 	}
-
+	
 	/**
 	 * 得到当前日期和时间字符串.
 	 *
@@ -579,7 +584,7 @@ public final class DateUtils {
 	public static String getDateTimeStr() {
 		return formatDate(new Date(), DateUtils.DATETIME_FORMAT);
 	}
-
+	
 	/**
 	 * 获取当前时间指定格式下的字符串.
 	 *
@@ -591,7 +596,7 @@ public final class DateUtils {
 	public static String getDate(String pattern) {
 		return DateFormatUtils.format(new Date(), pattern);
 	}
-
+	
 	/**
 	 * 获取指定日期的字符串格式.
 	 *
@@ -605,7 +610,7 @@ public final class DateUtils {
 	public static String getDate(Date date, String pattern) {
 		return DateFormatUtils.format(date, pattern);
 	}
-
+	
 	/**
 	 * 获取日期时间字符串，默认格式为（yyyy-MM-dd）.
 	 *
@@ -625,7 +630,7 @@ public final class DateUtils {
 		}
 		return formatDate;
 	}
-
+	
 	/**
 	 * 获取当前年份字符串.
 	 *
@@ -635,7 +640,7 @@ public final class DateUtils {
 	public static String getYear() {
 		return formatDate(new Date(), "yyyy");
 	}
-
+	
 	/**
 	 * 获取当前月份字符串.
 	 *
@@ -645,7 +650,7 @@ public final class DateUtils {
 	public static String getMonth() {
 		return formatDate(new Date(), "MM");
 	}
-
+	
 	/**
 	 * 获取当前天数字符串.
 	 *
@@ -655,7 +660,7 @@ public final class DateUtils {
 	public static String getDay() {
 		return formatDate(new Date(), "dd");
 	}
-
+	
 	/**
 	 * 获取当前星期字符串.
 	 *
@@ -665,7 +670,7 @@ public final class DateUtils {
 	public static String getWeek() {
 		return formatDate(new Date(), "E");
 	}
-
+	
 	/**
 	 * 将日期型字符串转换为日期格式.
 	 * 支持的日期字符串格式包括"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm",
@@ -685,7 +690,7 @@ public final class DateUtils {
 			return null;
 		}
 	}
-
+	
 	/**
 	 * 获取当前日期与指定日期相隔的天数.
 	 *
@@ -705,7 +710,7 @@ public final class DateUtils {
 		}
 		return t;
 	}
-
+	
 	/**
 	 * 获取当前日期指定天数之后的日期.
 	 *
@@ -719,7 +724,7 @@ public final class DateUtils {
 		curr.set(Calendar.DAY_OF_MONTH, curr.get(Calendar.DAY_OF_MONTH) + num);
 		return curr.getTime();
 	}
-
+	
 	/**
 	 * 获取当前日期指定月数之后的日期.
 	 *
@@ -733,7 +738,7 @@ public final class DateUtils {
 		curr.set(Calendar.MONTH, curr.get(Calendar.MONTH) + num);
 		return curr.getTime();
 	}
-
+	
 	/**
 	 * 获取当前日期指定年数之后的日期.
 	 *
@@ -747,7 +752,7 @@ public final class DateUtils {
 		curr.set(Calendar.YEAR, curr.get(Calendar.YEAR) + num);
 		return curr.getTime();
 	}
-
+	
 	/**
 	 * 将 Date 日期转化为 Calendar 类型日期.
 	 *
@@ -765,7 +770,7 @@ public final class DateUtils {
 		}
 		return calendar;
 	}
-
+	
 	/**
 	 * 计算两个日期之间相差天数.
 	 *
@@ -781,14 +786,14 @@ public final class DateUtils {
 		start = DateUtils.parseDate(DateUtils.formatDate(start, DateUtils.DATE_FORMAT));
 		// 当前日期转换为yyyy-MM-dd格式
 		end = DateUtils.parseDate(DateUtils.formatDate(end, DateUtils.DATE_FORMAT));
-
+		
 		long diff = 0;
 		if (start != null && end != null) {
 			diff = (end.getTime() - start.getTime()) / DateUtils.MILLISECONDS_PER_DAY;
 		}
 		return diff;
 	}
-
+	
 	/**
 	 * 计算两个日期之前相隔多少周.
 	 *
@@ -802,7 +807,7 @@ public final class DateUtils {
 	public static long getWeeksBetween(Date start, Date end) {
 		return getDaysBetween(start, end) / DateUtils.DAYS_PER_WEEK;
 	}
-
+	
 	/**
 	 * 获取与指定日期间隔给定天数的日期.
 	 *
@@ -824,7 +829,7 @@ public final class DateUtils {
 		String dayAfter = formatDate(c.getTime(), DateUtils.DATE_FORMAT);
 		return dayAfter;
 	}
-
+	
 	/**
 	 * 计算两个日期之前间隔的小时数.
 	 *
@@ -844,7 +849,7 @@ public final class DateUtils {
 		double result = r * 1.0 / DateUtils.MILLISECONDS_PER_HOUR;
 		return df.format(result);
 	}
-
+	
 	/**
 	 * 获取当前季度 .
 	 *
@@ -866,7 +871,7 @@ public final class DateUtils {
 		}
 		return season;
 	}
-
+	
 	/**
 	 * 将以秒为单位的时间转换为其他单位.
 	 *
@@ -892,7 +897,7 @@ public final class DateUtils {
 		}
 		return buffer.toString();
 	}
-
+	
 	/**
 	 * getNowTimeBefore(记录时间相当于目前多久之前)
 	 *
@@ -921,7 +926,7 @@ public final class DateUtils {
 		}
 		return buffer.toString();
 	}
-
+	
 	/**
 	 * getMonthsBetween(查询两个日期相隔的月份)
 	 *
@@ -940,7 +945,7 @@ public final class DateUtils {
 		int month = c2.get(Calendar.MONTH) - c1.get(Calendar.MONTH);
 		return Math.abs(year * 12 + month);
 	}
-
+	
 	/**
 	 * getDayOfWeek(获取当前日期是星期几)
 	 *
@@ -956,7 +961,7 @@ public final class DateUtils {
 		int num = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		return weekOfDays[num];
 	}
-
+	
 	/**
 	 * sns 格式 如几秒前，几分钟前，几小时前，几天前，几个月前，几年后， ... 精细，类如某个明星几秒钟之前发表了一篇微博
 	 *
@@ -982,7 +987,7 @@ public final class DateUtils {
 		}
 		return dateStr;
 	}
-
+	
 	/**
 	 * 得到UTC时间，类型为字符串，格式为"yyyy-MM-dd HH:mm"
 	 * 如果获取失败，返回null
@@ -1011,8 +1016,8 @@ public final class DateUtils {
 			sdf.parse(UTCTimeBuffer.toString());
 			return UTCTimeBuffer.toString();
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.error("getUTCTimeStr:", e.getMessage());
+			throw new BaseException(-1, e.getMessage());
 		}
-		return null;
 	}
 }

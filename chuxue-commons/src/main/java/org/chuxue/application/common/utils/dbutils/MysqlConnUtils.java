@@ -6,10 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Administrator
  */
 public class MysqlConnUtils {
+	private static final Logger	logger		= LoggerFactory.getLogger(MysqlConnUtils.class);
 	
 	// jdbc:oracle:thin
 	private static final String	URL			= "jdbc:mysql:///application?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false";
@@ -23,7 +27,7 @@ public class MysqlConnUtils {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.error("驱动错误:{}", e.getMessage());
 		}
 	}
 	
@@ -31,7 +35,7 @@ public class MysqlConnUtils {
 		try {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 		return null;
 	}
@@ -40,7 +44,7 @@ public class MysqlConnUtils {
 		try {
 			return DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 		return null;
 	}
@@ -51,7 +55,7 @@ public class MysqlConnUtils {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 	}
 	
@@ -61,7 +65,7 @@ public class MysqlConnUtils {
 				state.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 	}
 	
@@ -71,7 +75,7 @@ public class MysqlConnUtils {
 				rs.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 	}
 }

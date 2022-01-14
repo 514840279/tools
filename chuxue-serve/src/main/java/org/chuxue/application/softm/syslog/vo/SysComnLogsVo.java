@@ -14,10 +14,14 @@ import org.chuxue.application.common.base.Pagination;
  * 版 本 ： V1.0
  */
 public class SysComnLogsVo extends Pagination<SysComnLogs> {
-	
-	String	strartCreateTime;
-	String	endCreateTime;
-	
+
+	/**
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	 */
+	private static final long	serialVersionUID	= 1572042184702456009L;
+	private String				strartCreateTime;
+	private String				endCreateTime;
+
 	/**
 	 * 方法名 ： getStrartCreateTime <br />
 	 * 功 能 ： 返回变量 strartCreateTime 的值 <br />
@@ -27,7 +31,7 @@ public class SysComnLogsVo extends Pagination<SysComnLogs> {
 	public String getStrartCreateTime() {
 		return strartCreateTime;
 	}
-	
+
 	/**
 	 * 方法名 ： setStrartCreateTime <br />
 	 * 功 能 ： 设置变量 strartCreateTime 的值
@@ -35,7 +39,7 @@ public class SysComnLogsVo extends Pagination<SysComnLogs> {
 	public void setStrartCreateTime(String strartCreateTime) {
 		this.strartCreateTime = strartCreateTime;
 	}
-	
+
 	/**
 	 * 方法名 ： getEndCreateTime <br />
 	 * 功 能 ： 返回变量 endCreateTime 的值 <br />
@@ -45,7 +49,7 @@ public class SysComnLogsVo extends Pagination<SysComnLogs> {
 	public String getEndCreateTime() {
 		return endCreateTime;
 	}
-	
+
 	/**
 	 * 方法名 ： setEndCreateTime <br />
 	 * 功 能 ： 设置变量 endCreateTime 的值
@@ -53,7 +57,7 @@ public class SysComnLogsVo extends Pagination<SysComnLogs> {
 	public void setEndCreateTime(String endCreateTime) {
 		this.endCreateTime = endCreateTime;
 	}
-
+	
 	/**
 	 * 方法名 ： toString
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -61,10 +65,10 @@ public class SysComnLogsVo extends Pagination<SysComnLogs> {
 	 * 参 考 ： @see java.lang.Object#toString()
 	 * 作 者 ： wth
 	 */
-	
+
 	@Override
 	public String toString() {
 		return "SysComnLogsVo [strartCreateTime=" + strartCreateTime + ", endCreateTime=" + endCreateTime + "]";
 	}
-
+	
 }

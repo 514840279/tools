@@ -2,6 +2,10 @@ package org.chuxue.application.common.utils.files;
 
 import java.io.File;
 
+import org.chuxue.application.common.base.BaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @文件名 FileDelete.java
  * @包名 org.danyuan.application.common.utils.files
@@ -11,6 +15,9 @@ import java.io.File;
  * @版本 V1.0
  */
 public class FileDelete {
+	
+	private static final Logger logger = LoggerFactory.getLogger(FileDelete.class);
+
 	/***
 	 * 删除指定文件夹下所有文件
 	 *
@@ -36,7 +43,9 @@ public class FileDelete {
 				temp = new File(path + File.separator + element);
 			}
 			if (temp.isFile()) {
-				temp.delete();
+				if (!temp.delete()) {
+					throw new BaseException(-1, "文件沒有刪除掉,.");
+				}
 			}
 			if (temp.isDirectory()) {
 				delAllFile(path + "/" + element);// 先删除文件夹里面的文件
@@ -57,10 +66,12 @@ public class FileDelete {
 			delAllFile(folderPath); // 删除完里面所有内容
 			String filePath = folderPath;
 			filePath = filePath.toString();
-			java.io.File myFilePath = new java.io.File(filePath);
-			myFilePath.delete(); // 删除空文件夹
+			File myFilePath = new File(filePath);
+			if (!myFilePath.delete()) {
+				throw new BaseException(-1, "文件沒有刪除掉,.");
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("删除文件时出错:{}", e.getMessage());
 		}
 	}
 }

@@ -16,7 +16,7 @@ import org.chuxue.application.common.utils.files.TxtFilesWriter;
  * @版本 V1.0
  */
 public class GenerateJs {
-	
+
 	/**
 	 * 方法名 generate
 	 * 功能 查询页面脚本
@@ -85,7 +85,7 @@ public class GenerateJs {
 		stringBuilder.append("	\r\n");
 		stringBuilder.append("	// 弹出编辑窗口\r\n");
 		stringBuilder.append("	$('#addnew_" + subNameIdString + "').click(function() {\r\n");
-		
+
 		stringBuilder.append("		$(\"#" + subNameIdString + "_uuid\").val(\"\");\r\n");
 		stringBuilder.append("		$(\"#" + subNameIdString + "_deleteFlag\").val(\"\");\r\n");
 		stringBuilder.append("		$(\"#" + subNameIdString + "_discription\").val(\"\");\r\n");
@@ -106,19 +106,19 @@ public class GenerateJs {
 			}
 			stringBuilder.append("		$(\"#" + subNameIdString + "_" + colsNameString + "\").val(\"\");\r\n");
 		}
-		
+
 		stringBuilder.append("		$('#" + subNameIdString + "_modal').modal({\r\n");
 		stringBuilder.append("			show:true,\r\n");
 		stringBuilder.append("		});\r\n");
 		stringBuilder.append("	});\r\n");
 		stringBuilder.append("	// 反填数据并弹出编辑窗口\r\n");
 		stringBuilder.append("	$('#editold_" + subNameIdString + "').click(function() {\r\n");
-		
+
 		stringBuilder.append("		var data = $('#" + subNameIdString + "_datagrid').bootstrapTable('getAllSelections');\r\n");
 		stringBuilder.append("		if(data.length == 0||data.length >1){\r\n");
 		stringBuilder.append("			alert(\"必须选中一条数据\");\r\n");
 		stringBuilder.append("		}else if(data.length > 0){\r\n");
-		
+
 		stringBuilder.append("			$(\"#" + subNameIdString + "_uuid\").val(data[0].uuid);\r\n");
 		stringBuilder.append("			$(\"#" + subNameIdString + "_deleteFlag\").val(data[0].deleteFlag);\r\n");
 		stringBuilder.append("			$(\"#" + subNameIdString + "_discription\").val(data[0].discription);\r\n");
@@ -139,7 +139,7 @@ public class GenerateJs {
 			}
 			stringBuilder.append("			$(\"#" + subNameIdString + "_" + colsNameString + "\").val(data[0]." + colsNameString + ");\r\n");
 		}
-		
+
 		stringBuilder.append("			\r\n");
 		stringBuilder.append("			// 模态框\r\n");
 		stringBuilder.append("			$('#" + subNameIdString + "_modal').modal({\r\n");
@@ -284,7 +284,7 @@ public class GenerateJs {
 			if (colsDescString == null || "".equals(colsDescString)) {
 				colsDescString = colsNameString;
 			}
-			Integer widthInteger = new Integer(150);
+			Integer widthInteger = Integer.valueOf(150);
 			if (sysDbmsTabsColsInfo.getColsWidth() != null && sysDbmsTabsColsInfo.getColsWidth().intValue() > 0) {
 				widthInteger = sysDbmsTabsColsInfo.getColsWidth();
 			}
@@ -304,7 +304,7 @@ public class GenerateJs {
 			if (colsVisible == null) {
 				colsVisible = true;
 			}
-			
+
 			stringBuilder.append("			{title : '" + colsDescString + "',	field : '" + colsNameString + "','width':" + widthInteger.intValue() + ",align : '" + alignString + "',sortable : " + colsSortable + ",valign : '" + colsValign + "',switchable:" + colsSwitchable + ",visible:" + colsVisible + "},\r\n");
 		}
 		stringBuilder.append("			{title : '项目描述',	field : 'discription',align : 'left',sortable : true,	valign : 'middle',switchable:true,visible:false},\r\n");
@@ -332,7 +332,7 @@ public class GenerateJs {
 		stringBuilder.append("		contextMenu: '#context-menu', // 右键菜单绑定\r\n");
 		stringBuilder.append("		onContextMenuItem: function(row,$ele){ // 右键菜单事件\r\n");
 		stringBuilder.append("		}\r\n");
-		
+
 		stringBuilder.append("	}).on('dbl-click-row.bs.table', function (e, row, ele,field) { // 行双击事件 \r\n");
 		stringBuilder.append("	}).on('click-row.bs.table', function (e, row, ele,field) { // 行单击事件\r\n");
 		stringBuilder.append("	});\r\n");
@@ -351,7 +351,7 @@ public class GenerateJs {
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName().toLowerCase() + ".js";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-	
+
 	/**
 	 * 方法名 generateDetail
 	 * 功能 详细页面对应脚本
@@ -408,7 +408,7 @@ public class GenerateJs {
 			}
 			stringBuilder.append("			" + colsNameString + ":$(\"#" + subNameIdString + "_" + colsNameString + "\").val(),\r\n");
 		}
-		
+
 		stringBuilder.append("			createUser:username,\r\n");
 		stringBuilder.append("			updateUser:username,\r\n");
 		stringBuilder.append("		};\r\n");
@@ -419,7 +419,7 @@ public class GenerateJs {
 		stringBuilder.append("	$(\"#" + subNameIdString + "_exit_button\").bind(\"click\",function(){\r\n");
 		stringBuilder.append("		loadPage(\"" + pathString.substring(pathString.indexOf("/pages/")) + "/" + sysDbmsGenerateCodeInfo.getClassName().toLowerCase() + ".html\")\r\n");
 		stringBuilder.append("	})\r\n");
-		
+
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}\r\n");
 		stringBuilder.append("\r\n");
@@ -437,7 +437,7 @@ public class GenerateJs {
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName().toLowerCase() + "detail.js";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
-		
+
 	}
-	
+
 }

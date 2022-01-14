@@ -6,10 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Administrator
  */
 public class SqlserverConnUtils {
+	
+	private static final Logger	logger		= LoggerFactory.getLogger(SqlserverConnUtils.class);
 
 	// jdbc:oracle:thin
 	private static final String	URL			= "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=jsp";
@@ -21,7 +26,7 @@ public class SqlserverConnUtils {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.error("驱动错误:{}", e.getMessage());
 		}
 	}
 
@@ -29,7 +34,7 @@ public class SqlserverConnUtils {
 		try {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 		return null;
 	}
@@ -38,7 +43,7 @@ public class SqlserverConnUtils {
 		try {
 			return DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 		return null;
 	}
@@ -49,7 +54,7 @@ public class SqlserverConnUtils {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 	}
 
@@ -59,7 +64,7 @@ public class SqlserverConnUtils {
 				state.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 	}
 
@@ -69,7 +74,7 @@ public class SqlserverConnUtils {
 				rs.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		}
 	}
 }

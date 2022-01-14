@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @program: javalearning
  * @Date: 2018/7/11 11:03
@@ -13,8 +16,9 @@ import java.sql.SQLException;
  * @Description: 工具类
  */
 public class AccessConnUtils {
+	private static final Logger	logger	= LoggerFactory.getLogger(AccessConnUtils.class);
 	
-	private static final String dbURL = "jdbc:ucanaccess://" + "F:\\data\\Database2.mdb";
+	private static final String	dbURL	= "jdbc:ucanaccess://" + "F:\\data\\Database2.mdb";
 	
 	/*
 	 * 加载驱动
@@ -24,8 +28,7 @@ public class AccessConnUtils {
 			// Step 1: Loading or registering Oracle JDBC driver class
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
 		} catch (ClassNotFoundException cnfex) {
-			System.out.println("Problem in loading or registering MS Access JDBC driver");
-			cnfex.printStackTrace();
+			logger.error("Problem in loading or registering MS Access JDBC driver:{}", cnfex.getMessage());
 		}
 	}
 	
@@ -36,8 +39,7 @@ public class AccessConnUtils {
 			// Step 2.A: Create and get connection using DriverManager class
 			return DriverManager.getConnection(dbURL);
 		} catch (Exception e) {
-			System.out.println("AccessDB connection fail");
-			e.printStackTrace();
+			logger.error("AccessDB connection fail:{}", e.getMessage());
 		}
 		return null;
 	}
@@ -46,7 +48,7 @@ public class AccessConnUtils {
 		try {
 			return DriverManager.getConnection("jdbc:ucanaccess://" + filepath);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("路径错误:{}", e.getMessage());
 		}
 		return null;
 	}
@@ -58,20 +60,20 @@ public class AccessConnUtils {
 				rs.close();// 这里出现异常了，rs关闭了吗？，如果没有怎么解决,ps , con也是一样的。
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("错误:{}", e.getMessage());
 		} finally {
 			try {
 				if (ps != null) {
 					ps.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error("错误:{}", e.getMessage());
 			} finally {
 				if (con != null) {
 					try {
 						con.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("错误:{}", e.getMessage());
 					}
 				}
 			}

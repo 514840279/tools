@@ -20,7 +20,7 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
  */
 @Configuration
 public class XmlFileWriteConfig {
-
+	
 	/**
 	 * TODO(这里用一句话描述这个方法的作用)
 	 *
@@ -30,27 +30,29 @@ public class XmlFileWriteConfig {
 	 * @参考 @see org.springframework.batch.item.ItemWriter#write(java.util.List)
 	 * @author Administrator
 	 */
-
+	
 	@Bean
 	public StaxEventItemWriter<SysUserBaseInfo> xlmFileWrite() throws Exception {
 		StaxEventItemWriter<SysUserBaseInfo> writer = new StaxEventItemWriter<>();
-
+		
 		XStreamMarshaller marshaller = new XStreamMarshaller();
 		Map<String, Class<SysUserBaseInfo>> aliases = new HashMap<>();
 		aliases.put("user", SysUserBaseInfo.class);
 		marshaller.setAliases(aliases);
-
+		
 		writer.setRootTagName("users");
 		writer.setMarshaller(marshaller);
 		String pathString = "F://user.xml";
 		File file = new File(pathString);
-
+		
 		if (!file.exists()) {
-			file.createNewFile();
+			if (!file.createNewFile()) {
+				System.out.println("文件創建失敗");
+			}
 		}
 		writer.setResource(new FileSystemResource(pathString));
 		writer.afterPropertiesSet();
 		return writer;
 	}
-
+	
 }

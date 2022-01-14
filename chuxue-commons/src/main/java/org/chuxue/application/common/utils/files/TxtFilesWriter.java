@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.chuxue.application.common.base.BaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 文件名 ： TxtFilesWriter.java
  * 包 名 ： org.danyuan.utils.files
@@ -14,6 +18,8 @@ import java.io.IOException;
  */
 public class TxtFilesWriter {
 
+	private static final Logger logger = LoggerFactory.getLogger(TxtFilesWriter.class);
+	
 	/**
 	 * 拼接写入
 	 * 方法名： appendWriteToFile
@@ -35,7 +41,9 @@ public class TxtFilesWriter {
 			File file = new File(filepath);
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
-				file.createNewFile();
+				if (!file.createNewFile()) {
+					throw new BaseException(-1, "創建文件錯誤");
+				}
 			}
 			// true = append file
 			fileWritter = new FileWriter(filepath, true);
@@ -43,19 +51,19 @@ public class TxtFilesWriter {
 			fileWritter.flush();
 			fileWritter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "創建文件錯誤");
 		} finally {
 			if (fileWritter != null) {
 				try {
 					fileWritter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}
 	}
-
+	
 	/**
 	 * 重新写入文件
 	 * 方法名： writeToFile
@@ -77,7 +85,9 @@ public class TxtFilesWriter {
 			File file = new File(filepath);
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
-				file.createNewFile();
+				if (!file.createNewFile()) {
+					throw new BaseException(-1, "創建文件錯誤");
+				}
 			}
 			// true = append file
 			fileWritter = new FileWriter(filepath);
@@ -85,14 +95,14 @@ public class TxtFilesWriter {
 			fileWritter.flush();
 			fileWritter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "創建文件錯誤");
 		} finally {
 			if (fileWritter != null) {
 				try {
 					fileWritter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}

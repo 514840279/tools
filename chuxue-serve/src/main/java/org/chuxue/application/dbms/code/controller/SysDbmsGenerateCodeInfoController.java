@@ -38,14 +38,14 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @RestController
 @RequestMapping("/sysDbmsGenerateCodeInfo")
-public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbmsGenerateCodeInfo>
-		implements BaseController<SysDbmsGenerateCodeInfo> {
-
-	private static final Logger logger = LoggerFactory.getLogger(SysDbmsGenerateCodeInfoController.class);
-
+public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbmsGenerateCodeInfo> implements BaseController<SysDbmsGenerateCodeInfo> {
+	
+	private static final Logger		logger		= LoggerFactory.getLogger(SysDbmsGenerateCodeInfoController.class);
+	private static final String		OUTPUTFILE	= "outputfile";
+	
 	@Autowired
-	SysDbmsGenerateCodeInfoService sysDbmsGenerateCodeInfoService;
-
+	SysDbmsGenerateCodeInfoService	sysDbmsGenerateCodeInfoService;
+	
 	@RequestMapping("/generate")
 	public BaseResult<String> generate(@RequestBody Pagination<SysDbmsGenerateCodeInfo> vo) {
 		try {
@@ -58,8 +58,6 @@ public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbm
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-
-	public String OUTPUTFILE = "outputfile";
 
 	@RequestMapping(value = "/downloadCode/{path}", method = RequestMethod.GET)
 	public void downloadCode(HttpServletResponse response, @PathVariable("path") String path) throws IOException {
@@ -81,20 +79,22 @@ public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbm
 				i = bis.read(buff);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("文件{}讀取失敗.", path);
 		} finally {
 			if (bis != null) {
 				try {
 					bis.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("失敗.", e.getMessage());
 				}
 			}
 		}
-		file.delete();
-
+		if (!file.delete()) {
+			logger.error("文件刪除失敗.");
+		}
+		
 	}
-
+	
 	@GetMapping("/detail/{uuid}")
 	public ModelAndView name(@PathVariable("uuid") String uuid) {
 		logger.info("detail", SysDbmsGenerateCodeInfoController.class);
@@ -104,5 +104,5 @@ public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbm
 		modelAndView.addObject("sysDbmsGenerateCodeInfo", sysDbmsGenerateCodeInfoService.findOne(info));
 		return modelAndView;
 	}
-
+	
 }

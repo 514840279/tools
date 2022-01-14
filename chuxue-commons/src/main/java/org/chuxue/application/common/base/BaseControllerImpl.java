@@ -2,6 +2,8 @@ package org.chuxue.application.common.base;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @NoRepositoryBean
 public class BaseControllerImpl<T> implements BaseController<T> {
+	
+	private static final Logger	logger	= LoggerFactory.getLogger(BaseControllerImpl.class);
 
 	@Autowired
-	BaseService<T> baseService;
+	BaseService<T>				baseService;
 	
 	/**
 	 * 分页请求方法
@@ -33,10 +37,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<Page<T>> page(@RequestBody Pagination<T> vo) {
+		logger.info("<page> param vo:{} ", vo.toString());
 		try {
 			Page<T> page = baseService.page(vo);
 			return ResultUtil.success(page);
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -53,10 +59,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<List<T>> findAll(@RequestBody T info) {
+		logger.info("<findAll> param vo:{} ", info.toString());
 		try {
 			List<T> list = baseService.findAll(info);
 			return ResultUtil.success(list);
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -73,10 +81,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<T> findOne(@RequestBody T info) {
+		logger.info("<findOne> param vo:{} ", info.toString());
 		try {
 			T page = baseService.findOne(info);
 			return ResultUtil.success(page);
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -93,10 +103,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<T> save(@RequestBody T info) {
+		logger.info("<save> param vo:{} ", info.toString());
 		try {
 			T page = baseService.save(info);
 			return ResultUtil.success(page);
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -113,10 +125,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<T> saveAll(@RequestBody Pagination<T> vo) {
+		logger.info("<saveAll> param vo:{} ", vo.toString());
 		try {
 			baseService.saveAll(vo.getList());
 			return ResultUtil.success();
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -133,10 +147,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<T> deleteAll(@RequestBody Pagination<T> vo) {
+		logger.info("<deleteAll> param vo:{} ", vo.toString());
 		try {
 			baseService.deleteAll(vo.getList());
 			return ResultUtil.success();
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -153,10 +169,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<T> delete(@RequestBody T info) {
+		logger.info("<delete> param vo:{} ", info.toString());
 		try {
 			baseService.delete(info);
 			return ResultUtil.success(info);
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -172,10 +190,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<T> trunc() {
+		logger.info("<trunc> ");
 		try {
 			baseService.trunc();
 			return ResultUtil.success();
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
@@ -192,10 +212,12 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 
 	@Override
 	public BaseResult<Long> count(T info) {
+		logger.info("<count> param vo:{} ", info.toString());
 		try {
 			Long lengthLong = baseService.count(info);
 			return ResultUtil.success(lengthLong);
 		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}

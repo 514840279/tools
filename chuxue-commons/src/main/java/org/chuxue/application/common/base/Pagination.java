@@ -24,16 +24,16 @@ public class Pagination<T> implements Serializable {
 	/**
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
 	 */
-	private static final long	serialVersionUID	= 1L;
-	public Integer				pageNumber			= 10;
-	public Integer				pageSize			= 1;
-	public String				uuid;
-	public String				username;
-	List<T>						list;
-	List<SearchParameters>		searchList;
-	List<SortParameters>		sortList;
-	public T					info;
-	public Map<String, String>	map					= new HashMap<>();
+	private static final long			serialVersionUID	= 1L;
+	protected Integer					pageNumber			= 10;
+	protected Integer					pageSize			= 1;
+	protected String					uuid;
+	protected String					username;
+	protected List<T>					list;
+	protected List<SearchParameters>	searchList;
+	protected List<SortParameters>		sortList;
+	protected T							info;
+	protected Map<String, String>		map					= new HashMap<>();
 	
 	/**
 	 * 方法名 ： getInfo

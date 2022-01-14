@@ -13,6 +13,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.chuxue.application.common.base.BaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 文件名 ： TxtFilesReader.java
  * 包 名 ： org.eastone.utils.files
@@ -22,17 +26,20 @@ import java.util.List;
  * 版 本 ： V1.0
  */
 public class TxtFilesReader {
-	
-	static String default_chartset = "UTF8";
-	
+
+	private static final Logger	logger				= LoggerFactory.getLogger(TxtFilesReader.class);
+
+	static String				default_chartset	= "UTF8";
+
 	/**
 	 * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。
 	 */
-	public static void readFileByBytes(String fileName) {
+	public void readFileByBytes(String fileName) {
+		// 单字节读取
 		File file = new File(fileName);
 		InputStream in = null;
 		try {
-			System.out.println("以字节为单位读取文件内容，一次读一个字节：");
+			logger.info("以字节为单位读取文件内容，一次读一个字节：");
 			// 一次读一个字节
 			in = new FileInputStream(file);
 			int tempbyte;
@@ -41,18 +48,20 @@ public class TxtFilesReader {
 			}
 			in.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			return;
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}
+		// 多字节读取
 		try {
-			System.out.println("以字节为单位读取文件内容，一次读多个字节：");
+			logger.info("以字节为单位读取文件内容，一次读多个字节：");
 			// 一次读多个字节
 			byte[] tempbytes = new byte[100];
 			int byteread = 0;
@@ -62,26 +71,28 @@ public class TxtFilesReader {
 			while ((byteread = in.read(tempbytes)) != -1) {
 				System.out.write(tempbytes, 0, byteread);
 			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * 以字符为单位读取文件，常用于读文本，数字等类型的文件
 	 */
-	public static void readFileByChars(String fileName) {
+	public void readFileByChars(String fileName) {
 		File file = new File(fileName);
 		Reader reader = null;
 		try {
-			System.out.println("以字符为单位读取文件内容，一次读一个字节：");
+			logger.info("以字符为单位读取文件内容，一次读一个字节：");
 			// 一次读一个字符
 			reader = new InputStreamReader(new FileInputStream(file));
 			int tempchar;
@@ -95,19 +106,20 @@ public class TxtFilesReader {
 			}
 			reader.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("关闭出错:{}", e.getMessage());
 			}
 		}
+		
 		try {
-			System.out.println("以字符为单位读取文件内容，一次读多个字节：");
+			logger.info("以字符为单位读取文件内容，一次读多个字节：");
 			// 一次读多个字符
 			char[] tempchars = new char[30];
 			int charread = 0;
@@ -127,19 +139,21 @@ public class TxtFilesReader {
 					}
 				}
 			}
-			
-		} catch (Exception e1) {
-			e1.printStackTrace();
+
+		} catch (Exception e) {
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			if (reader != null) {
 				try {
 					reader.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * 以行为单位读取文件，常用于读面向行的格式化文件
 	 *
@@ -148,14 +162,14 @@ public class TxtFilesReader {
 	public static List<String> readFileByLines(String fileName) {
 		return readFileByLines(fileName, default_chartset);
 	}
-	
+
 	public static List<String> readFileByLines(String fileName, String encoding) {
 		File file = new File(fileName);
 		BufferedReader reader = null;
 		List<String> list = null;
 		InputStreamReader read = null;
 		try {
-			System.out.println("以行为单位读取文件内容，一次读一整行：");
+			logger.info("以行为单位读取文件内容，一次读一整行：");
 			read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
 			reader = new BufferedReader(read);
 			String tempString = null;
@@ -165,29 +179,31 @@ public class TxtFilesReader {
 			while ((tempString = reader.readLine()) != null) {
 				// 显示行号
 				list.add(tempString);
-				// System.out.println("line " + line + ": " + tempString);
 				// line++;
 			}
 			reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			if (read != null) {
 				try {
 					read.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 			if (reader != null) {
 				try {
 					reader.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 读取文件的第一行数据
 	 * 方法名： readFileFirstLines
@@ -198,44 +214,45 @@ public class TxtFilesReader {
 	 * 作 者 ： Tenghui.Wang
 	 * @throws
 	 */
-	
+
 	public static String readFileFirstLines(String fileName) {
 		return readFileFirstLines(fileName, default_chartset);
 	}
-	
+
 	public static String readFileFirstLines(String fileName, String encoding) {
 		File file = new File(fileName);
 		BufferedReader reader = null;
 		String tempString = null;
 		InputStreamReader read = null;
 		try {
-			System.out.println("以行为单位读取文件内容，一次读一整行：");
+			logger.info("以行为单位读取文件内容，一次读一整行：");
 			read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
 			reader = new BufferedReader(read);
 			tempString = reader.readLine();
-			
-			// int line = 1;
-			// 一次读入一行，直到读入null为文件结束
+
 			reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			if (read != null) {
 				try {
 					read.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 			if (reader != null) {
 				try {
 					reader.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}
 		return tempString;
 	}
-	
+
 	/**
 	 * 功能：Java读取txt文件的内容
 	 * 步骤：1：先获得文件句柄
@@ -249,7 +266,7 @@ public class TxtFilesReader {
 	public static List<String> readTxtFile(String filePath) {
 		return readTxtFile(filePath, default_chartset);
 	}
-	
+
 	public static List<String> readTxtFile(String filePath, String encoding) {
 		List<String> strList = new ArrayList<String>();
 		InputStreamReader read = null;
@@ -262,45 +279,45 @@ public class TxtFilesReader {
 				String lineTxt = null;
 				strList = new ArrayList<String>();
 				while ((lineTxt = bufferedReader.readLine()) != null) {
-					// System.out.println(lineTxt);
 					strList.add(lineTxt);
 				}
 				bufferedReader.close();
 				read.close();
 			} else {
-				System.out.println("找不到指定的文件");
+				logger.info("找不到指定的文件");
+				throw new BaseException(-1, "文件沒找到錯誤");
 			}
 		} catch (Exception e) {
-			System.out.println("读取文件内容出错");
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			try {
 				if (read != null) {
 					read.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("关闭出错:{}", e.getMessage());
 			}
 			try {
 				if (bufferedReader != null) {
 					bufferedReader.close();
 				}
-
+				
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("关闭出错:{}", e.getMessage());
 			}
 		}
 		return strList;
-		
+
 	}
-	
+
 	/**
 	 * 随机读取文件内容
 	 */
 	public static void readFileByRandomAccess(String fileName) {
 		RandomAccessFile randomFile = null;
 		try {
-			System.out.println("随机读取一段文件内容：");
+			logger.info("随机读取一段文件内容：");
 			// 打开一个随机访问文件流，按只读方式
 			randomFile = new RandomAccessFile(fileName, "r");
 			// 文件长度，字节数
@@ -317,28 +334,30 @@ public class TxtFilesReader {
 				System.out.write(bytes, 0, byteread);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件沒找到錯誤");
 		} finally {
 			if (randomFile != null) {
 				try {
 					randomFile.close();
-				} catch (IOException e1) {
+				} catch (IOException e) {
+					logger.error("关闭出错:{}", e.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * 显示输入流中还剩的字节数
 	 */
 	private static void showAvailableBytes(InputStream in) {
 		try {
-			System.out.println("当前字节输入流中的字节数为:" + in.available());
+			logger.info("当前字节输入流中的字节数为:" + in.available());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("出错:{}", e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名： readToString
 	 * 功 能： 读取整个文件
@@ -361,26 +380,26 @@ public class TxtFilesReader {
 				sb.append(new String(filecontent, encoding));
 			}
 			in.close();
-
+			
 			return sb.toString();
 		} catch (UnsupportedEncodingException e) {
-			System.err.println("The OS does not support " + encoding);
-			e.printStackTrace();
+			logger.error("The OS does not support " + encoding);
+			throw new BaseException(-1, "字符集錯誤");
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("文件未找到:{}", e.getMessage());
+			throw new BaseException(-1, "文件沒找到錯誤");
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读文件时出错:{}", e.getMessage());
+			throw new BaseException(-1, "文件錯誤");
 		} finally {
 			try {
 				if (in != null) {
 					in.close();
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("关闭出错:{}", e.getMessage());
 			}
 		}
-		return null;
 	}
-	
+
 }

@@ -8,25 +8,29 @@ import org.chuxue.application.common.base.Pagination;
 
 public class SysDbmsTabsInfoVo extends Pagination<SysDbmsTabsInfo> {
 
+	/**
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	 */
+	private static final long	serialVersionUID	= -1237433198006795316L;
 	private String				databaseUuid;
 	private String				typeUuid;
 	private String				jdbcUuid;
 
-	SysDbmsTabsInfo				old			= new SysDbmsTabsInfo();
-	SysDbmsTabsInfo				now			= new SysDbmsTabsInfo();
+	SysDbmsTabsInfo				old					= new SysDbmsTabsInfo();
+	SysDbmsTabsInfo				now					= new SysDbmsTabsInfo();
 
-	public String				userindex;
-	public String				uservalue;
-	public String				type;
-	public String				tabsuuid;
-	public String				tabsName;
-	public String				dbType;
-	public String				esName;
-	public String				tabsDesc;
-	public String				tabsRows;
+	private String				userindex;
+	private String				uservalue;
+	private String				type;
+	private String				tabsuuid;
+	private String				tabsName;
+	private String				dbType;
+	private String				esName;
+	private String				tabsDesc;
+	private String				tabsRows;
 
-	public String				paramString;
-	public List<MulteityParam>	paramList	= new ArrayList<>();
+	private String				paramString;
+	private List<MulteityParam>	paramList			= new ArrayList<>();
 
 	/**
 	 * 方法名 ： getUserindex

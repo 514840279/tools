@@ -7,20 +7,24 @@ import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.common.base.Pagination;
 
 public class SysDbmsTabsColsInfoVo extends Pagination<SysDbmsTabsColsInfo> {
-	public String				userindex;
-	public String				uservalue;
-	public String				jdbcUuid;
-	public String				tabsUuid;
-	public String				tabsName;
-	public String				dbType;
-	public String				esName;
-	public String				tabsDesc;
-	public Integer				total;
-	public String				type;
-	public String				paramString;
-	public List<MulteityParam>	paramList	= new ArrayList<>();
+	/**
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	 */
+	private static final long	serialVersionUID	= -1098342939088321805L;
+	private String				userindex;
+	private String				uservalue;
+	private String				jdbcUuid;
+	private String				tabsUuid;
+	private String				tabsName;
+	private String				dbType;
+	private String				esName;
+	private String				tabsDesc;
+	private Integer				total;
+	private String				type;
+	private String				paramString;
+	private List<MulteityParam>	paramList			= new ArrayList<>();
 	
-	public String				mapString;
+	private String				mapString;
 	
 	/**
 	 * 方法名 ： getUserindex

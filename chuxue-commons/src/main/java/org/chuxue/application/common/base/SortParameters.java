@@ -11,22 +11,22 @@ package org.chuxue.application.common.base;
  * 版 本 ： V1.0
  */
 public class SortParameters {
-	
-	public Integer	sortIndex;	// 顺序
-	public String	sortName;	// 排序字段
-	public String	sortTitle;	// 排序字段
-	public String	sortOrder;	// 排序方式 desc，asc default asc
-	
+
+	private Integer	sortIndex;	// 顺序
+	private String	sortName;	// 排序字段
+	private String	sortTitle;	// 排序字段
+	private String	sortOrder;	// 排序方式 desc，asc default asc
+
 	/**
 	 * 方法名 ： getSortIndex
 	 * 功 能 ： 返回变量 sortIndex 的值
-	 * 
+	 *
 	 * @return: Integer
 	 */
 	public Integer getSortIndex() {
 		return sortIndex;
 	}
-	
+
 	/**
 	 * 方法名 ： setSortIndex
 	 * 功 能 ： 设置变量 sortIndex 的值
@@ -34,17 +34,17 @@ public class SortParameters {
 	public void setSortIndex(Integer sortIndex) {
 		this.sortIndex = sortIndex;
 	}
-	
+
 	/**
 	 * 方法名 ： getSortName
 	 * 功 能 ： 返回变量 sortName 的值
-	 * 
+	 *
 	 * @return: String
 	 */
 	public String getSortName() {
 		return sortName;
 	}
-	
+
 	/**
 	 * 方法名 ： setSortName
 	 * 功 能 ： 设置变量 sortName 的值
@@ -52,17 +52,17 @@ public class SortParameters {
 	public void setSortName(String sortName) {
 		this.sortName = sortName;
 	}
-	
+
 	/**
 	 * 方法名 ： getSortOrder
 	 * 功 能 ： 返回变量 sortOrder 的值
-	 * 
+	 *
 	 * @return: String
 	 */
 	public String getSortOrder() {
 		return sortOrder;
 	}
-	
+
 	/**
 	 * 方法名 ： setSortOrder
 	 * 功 能 ： 设置变量 sortOrder 的值
@@ -70,17 +70,17 @@ public class SortParameters {
 	public void setSortOrder(String sortOrder) {
 		this.sortOrder = sortOrder;
 	}
-	
+
 	/**
 	 * 方法名 ： getSortTitle
 	 * 功 能 ： 返回变量 sortTitle 的值
-	 * 
+	 *
 	 * @return: String
 	 */
 	public String getSortTitle() {
 		return sortTitle;
 	}
-	
+
 	/**
 	 * 方法名 ： setSortTitle
 	 * 功 能 ： 设置变量 sortTitle 的值
@@ -88,5 +88,5 @@ public class SortParameters {
 	public void setSortTitle(String sortTitle) {
 		this.sortTitle = sortTitle;
 	}
-	
+
 }

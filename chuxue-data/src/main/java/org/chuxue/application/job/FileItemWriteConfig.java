@@ -18,20 +18,22 @@ import org.springframework.core.io.FileSystemResource;
  */
 @Configuration
 public class FileItemWriteConfig {
-	
+
 	@Bean
 	public FlatFileItemWriter<SysUserBaseInfo> myFlatFileItemWriter() throws Exception {
 		FlatFileItemWriter<SysUserBaseInfo> writer = new FlatFileItemWriter<>();
 		String fileString = "F://user.csv";
 		File file = new File(fileString);
 		if (!file.exists()) {
-			file.createNewFile();
+			if (!file.createNewFile()) {
+				System.out.println("文件創建失敗");
+			}
 		}
 		writer.setResource(new FileSystemResource(fileString));
 		writer.setLineSeparator("\n");
 		writer.setEncoding("UTF-8");
 		writer.setLineAggregator(new LineAggregator<SysUserBaseInfo>() {
-
+			
 			@Override
 			public String aggregate(SysUserBaseInfo info) {
 				return info.toLine();
@@ -39,7 +41,7 @@ public class FileItemWriteConfig {
 		});
 		writer.afterPropertiesSet();
 		return writer;
-
+		
 	}
-
+	
 }
