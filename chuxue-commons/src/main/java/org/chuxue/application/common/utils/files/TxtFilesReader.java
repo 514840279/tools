@@ -371,12 +371,12 @@ public class TxtFilesReader {
 	public static String readToString(String fileName, String encoding) {
 		File file = new File(fileName.trim());
 		Long filelength = file.length();
-		byte[] filecontent = new byte[filelength.intValue() > 1000 ? 1000 : filelength.intValue()];
+		byte[] filecontent = new byte[filelength.intValue()];
 		FileInputStream in = null;
 		try {
 			in = new FileInputStream(file);
 			StringBuffer sb = new StringBuffer();
-			while ((in.read(filecontent)) > 0) {
+			while ((in.read(filecontent)) != -1) {
 				sb.append(new String(filecontent, encoding));
 			}
 			in.close();
