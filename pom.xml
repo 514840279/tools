@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.chuxue</groupId>
 	<artifactId>tools</artifactId>
@@ -14,11 +12,11 @@
 		<module>chuxue-commons</module>
 		<module>chuxue-serve</module>
 		<module>chuxue-data</module>
-
 		<module>chuxue-data-h2</module>
 		<module>chuxue-data-mysql</module>
 		<module>chuxue-data-oracle</module>
-	</modules>
+    	<module>tools-data-clean</module>
+  </modules>
 	<properties>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,7 +67,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- 支持Word文档的操作 -->
+			<!--支持Word文档的操作 -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-scratchpad</artifactId>

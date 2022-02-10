@@ -4,7 +4,6 @@ spring:
       # nacos的信息
       server-addr: 192.168.0.103:8848
       discovery:  # 容器化后nacos不能找到，需要配置宿主机的ip 和服务的端口，
-        namespace: danyuan
          # 宿主机的ip
         ip: ${LOCAL_IP}
         port: ${server.port}  
