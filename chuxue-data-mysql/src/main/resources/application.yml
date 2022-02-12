@@ -1,0 +1,13 @@
+server:
+  port: 8004
+  servlet:    context-path: /data
+  
+
+spring:
+  application:    name: danyuan-data-mysql
+  banner:    charset: utf-8
+  profiles:
+    active:
+    - nacos
+    - mysql
+    - hikari

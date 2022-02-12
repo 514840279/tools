@@ -1,0 +1,14 @@
+server:
+  port: 8003
+  servlet:    context-path: /data
+  
+
+spring:
+  application:    name: danyuan-data-h2
+  banner:    charset: utf-8
+  profiles:
+    active:
+    - nacos
+    - h2
+    - hikari
+    
