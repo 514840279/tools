@@ -1,7 +1,10 @@
 package org.tools.application.common.string;
 
-public class IdInfo {
+import lombok.Data;
 
+@Data
+public class IdInfo {
+	
 	private String	id;
 	private String	is;
 	private String	sfzh18;
@@ -12,5 +15,5 @@ public class IdInfo {
 	private String	id_性别;
 	private String	id_生肖;
 	private String	id_星座;
-	
+
 }
