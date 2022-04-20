@@ -16,7 +16,8 @@
 		<module>chuxue-data-mysql</module>
 		<module>chuxue-data-oracle</module>
     	<module>tools-data-clean</module>
-  </modules>
+    	<module>tools-rollcall</module>
+	</modules>
 	<properties>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
