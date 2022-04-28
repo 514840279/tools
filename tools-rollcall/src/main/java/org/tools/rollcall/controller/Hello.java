@@ -1,13 +1,15 @@
 package org.tools.rollcall.controller;
 
-import org.springframework.stereotype.Controller;
+import org.chuxue.application.common.base.BaseResult;
+import org.chuxue.application.common.base.ResultUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class Hello {
-
-	@RequestMapping("/")
-	public String cc() {
-		return "templates/hello";
+	
+	@RequestMapping("/test")
+	public BaseResult<String> test() {
+		return ResultUtil.success("test");
 	}
 }

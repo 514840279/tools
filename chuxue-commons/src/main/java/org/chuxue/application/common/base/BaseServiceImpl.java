@@ -127,7 +127,7 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 					}
 					fluxFlag = false;
 					// 成功赋值id 中断循环
-					break;
+					continue;
 				} catch (IllegalArgumentException e) {
 					logger.error("<page> error:{} ", e.getMessage());
 					throw new BaseException(-1, e.getMessage());
@@ -144,7 +144,7 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 					}
 					fluxDeleteFlag = false;
 					// 成功赋值id 中断循环
-					break;
+					continue;
 				} catch (IllegalArgumentException e) {
 					logger.error("<page> error:{} ", e.getMessage());
 					throw new BaseException(-1, e.getMessage());

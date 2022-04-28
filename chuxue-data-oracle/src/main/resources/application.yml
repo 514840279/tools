@@ -1,5 +1,5 @@
 server:
-  port: 8005
+  port: 8006
   servlet:    context-path: /database
   
 
@@ -12,6 +12,3 @@ spring:
     - oracle
     - hikari
 
-app:
-  name: ${spring.application.name}
-  version: @project.version@
