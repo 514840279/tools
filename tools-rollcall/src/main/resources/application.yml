@@ -9,7 +9,16 @@ server:
   servlet:
     context-path: /rollcall
 
+
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1024000000
+      max-request-size: 409600000
+      location: /tmp/
+      
+        
   application:
     name: tools-rollcall
   main:

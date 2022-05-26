@@ -52,6 +52,20 @@
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-devtools</artifactId>
         </dependency>
+        <dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-configuration-processor</artifactId>
+        	<optional>true</optional>
+        </dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
     </dependencies>
     <build>
     	<finalName>${project.name}</finalName>
@@ -86,8 +100,8 @@
 	                <!-- docker.host就是docker服务的地址 -->
                 	<dockerHost>${docker.host}</dockerHost>
                 	<serverId>docker-hub</serverId>
-                	<!-- docker.repository就是私服的地址 -->
-                    <imageName>${docker.repository}/514840279/${project.artifactId}:1.0</imageName>
+                	<!-- docker.repository就是私服的地址 ${docker.repository}/ -->
+                    <imageName>514840279/${project.artifactId}:1.0</imageName>
                     <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
