@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,11 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.tools.rollcall.common.UserConfig;
+import org.tools.rollcall.service.LoadData;
 
 @RestController
 @RequestMapping("/file")
@@ -34,6 +37,9 @@ public class FileController<T> {
 	
 	@Autowired
 	UserConfig					userConfig;
+	
+	@Autowired
+	LoadData					loadData;
 	
 	@RequestMapping(path = "/uploadFile")
 	public BaseResult<List<String>> uploadFile(HttpServletRequest request) throws UnsupportedEncodingException {
@@ -93,7 +99,17 @@ public class FileController<T> {
 	}
 
 	@PostMapping("/load")
-	public BaseResult<List<String>> load(Map<String, String> map) {
-		return null;
+	public BaseResult<List<String>> load(@RequestBody Map<String, String> map) throws UnsupportedEncodingException {
+		try {
+			String docPath = map.get("path");
+			Boolean flag = loadData.loadData(URLDecoder.decode(docPath, "UTF-8"));
+			if (flag) {
+				return ResultUtil.success();
+			} else {
+				return ResultUtil.error("加载未知错误！");
+			}
+		} catch (Exception e) {
+			return ResultUtil.error(e.getMessage());
+		}
 	}
 }
