@@ -13,4 +13,14 @@ import lombok.Setter;
 public class ClassRoom extends BaseEntity {
 	
 	private String name;
+
+	public ClassRoom() {
+		super();
+	}
+
+	public ClassRoom(String id, String name) {
+		this.uuid = id;
+		this.name = name;
+	}
+
 }
