@@ -29,15 +29,15 @@ import org.tools.rollcall.common.UserConfig;
 @RestController
 @RequestMapping("/file")
 public class FileController<T> {
-
-	private static final Logger	logger	= LoggerFactory.getLogger(FileController.class);
 	
+	private static final Logger	logger	= LoggerFactory.getLogger(FileController.class);
+
 	@Autowired
 	UserConfig					userConfig;
-	
+
 	@RequestMapping(path = "/uploadFile")
 	public BaseResult<List<String>> uploadFile(HttpServletRequest request) throws UnsupportedEncodingException {
-		List<String> listFileName = null;
+		List<String> listFileName;
 		listFileName = new ArrayList<>();
 		// 文件保存
 		request.setCharacterEncoding("UTF-8");
@@ -48,20 +48,20 @@ public class FileController<T> {
 			String filename = simpleDateFormat.format(new Date()) + "_" + multipartFile.getOriginalFilename();
 			InputStream inputStream = null;
 			FileOutputStream fos = null;
-			
+
 			String path = userConfig.getFileUploadPath() + "/";
 			listFileName.add(path + URLEncoder.encode(filename, "utf-8"));
-			
+
 			File file = new File(path);
 			try {
 				inputStream = multipartFile.getInputStream();
-				
+
 				if (!file.exists()) {
 					file.mkdirs();
 				}
 				path = path + filename;
 				fos = new FileOutputStream(path);
-				
+
 				byte[] b = new byte[1024];
 				int byteread = 0;
 				while ((byteread = inputStream.read(b)) != -1) {
@@ -70,7 +70,7 @@ public class FileController<T> {
 				}
 				fos.close();
 				inputStream.close();
-				
+
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			} finally {
@@ -89,11 +89,12 @@ public class FileController<T> {
 			}
 		}
 		return ResultUtil.success(listFileName);
-		
-	}
 
+	}
+	
 	@PostMapping("/load")
 	public BaseResult<List<String>> load(Map<String, String> map) {
+
 		return null;
 	}
 }

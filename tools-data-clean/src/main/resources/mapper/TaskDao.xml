@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="org.tools.application.dao.TaskDao">
+
+	<insert id="addTask" parameterType="org.tools.application.po.SysTaskInfo">
+		INSERT INTO SYS_TASK_INFO(UUID,PROCEDURE_NAME,TABLE_NAME,TABLE_COUNT,CURRENT_ID)
+		VALUES (#{info.uuid},#{info.procedureName},#{info.tableName},#{info.tableCount,jdbcType=NUMERIC},#{info.currentId,jdbcType=NUMERIC})
+	</insert>
+    
+    <update id="updateTask" parameterType="org.tools.application.po.SysTaskInfo">
+    	UPDATE SYS_TASK_INFO 
+    	SET CURRENT_ID =0
+    	WHERE UUID = #{info.uuid}
+    </update>
+    
+</mapper>
