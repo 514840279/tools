@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -22,6 +24,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @date 2021-10-31 1:36
  */
 @Configuration
+@EnableCaching // 开启缓存
+@Order(50)
 public class LettuceRedisConfig {
 	
 	@Autowired

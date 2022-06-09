@@ -1,5 +1,8 @@
 package org.chuxue.application;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -16,17 +19,34 @@ import org.springframework.web.util.pattern.PathPatternParser;
  */
 @Configuration
 public class CorsConfig {
+//	@Bean
+//	public CorsWebFilter corsWebFilter() {
+//		CorsConfiguration config = new CorsConfiguration();
+//		config.setAllowCredentials(true);
+//		config.addAllowedMethod("*");
+//		config.addAllowedOrigin("*");
+//		config.addAllowedHeader("*");
+//		// 设置预检请求的缓存时间（秒），在这个时间段里，对于相同的跨域请求不会再预检了
+//		config.setMaxAge(18000L);
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(new PathPatternParser());
+//		source.registerCorsConfiguration("/**", config);
+//		return new CorsWebFilter(source);
+//	}
+	
 	@Bean
 	public CorsWebFilter corsWebFilter() {
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.addAllowedMethod("*");
-		config.addAllowedOrigin("*");
-		config.addAllowedHeader("*");
-		// 设置预检请求的缓存时间（秒），在这个时间段里，对于相同的跨域请求不会再预检了
-		config.setMaxAge(18000L);
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(new PathPatternParser());
-		source.registerCorsConfiguration("/**", config);
-		return new CorsWebFilter(source);
+		UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource(new PathPatternParser());
+		CorsConfiguration configuration = new CorsConfiguration();
+//       配置跨域
+		configuration.setAllowCredentials(true);
+		List<String> allowedOriginPatterns = new ArrayList<>();
+		allowedOriginPatterns.add(CorsConfiguration.ALL);
+		configuration.setAllowedOriginPatterns(allowedOriginPatterns);
+		configuration.addAllowedHeader(CorsConfiguration.ALL);
+		configuration.addAllowedMethod(CorsConfiguration.ALL);
+
+		configurationSource.registerCorsConfiguration("/**", configuration);
+		return new CorsWebFilter(configurationSource);
 	}
+
 }

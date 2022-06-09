@@ -4,5 +4,5 @@ spring:
       config:
         server-addr: http://nacos.cn:8848
         file-extension: yml
-        prefix: danyuan
-        namespace: danyuan
+        prefix: chuxue
+        namespace: chuxue

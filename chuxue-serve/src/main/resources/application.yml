@@ -6,7 +6,6 @@ server:
 spring:
   application:    name: chuxue-serve
   banner:    charset: utf-8
-    
   profiles:
     active:
     - nacos

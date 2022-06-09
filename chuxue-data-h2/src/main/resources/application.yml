@@ -4,7 +4,7 @@ server:
   
 
 spring:
-  application:    name: danyuan-data-h2
+  application:    name: chuxue-data-h2
   banner:    charset: utf-8
   profiles:
     active:
