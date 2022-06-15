@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @NoRepositoryBean
 public class BaseControllerImpl<T> implements BaseController<T> {
-	
-	private static final Logger	logger	= LoggerFactory.getLogger(BaseControllerImpl.class);
 
+	private static final Logger	logger	= LoggerFactory.getLogger(BaseControllerImpl.class);
+	
 	@Autowired
 	BaseService<T>				baseService;
-	
+
 	/**
 	 * 分页请求方法
 	 *
@@ -34,19 +34,20 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#page(org.danyuan.application.common.base.Pagination)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<Page<T>> page(@RequestBody Pagination<T> vo) {
 		logger.info("<page> param vo:{} ", vo.toString());
 		try {
 			Page<T> page = baseService.page(vo);
 			return ResultUtil.success(page);
+//			return ResultUtil.error(-1, "自定义错误");
 		} catch (Exception e) {
 			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 查询所有数据，慎用
 	 *
@@ -56,7 +57,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#findAll(java.lang.Object)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<List<T>> findAll(@RequestBody T info) {
 		logger.info("<findAll> param vo:{} ", info.toString());
@@ -68,7 +69,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 查询一条记录，
 	 *
@@ -78,7 +79,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#findOne(java.lang.Object)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<T> findOne(@RequestBody T info) {
 		logger.info("<findOne> param vo:{} ", info.toString());
@@ -90,7 +91,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 单条记录保存
 	 *
@@ -100,7 +101,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#save(java.lang.Object)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<T> save(@RequestBody T info) {
 		logger.info("<save> param vo:{} ", info.toString());
@@ -112,7 +113,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 多条记录保存
 	 *
@@ -122,7 +123,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#save(org.danyuan.application.common.base.Pagination)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<T> saveAll(@RequestBody Pagination<T> vo) {
 		logger.info("<saveAll> param vo:{} ", vo.toString());
@@ -134,7 +135,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 多条记录删除
 	 *
@@ -144,7 +145,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#delete(org.danyuan.application.common.base.Pagination)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<T> deleteAll(@RequestBody Pagination<T> vo) {
 		logger.info("<deleteAll> param vo:{} ", vo.toString());
@@ -156,7 +157,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 单条记录删除
 	 *
@@ -166,7 +167,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#delete(java.lang.Object)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<T> delete(@RequestBody T info) {
 		logger.info("<delete> param vo:{} ", info.toString());
@@ -178,7 +179,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 删除整个表，慎用
 	 *
@@ -187,7 +188,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#trunc()
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<T> trunc() {
 		logger.info("<trunc> ");
@@ -199,7 +200,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 统计数量
 	 *
@@ -209,7 +210,7 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseController#count(java.lang.Object)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public BaseResult<Long> count(T info) {
 		logger.info("<count> param vo:{} ", info.toString());
@@ -221,5 +222,5 @@ public class BaseControllerImpl<T> implements BaseController<T> {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 }

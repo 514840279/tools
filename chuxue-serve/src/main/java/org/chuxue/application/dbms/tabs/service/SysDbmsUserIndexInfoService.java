@@ -6,8 +6,8 @@ import java.util.List;
 import org.chuxue.application.bean.manager.dbms.SysDbmsUserIndexInfo;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
+import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsUserIndexInfoDao;
-import org.chuxue.application.dbms.tabs.vo.SysDbmsUserIndexInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 public class SysDbmsUserIndexInfoService extends BaseServiceImpl<SysDbmsUserIndexInfo> implements BaseService<SysDbmsUserIndexInfo> {
 	@Autowired
 	private SysDbmsUserIndexInfoDao sysDbmsUserIndexInfoDao;
-	
+
 	/**
 	 * 方法名： findAll
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -43,7 +43,7 @@ public class SysDbmsUserIndexInfoService extends BaseServiceImpl<SysDbmsUserInde
 	public List<SysDbmsUserIndexInfo> findAll() {
 		return sysDbmsUserIndexInfoDao.findAllByDeleteFlag();
 	}
-	
+
 	/**
 	 * 方法名： page
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -55,7 +55,8 @@ public class SysDbmsUserIndexInfoService extends BaseServiceImpl<SysDbmsUserInde
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public Page<SysDbmsUserIndexInfo> page(SysDbmsUserIndexInfoVo vo) {
+	@Override
+	public Page<SysDbmsUserIndexInfo> page(Pagination<SysDbmsUserIndexInfo> vo) {
 		Example<SysDbmsUserIndexInfo> example = Example.of(vo.getInfo());
 		Sort sort = vo.sort();
 		if (sort == null) {
@@ -68,7 +69,7 @@ public class SysDbmsUserIndexInfoService extends BaseServiceImpl<SysDbmsUserInde
 		Page<SysDbmsUserIndexInfo> sourceCodes = sysDbmsUserIndexInfoDao.findAll(example, request);
 		return sourceCodes;
 	}
-	
+
 	/**
 	 * 方法名： chartList
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
