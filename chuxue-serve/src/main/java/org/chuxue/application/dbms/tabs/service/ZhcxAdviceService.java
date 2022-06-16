@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ZhcxAdviceService {
 	private static final Logger logger = LoggerFactory.getLogger(ZhcxAdviceService.class);
-	
+
 	/**
 	 * @param sysZhcxCol
 	 * @param jdbcTemplate2
@@ -75,19 +75,19 @@ public class ZhcxAdviceService {
 			if (!expactUser.equals(resultmap.get("owner")) || !expactIndexSpaces.equals(resultmap.get("tablespace_name"))) {
 				advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "索引重建", sysZhcxTab.getTabsDesc(), sysZhcxTab.getTabsName(), sysZhcxTab.getJdbcUuid());
 				sBuilder.append("-- 由于索引信息并不是期望的值，建议充建索引信息：\n");
-				String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getColsOrder();
+				String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getSort();
 				sBuilder.append("-- 预期值：\t 索引所属：" + expactUser + "\t索引的表空间：" + expactIndexSpaces + "\n");
 				sBuilder.append("-- 实际值：\t 索引所属：" + resultmap.get("owner") + "\t索引的表空间：" + resultmap.get("tablespace_name") + "\n");
 				sBuilder.append("drop index " + resultmap.get("owner") + "." + resultmap.get("index_name") + ";\n");
 				sBuilder.append(" create index " + expactUser + "." + indexName + " on " + tableName + " (" + sysZhcxCol.getColsName() + ")  tablespace " + expactIndexSpaces + ";");
-				
+
 			} else {
 				return;
 			}
 		} else if (sysZhcxCol.getUserIndex() != null && !"".equals(sysZhcxCol.getUserIndex())) {
 			advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "索引添加", sysZhcxTab.getTabsDesc(), sysZhcxTab.getTabsName(), sysZhcxTab.getJdbcUuid());
 			sBuilder.append("-- 由于配置中userIndex不为空，并且期望的索引信息未找到，建议建索引信息：\n");
-			String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getColsOrder();
+			String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getSort();
 			sBuilder.append(" create index " + expactUser + "." + indexName + " on " + tableName + " (" + sysZhcxCol.getColsName() + ")  tablespace " + expactIndexSpaces + ";");
 		} else {
 			return;
@@ -95,9 +95,9 @@ public class ZhcxAdviceService {
 		advice.setMessage(sBuilder.toString());
 		advice.setDeleteFlag(0);
 		sysAdviceMessDao.save(advice);
-		
+
 	}
-	
+
 	/**
 	 * @param sysZhcxCol
 	 * @param sysAdviceMessDao
@@ -177,20 +177,20 @@ public class ZhcxAdviceService {
 					} else {
 						return;
 					}
-					
+
 					advice.setMessage(sBuilder.toString());
 					advice.setDeleteFlag(0);
 					sysAdviceMessDao.save(advice);
 				}
 			}
-			
+
 			// 列数据统计建议添加索引，平台隐藏，实际长度修改(索引修改或重建，索引添加，)
 			startConfixOracleTableCloumnIndexConfig(sysZhcxTab, multiDatasource, sysAdviceMessDao, jdbcTemplate2, sysZhcxCol);
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * @throws SQLException
 	 * @param jdbcTemplate2
@@ -209,7 +209,7 @@ public class ZhcxAdviceService {
 		// 表配置比较建议修正 (表修改，表配置修改)
 		// 表修改需要人工确认，所以当前不会生成表修改的类型
 		// 表配置修改包括： 修改注释翻译对照的mess和 更新配置表中的数据两块大小
-		
+
 		StringBuffer sBuffer = new StringBuffer();
 		sBuffer.append(" select t.owner,t.table_name,t.num_rows,t.blocks*8*1024 as table_space ,tc.comments  from all_tables t ");
 		sBuffer.append(" inner join all_tab_comments tc on t.owner = tc.owner and t.table_name = tc.table_name ");
@@ -247,7 +247,7 @@ public class ZhcxAdviceService {
 						conn.close();
 					}
 				}
-				
+
 			}
 			// 表注释和翻译
 			if (sysZhcxTab.getTabsDesc() != null && resultmap.get("comments") != null) {
@@ -272,9 +272,9 @@ public class ZhcxAdviceService {
 				sysAdviceMessDao.save(advice);
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * @方法名 startConfixMysqlTableConfig
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -291,7 +291,7 @@ public class ZhcxAdviceService {
 		// 表配置比较建议修正 (表修改，表配置修改)
 		// 表修改需要人工确认，所以当前不会生成表修改的类型
 		// 表配置修改包括： 修改注释翻译对照的mess和 更新配置表中的数据两块大小
-		
+
 		StringBuffer sBuffer = new StringBuffer();
 		sBuffer.append(" SELECT t.TABLE_SCHEMA AS OWNER,CONCAT(t.TABLE_SCHEMA,'.',t.TABLE_NAME) AS tabs_name,t.TABLE_ROWS AS  num_rows,t.TABLE_COMMENT AS comments  FROM information_schema.TABLES t ");
 		sBuffer.append(" where CONCAT(t.TABLE_SCHEMA,'.',t.TABLE_NAME) = :tablename");
@@ -310,7 +310,7 @@ public class ZhcxAdviceService {
 				jdbcTemplate2.execute(executeSql);
 				advice.setDeleteFlag(1);
 				sysDbmsAdviMessInfoDao.save(advice);
-				
+
 			}
 			// 表注释和翻译
 			if (sysZhcxTab.getTabsDesc() != null && resultmap.get("comments") != null) {
@@ -335,9 +335,9 @@ public class ZhcxAdviceService {
 				sysDbmsAdviMessInfoDao.save(advice);
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * @方法名 startConfixMysqlTableColumnsConfig
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -413,7 +413,7 @@ public class ZhcxAdviceService {
 					} else {
 						return;
 					}
-					
+
 					advice.setMessage(sBuilder.toString());
 					advice.setDeleteFlag(0);
 					sysDbmsAdviMessInfoDao.save(advice);
@@ -421,11 +421,11 @@ public class ZhcxAdviceService {
 				// 列数据统计建议添加索引，平台隐藏，实际长度修改(索引修改或重建，索引添加，)
 				startConfixMysqlTableCloumnIndexConfig(sysZhcxTab, sysZhcxCol, resultlist, sysDbmsAdviMessInfoDao);
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * @方法名 startConfixMysqlTableCloumnIndexConfig
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -452,7 +452,7 @@ public class ZhcxAdviceService {
 			if (sysZhcxCol.getUserIndex() != null && !"".equals(sysZhcxCol.getUserIndex())) {
 				advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "索引添加", sysZhcxTab.getTabsDesc(), sysZhcxTab.getTabsName(), sysZhcxTab.getJdbcUuid());
 				sBuilder.append("-- 由于配置中userIndex不为空，并且期望的索引信息未找到，建议建索引信息：\n");
-				String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getColsOrder();
+				String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getSort();
 				sBuilder.append(" create index " + expactUser + "." + indexName + " on " + tableName + " (" + sysZhcxCol.getColsName() + ")  tablespace " + expactIndexSpaces + ";");
 				advice.setMessage(sBuilder.toString());
 				advice.setDeleteFlag(0);
@@ -460,5 +460,5 @@ public class ZhcxAdviceService {
 			}
 		}
 	}
-	
+
 }

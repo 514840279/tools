@@ -4,7 +4,28 @@
 工具集合
 
 #### 软件架构
+::: danger
+这是一个危险警告
+:::
+
 软件架构说明
+
+基于spring-cloud +nacos
+
+|名称|项目|
+|--|--|
+|共同|chuxue-commons|
+|处理数据的主要程序|chuxue-data|
+|链接各种数据库|chuxue-data-h2，chuxue-data-mysql，chuxue-data-oracle|
+|gateway|chuxue-gateway|
+|登录中心|chuxue-security|
+|业务控制|chuxue-serve|
+
+
+
+
+
+
 
 
 #### 安装教程

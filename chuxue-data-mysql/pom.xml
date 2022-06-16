@@ -19,11 +19,11 @@
 		<skipTests>true</skipTests>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.chuxue</groupId>
-			<version>${project.version}</version>
-			<artifactId>chuxue-commons</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.chuxue</groupId> -->
+<!-- 			<version>${project.version}</version> -->
+<!-- 			<artifactId>chuxue-commons</artifactId> -->
+<!-- 		</dependency> -->
 		<!-- spring boot web支持：mvc,aop... -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

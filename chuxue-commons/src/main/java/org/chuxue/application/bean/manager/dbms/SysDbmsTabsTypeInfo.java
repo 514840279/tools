@@ -23,22 +23,18 @@ import org.chuxue.application.common.base.BaseEntity;
 public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 	
-	// 类型排序
-	@Column(name = "type_order", precision = 10)
-	private Integer				typeOrder;
-	
 	// 类型
 	@Column(name = "type_class")
 	private String				typeClass;
-	
+
 	// 图标
 	@Column(name = "type_icon")
 	private String				typeIcon;
-	
+
 	// 类型名
 	@Column(name = "type_name")
 	private String				typeName;
-	
+
 	/**
 	 * 构造方法：
 	 * 描 述： 默认构造函数
@@ -51,24 +47,6 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	}
 	
 	/**
-	 * 方法名 ： getTypeOrder
-	 * 功 能 ： 返回变量 typeOrder 类型排序 的值
-	 *
-	 * @return: String
-	 */
-	public Integer getTypeOrder() {
-		return typeOrder;
-	}
-	
-	/**
-	 * 方法名 ： setTypeOrder
-	 * 功 能 ： 设置变量 typeOrder 类型排序 的值
-	 */
-	public void setTypeOrder(Integer typeOrder) {
-		this.typeOrder = typeOrder;
-	}
-	
-	/**
 	 * 方法名 ： getTypeClass
 	 * 功 能 ： 返回变量 typeClass 类型 的值
 	 *
@@ -77,7 +55,7 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	public String getTypeClass() {
 		return typeClass;
 	}
-	
+
 	/**
 	 * 方法名 ： setTypeClass
 	 * 功 能 ： 设置变量 typeClass 类型 的值
@@ -85,7 +63,7 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	public void setTypeClass(String typeClass) {
 		this.typeClass = typeClass;
 	}
-	
+
 	/**
 	 * 方法名 ： getTypeIcon
 	 * 功 能 ： 返回变量 typeIcon 图标 的值
@@ -95,7 +73,7 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	public String getTypeIcon() {
 		return typeIcon;
 	}
-	
+
 	/**
 	 * 方法名 ： setTypeIcon
 	 * 功 能 ： 设置变量 typeIcon 图标 的值
@@ -103,7 +81,7 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	public void setTypeIcon(String typeIcon) {
 		this.typeIcon = typeIcon;
 	}
-	
+
 	/**
 	 * 方法名 ： getTypeName
 	 * 功 能 ： 返回变量 typeName 类型名 的值
@@ -113,7 +91,7 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	public String getTypeName() {
 		return typeName;
 	}
-	
+
 	/**
 	 * 方法名 ： setTypeName
 	 * 功 能 ： 设置变量 typeName 类型名 的值
@@ -121,5 +99,5 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
-	
+
 }
