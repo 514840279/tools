@@ -2,7 +2,7 @@ package org.chuxue.application.dbms.tabs.service;
 
 import java.util.List;
 
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseResult;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
@@ -26,11 +26,11 @@ import org.springframework.web.client.RestTemplate;
  * 时 间 ： 2017年8月3日 下午3:55:43
  * 版 本 ： V1.0
  */
-@Service("sysDbmsTabsInfoService")
-public class SysDbmsTabsInfoService extends BaseServiceImpl<SysDbmsTabsInfo> implements BaseService<SysDbmsTabsInfo> {
+@Service("sysDbmsTabsTableInfoService")
+public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTableInfo> implements BaseService<SysDbmsTabsTableInfo> {
 	
 	//
-	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsInfoService.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfo.class);
 	
 	@Autowired
 	private RestTemplate		restTemplate;
@@ -46,9 +46,9 @@ public class SysDbmsTabsInfoService extends BaseServiceImpl<SysDbmsTabsInfo> imp
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Cacheable(cacheNames = "test", key = "targetClass + methodName +#p0")
-	public BaseResult<Page<SysDbmsTabsInfo>> findAllByTableUuid(Pagination<SysDbmsTabsInfo> vo) {
+	public BaseResult<Page<SysDbmsTabsTableInfo>> findAllByTableUuid(Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("微服务访问{}开始。", vo.getInfo().getJdbcUuid());
-		List<SysDbmsTabsInfo> list = findAll(vo.getInfo());
+		List<SysDbmsTabsTableInfo> list = findAll(vo.getInfo());
 		vo.setList(list);
 		ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + vo.getInfo().getJdbcUuid() + "/data/sysDbmsTabsInfo/findAllByTableUuid", vo, BaseResult.class);
 		if (result.getStatusCode().value() == 200) {

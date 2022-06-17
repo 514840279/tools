@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsAdviMessInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsAdviMessInfoDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class ZhcxAdviceService {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public static void startConfixOracleTableCloumnIndexConfig(SysDbmsTabsInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysAdviceMessDao, JdbcTemplate jdbcTemplate2, SysDbmsTabsColsInfo sysZhcxCol) {
+	public static void startConfixOracleTableCloumnIndexConfig(SysDbmsTabsTableInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysAdviceMessDao, JdbcTemplate jdbcTemplate2, SysDbmsTabsColsInfo sysZhcxCol) {
 		logger.info("startConfixTableCloumnIndexAndCloumnLengthConfig", ZhcxAdviceService.class);
 		// 列数据统计建议添加索引，(索引修改或重建，索引添加，)
 		// 索引修改 一般发现索引创建位置处于数据空间下或者处于其他用户下的索引空间 给出建议修改
@@ -110,7 +110,7 @@ public class ZhcxAdviceService {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public static void startConfixOracleTableColumnsConfig(SysDbmsTabsInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysAdviceMessDao, JdbcTemplate jdbcTemplate2, List<SysDbmsTabsColsInfo> list) {
+	public static void startConfixOracleTableColumnsConfig(SysDbmsTabsTableInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysAdviceMessDao, JdbcTemplate jdbcTemplate2, List<SysDbmsTabsColsInfo> list) {
 		// 列配置比较建议修正,平台隐藏，实际长度修改(列修改，列配置修改,列统计信息)
 		// 列信息处理会有多个同时执行，遮里配置和列的注释都有可能为空，需要对比
 		// 统计信息包含陪的实际最大长度 给出建议缩小列的长度类型， 列空值比例，当空超过60% 给出建议平台默认不展示
@@ -204,7 +204,7 @@ public class ZhcxAdviceService {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public static void startConfixOracleTableConfig(SysDbmsTabsInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysAdviceMessDao, JdbcTemplate jdbcTemplate2) throws SQLException {
+	public static void startConfixOracleTableConfig(SysDbmsTabsTableInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysAdviceMessDao, JdbcTemplate jdbcTemplate2) throws SQLException {
 		logger.info("startConfixTableConfig", ZhcxAdviceService.class);
 		// 表配置比较建议修正 (表修改，表配置修改)
 		// 表修改需要人工确认，所以当前不会生成表修改的类型
@@ -286,7 +286,7 @@ public class ZhcxAdviceService {
 	 * @author Administrator
 	 * @throws
 	 */
-	public static void startConfixMysqlTableConfig(SysDbmsTabsInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysDbmsAdviMessInfoDao, JdbcTemplate jdbcTemplate2) {
+	public static void startConfixMysqlTableConfig(SysDbmsTabsTableInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysDbmsAdviMessInfoDao, JdbcTemplate jdbcTemplate2) {
 		logger.info("startConfixTableConfig", ZhcxAdviceService.class);
 		// 表配置比较建议修正 (表修改，表配置修改)
 		// 表修改需要人工确认，所以当前不会生成表修改的类型
@@ -350,7 +350,7 @@ public class ZhcxAdviceService {
 	 * @author Administrator
 	 * @throws
 	 */
-	public static void startConfixMysqlTableColumnsConfig(SysDbmsTabsInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysDbmsAdviMessInfoDao, JdbcTemplate jdbcTemplate2, List<SysDbmsTabsColsInfo> colList) {
+	public static void startConfixMysqlTableColumnsConfig(SysDbmsTabsTableInfo sysZhcxTab, Map<String, DataSource> multiDatasource, SysDbmsAdviMessInfoDao sysDbmsAdviMessInfoDao, JdbcTemplate jdbcTemplate2, List<SysDbmsTabsColsInfo> colList) {
 		// 列配置比较建议修正,平台隐藏，实际长度修改(列修改，列配置修改,列统计信息)
 		// 列信息处理会有多个同时执行，遮里配置和列的注释都有可能为空，需要对比
 		// 统计信息包含陪的实际最大长度 给出建议缩小列的长度类型， 列空值比例，当空超过60% 给出建议平台默认不展示
@@ -438,7 +438,7 @@ public class ZhcxAdviceService {
 	 * @author Administrator
 	 * @throws
 	 */
-	private static void startConfixMysqlTableCloumnIndexConfig(SysDbmsTabsInfo sysZhcxTab, SysDbmsTabsColsInfo sysZhcxCol, List<Map<String, Object>> resultlist, SysDbmsAdviMessInfoDao sysDbmsAdviMessInfoDao) {
+	private static void startConfixMysqlTableCloumnIndexConfig(SysDbmsTabsTableInfo sysZhcxTab, SysDbmsTabsColsInfo sysZhcxCol, List<Map<String, Object>> resultlist, SysDbmsAdviMessInfoDao sysDbmsAdviMessInfoDao) {
 		logger.info("startConfixMysqlTableCloumnIndexAndCloumnLengthConfig", ZhcxAdviceService.class);
 		// 列数据统计建议添加索引，(索引修改或重建，索引添加，)
 		// 索引修改 一般发现索引创建位置处于数据空间下或者处于其他用户下的索引空间 给出建议修改

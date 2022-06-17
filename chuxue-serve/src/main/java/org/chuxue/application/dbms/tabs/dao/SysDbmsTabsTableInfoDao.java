@@ -1,6 +1,6 @@
 package org.chuxue.application.dbms.tabs.dao;
 
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseDao;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,9 +16,9 @@ import org.springframework.stereotype.Repository;
  * 时 间 ： 2017年8月3日 下午3:54:48
  * 版 本 ： V1.0
  */
-@Repository("sysDbmsTabsInfoDao")
+@Repository("sysDbmsTabsTableInfoDao")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public interface SysDbmsTabsInfoDao extends BaseDao<SysDbmsTabsInfo> {
-
+public interface SysDbmsTabsTableInfoDao extends BaseDao<SysDbmsTabsTableInfo> {
+	
 }

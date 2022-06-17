@@ -15,6 +15,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  * 版 本 ： V1.0
  */
 @NoRepositoryBean
-public interface BaseDao<T> extends JpaRepository<T, Serializable>, JpaSpecificationExecutor<T> {
-	
+public interface BaseDao<T extends BaseEntity> extends JpaRepository<T, Serializable>, JpaSpecificationExecutor<T> {
+
 }

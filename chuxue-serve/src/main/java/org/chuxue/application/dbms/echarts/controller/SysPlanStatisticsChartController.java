@@ -15,7 +15,7 @@ import java.util.Map;
 import org.chuxue.application.bean.manager.dbms.SysDbmsChartDimension;
 import org.chuxue.application.bean.manager.dbms.SysDbmsChartDimensionData;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.utils.string.StringUtils;
 import org.chuxue.application.dbms.echarts.service.SysDbmsChartDimensionDataService;
 import org.chuxue.application.dbms.echarts.service.SysDbmsChartDimensionService;
@@ -23,7 +23,7 @@ import org.chuxue.application.dbms.echarts.service.SysPlantBarOrLineStatisticsCh
 import org.chuxue.application.dbms.echarts.service.SysPlantMapStatisticsChartService;
 import org.chuxue.application.dbms.echarts.service.SysPlantPieStatisticsChartService;
 import org.chuxue.application.dbms.tabs.service.SysDbmsTabsColsInfoService;
-import org.chuxue.application.dbms.tabs.service.SysDbmsTabsInfoService;
+import org.chuxue.application.dbms.tabs.service.SysDbmsTabsTableInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class SysPlanStatisticsChartController {
 	SysDbmsTabsColsInfoService				sysDbmsTabsColsInfoService;
 	
 	@Autowired
-	SysDbmsTabsInfoService					sysDbmsTabsInfoService;
+	SysDbmsTabsTableInfoService				sysDbmsTabsTableInfoService;
 	
 	@RequestMapping(path = "/build", method = RequestMethod.POST)
 	public Map<String, Object> build(@RequestBody SysDbmsChartDimension info) {
@@ -72,9 +72,9 @@ public class SysPlanStatisticsChartController {
 		info = sysPlantChartDimensionService.findOne(info);
 		
 		// 表名称拼接
-		SysDbmsTabsInfo tabsInfo = new SysDbmsTabsInfo();
+		SysDbmsTabsTableInfo tabsInfo = new SysDbmsTabsTableInfo();
 		tabsInfo.setUuid(info.getTableUuid());
-		tabsInfo = sysDbmsTabsInfoService.findOne(tabsInfo);
+		tabsInfo = sysDbmsTabsTableInfoService.findOne(tabsInfo);
 		String tableName = tabsInfo.getTabsName();
 		// 图表参数名称查询
 		SysDbmsChartDimensionData sysPlantChartDimensionData = new SysDbmsChartDimensionData();

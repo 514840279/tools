@@ -18,9 +18,9 @@ import org.chuxue.application.common.base.BaseEntity;
  * @版本 V1.0
  */
 @Entity
-@Table(name = "sys_dbms_tabs_info")
-@NamedQuery(name = "SysDbmsTabsInfo.findAll", query = "SELECT s FROM SysDbmsTabsInfo s")
-public class SysDbmsTabsInfo extends BaseEntity implements Serializable {
+@Table(name = "sys_dbms_tabs_table_info")
+@NamedQuery(name = "SysDbmsTabsTableInfo.findAll", query = "SELECT s FROM SysDbmsTabsTableInfo s")
+public class SysDbmsTabsTableInfo extends BaseEntity implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 	
 	// 数据库表空间大小
@@ -43,17 +43,9 @@ public class SysDbmsTabsInfo extends BaseEntity implements Serializable {
 	@Column(name = "tabs_rows", precision = 10)
 	private Integer				tabsRows;
 	
-	// 数据库表顺序
-	@Column(name = "tabs_order", precision = 10)
-	private Integer				tabsOrder;
-	
 	// 数据库表类型id
 	@Column(name = "type_uuid")
 	private String				typeUuid;
-	
-	// 数据库表空间大小
-	@Column(name = "db_type")
-	private String				dbType;
 	
 	// 数据库表id
 	@Column(name = "jdbc_uuid")
@@ -66,7 +58,7 @@ public class SysDbmsTabsInfo extends BaseEntity implements Serializable {
 	 * 作 者 ： test
 	 * @throws
 	 */
-	public SysDbmsTabsInfo() {
+	public SysDbmsTabsTableInfo() {
 		super();
 	}
 	
@@ -83,11 +75,10 @@ public class SysDbmsTabsInfo extends BaseEntity implements Serializable {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public SysDbmsTabsInfo(String uuid, String jdbcUuid, String dbType, String tabsName, Integer tabsRows) {
+	public SysDbmsTabsTableInfo(String uuid, String jdbcUuid, String tabsName, Integer tabsRows) {
 		super();
 		super.uuid = uuid;
 		this.jdbcUuid = jdbcUuid;
-		this.dbType = dbType;
 		this.tabsName = tabsName;
 		this.tabsRows = tabsRows;
 	}
@@ -183,24 +174,6 @@ public class SysDbmsTabsInfo extends BaseEntity implements Serializable {
 	}
 	
 	/**
-	 * 方法名 ： getTabsOrder
-	 * 功 能 ： 返回变量 tabsOrder 数据库表顺序 的值
-	 *
-	 * @return: String
-	 */
-	public Integer getTabsOrder() {
-		return tabsOrder;
-	}
-	
-	/**
-	 * 方法名 ： setTabsOrder
-	 * 功 能 ： 设置变量 tabsOrder 数据库表顺序 的值
-	 */
-	public void setTabsOrder(Integer tabsOrder) {
-		this.tabsOrder = tabsOrder;
-	}
-	
-	/**
 	 * 方法名 ： getTypeUuid
 	 * 功 能 ： 返回变量 typeUuid 数据库表类型id 的值
 	 *
@@ -216,24 +189,6 @@ public class SysDbmsTabsInfo extends BaseEntity implements Serializable {
 	 */
 	public void setTypeUuid(String typeUuid) {
 		this.typeUuid = typeUuid;
-	}
-	
-	/**
-	 * 方法名 ： getDbType
-	 * 功 能 ： 返回变量 dbType 数据库表空间大小 的值
-	 *
-	 * @return: String
-	 */
-	public String getDbType() {
-		return dbType;
-	}
-	
-	/**
-	 * 方法名 ： setDbType
-	 * 功 能 ： 设置变量 dbType 数据库表空间大小 的值
-	 */
-	public void setDbType(String dbType) {
-		this.dbType = dbType;
 	}
 	
 	/**

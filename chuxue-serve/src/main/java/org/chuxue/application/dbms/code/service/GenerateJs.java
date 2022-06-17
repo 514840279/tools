@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsGenerateCodeInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.utils.files.TxtFilesWriter;
 
 /**
@@ -29,7 +29,7 @@ public class GenerateJs {
 	 *
 	 * @author Administrator @throws
 	 */
-	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
 		for (int i = 0; i < 3; i++) {
@@ -363,7 +363,7 @@ public class GenerateJs {
 	 * 返回 void
 	 * author Administrator @throws
 	 */
-	public static void generateDetail(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	public static void generateDetail(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
 		for (int i = 0; i < 3; i++) {

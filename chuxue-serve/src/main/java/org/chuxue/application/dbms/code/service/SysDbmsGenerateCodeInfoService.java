@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsGenerateCodeInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseException;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
@@ -19,7 +19,7 @@ import org.chuxue.application.common.utils.files.CompressFile;
 import org.chuxue.application.common.utils.files.FileDelete;
 import org.chuxue.application.common.utils.files.TxtFilesWriter;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColsInfoDao;
-import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsInfoDao;
+import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -34,12 +34,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGenerateCodeInfo> implements BaseService<SysDbmsGenerateCodeInfo> {
-	@Autowired
-	private SysDbmsTabsColsInfoDao	sysDbmsTabsColsInfoDao;
-	@Autowired
-	private SysDbmsTabsInfoDao		sysDbmsTabsInfoDao;
 
-	private static final String		OUTPUTFILE	= "outputfile";
+	@Autowired
+	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
+	@Autowired
+	SysDbmsTabsTableInfoDao		sysDbmsTabsInfoDao;
+
+	private static final String	OUTPUTFILE	= "outputfile";
 
 	/**
 	 * @throws FileNotFoundException
@@ -66,8 +67,8 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 			Example<SysDbmsTabsColsInfo> example = Example.of(colsInfo);
 			List<SysDbmsTabsColsInfo> colsInfos = sysDbmsTabsColsInfoDao.findAll(example);
 
-			SysDbmsTabsInfo tabsInfo = new SysDbmsTabsInfo();
-			Optional<SysDbmsTabsInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getUuid());
+			SysDbmsTabsTableInfo tabsInfo = new SysDbmsTabsTableInfo();
+			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getUuid());
 			if (op.isPresent()) {
 				tabsInfo = op.get();
 
@@ -192,7 +193,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	 * 返回 void
 	 * author Administrator @throws
 	 */
-	private void getGenerateController(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	private void getGenerateController(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
 		for (int i = 0; i < 3; i++) {
@@ -262,7 +263,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	 * 返回 void
 	 * author Administrator @throws
 	 */
-	private void getGenerateService(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	private void getGenerateService(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
 		for (int i = 0; i < 3; i++) {
@@ -314,7 +315,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	 * 返回 void
 	 * author Administrator @throws
 	 */
-	private void getGenerateDao(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	private void getGenerateDao(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
 		for (int i = 0; i < 3; i++) {

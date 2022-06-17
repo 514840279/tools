@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
  * 时 间 ： 2017年10月10日 下午2:06:45
  * 版 本 ： V1.0
  */
-public interface BaseService<T> {
+public interface BaseService<T extends BaseEntity> {
 
 	T findOne(T entity);
 

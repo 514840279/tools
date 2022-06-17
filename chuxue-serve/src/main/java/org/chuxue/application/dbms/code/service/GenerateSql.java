@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsGenerateCodeInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.utils.files.TxtFilesWriter;
 import org.chuxue.application.common.utils.string.StringUtils;
 
@@ -31,7 +31,7 @@ public class GenerateSql {
 	 *
 	 * @author Administrator @throws
 	 */
-	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("-- ================" + tabsInfo.getTabsName() + "(" + tabsInfo.getTabsDesc() + ")配置开始======================= \r\n");
 		// 创建表
@@ -132,7 +132,7 @@ public class GenerateSql {
 	 * 返回 void
 	 * authorAdministrator @throws
 	 */
-	public static void generateConfig(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	public static void generateConfig(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		StringBuilder stringBuilder = new StringBuilder();
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
@@ -155,7 +155,7 @@ public class GenerateSql {
 		
 	}
 	
-	public static void generateOracle(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+	public static void generateOracle(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		StringBuilder stringBuilder = new StringBuilder();
 		String tableNameString = tabsInfo.getTabsName().substring(tabsInfo.getTabsName().indexOf(".") + 1);
 		

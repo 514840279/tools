@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsMergeInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.common.base.Pagination;
@@ -27,14 +27,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysDbmsTabsMergeInfoService extends BaseServiceImpl<SysDbmsTabsMergeInfo> implements BaseService<SysDbmsTabsMergeInfo> {
 	@Autowired
-	JdbcTemplate			jdbcTemplate;
-
+	JdbcTemplate				jdbcTemplate;
+	
 	@Autowired
-	SysDbmsTabsMergeInfoDao	sysDbmsTabsMergeInfoDao;
-
+	SysDbmsTabsMergeInfoDao		sysDbmsTabsMergeInfoDao;
+	
 	@Autowired
-	SysDbmsTabsInfoService	sysDbmsTabsInfoService;
-
+	SysDbmsTabsTableInfoService	sysDbmsTabsTableInfoService;
+	
 	/**
 	 * @方法名 page1
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -62,7 +62,7 @@ public class SysDbmsTabsMergeInfoService extends BaseServiceImpl<SysDbmsTabsMerg
 		List<SysDbmsTabsColsInfo> list = template.query(stringBuilder.toString(), new BeanPropertyRowMapper<>(SysDbmsTabsColsInfo.class));
 		return list;
 	}
-
+	
 	/**
 	 * @方法名 page2
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -90,7 +90,7 @@ public class SysDbmsTabsMergeInfoService extends BaseServiceImpl<SysDbmsTabsMerg
 		List<SysDbmsTabsColsInfo> list = template.query(stringBuilder.toString(), new BeanPropertyRowMapper<>(SysDbmsTabsColsInfo.class));
 		return list;
 	}
-
+	
 	/**
 	 * @方法名 merge
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -111,7 +111,7 @@ public class SysDbmsTabsMergeInfoService extends BaseServiceImpl<SysDbmsTabsMerg
 					merge.setColsName1(sysDbmsTabsColsInfo1.getColsName());
 					merge.setColsDesc1(sysDbmsTabsColsInfo1.getColsDesc());
 					merge.setColsUuid1(sysDbmsTabsColsInfo1.getUuid());
-
+					
 					merge.setTableUuid2(vo.getInfo().getTableUuid2());
 					merge.setColsName2(sysDbmsTabsColsInfo2.getColsName());
 					merge.setColsDesc2(sysDbmsTabsColsInfo2.getColsDesc());
@@ -124,7 +124,7 @@ public class SysDbmsTabsMergeInfoService extends BaseServiceImpl<SysDbmsTabsMerg
 		}
 		return "1";
 	}
-
+	
 	/**
 	 * @方法名 loadSql
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -139,8 +139,8 @@ public class SysDbmsTabsMergeInfoService extends BaseServiceImpl<SysDbmsTabsMerg
 		if (mergeInfos == null || mergeInfos.size() == 0) {
 			return "";
 		}
-		SysDbmsTabsInfo tabsInfo1 = sysDbmsTabsInfoService.findById(vo.getTableUuid1());
-		SysDbmsTabsInfo tabsInfo2 = sysDbmsTabsInfoService.findById(vo.getTableUuid2());
+		SysDbmsTabsTableInfo tabsInfo1 = sysDbmsTabsTableInfoService.findById(vo.getTableUuid1());
+		SysDbmsTabsTableInfo tabsInfo2 = sysDbmsTabsTableInfoService.findById(vo.getTableUuid2());
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append("-- 合并表语句 \r\n");
 		sBuilder.append(" insert into " + tabsInfo2.getTabsName() + "(");
@@ -170,5 +170,5 @@ public class SysDbmsTabsMergeInfoService extends BaseServiceImpl<SysDbmsTabsMerg
 		sBuilder.append("commit; \r\n");
 		return sBuilder.toString();
 	}
-
+	
 }

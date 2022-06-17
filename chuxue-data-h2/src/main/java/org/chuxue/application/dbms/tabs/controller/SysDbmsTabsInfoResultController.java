@@ -1,6 +1,6 @@
 package org.chuxue.application.dbms.tabs.controller;
 
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseController;
 import org.chuxue.application.common.base.BaseControllerImpl;
 import org.chuxue.application.common.base.BaseResult;
@@ -37,7 +37,7 @@ public class SysDbmsTabsInfoResultController extends BaseControllerImpl<SysDbmsT
 	SysDbmsTabsInfoResultService	sysDbmsTabsInfoResultService;
 	
 	@RequestMapping(value = "/findAllByTableUuid", method = { RequestMethod.POST })
-	public BaseResult<Page<SysDbmsTabsInfoResult>> findAllByTableUuid(@RequestBody Pagination<SysDbmsTabsInfo> vo) {
+	public BaseResult<Page<SysDbmsTabsInfoResult>> findAllByTableUuid(@RequestBody Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("数据库表信息查询：{}", vo.toString());
 		Page<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultService.findAllByTableUuid(vo);
 		return ResultUtil.success(page);

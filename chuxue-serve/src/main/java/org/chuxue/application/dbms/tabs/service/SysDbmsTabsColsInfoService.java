@@ -6,12 +6,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.bean.manager.dbms.SysDbmsTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColsInfoDao;
-import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsInfoDao;
+import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 	@Autowired
 	private SysDbmsTabsColsInfoDao	sysDbmsTabsColsInfoDao;
 	@Autowired
-	private SysDbmsTabsInfoDao		sysDbmsTabsInfoDao;
+	SysDbmsTabsTableInfoDao			sysDbmsTabsTableInfoDao;
 
 	@Autowired
 	JdbcTemplate					jdbcTemplate;
@@ -65,9 +65,9 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 	// 更新
 	public void change(SysDbmsTabsColsInfo info) {
 		try {
-			Optional<SysDbmsTabsInfo> op = sysDbmsTabsInfoDao.findById(info.getTabsUuid());
+			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsTableInfoDao.findById(info.getTabsUuid());
 			if (op.isPresent()) {
-				SysDbmsTabsInfo tab = op.get();
+				SysDbmsTabsTableInfo tab = op.get();
 				Optional<SysDbmsTabsColsInfo> old = sysDbmsTabsColsInfoDao.findById(info.getUuid());
 				if (old.isPresent()) {
 					String sql = "alter table " + tab.getTabsName() + " CHANGE " + old.get().getColsName() + " " + info.getColsName() + " " + info.getColsType() + "(" + info.getColsLength() + ")";
@@ -86,7 +86,7 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 
 	public void deleteSysDbmsTabsColsInfo(List<SysDbmsTabsColsInfo> list) {
 
-		Optional<SysDbmsTabsInfo> tab = sysDbmsTabsInfoDao.findById(list.get(0).getTabsUuid());
+		Optional<SysDbmsTabsTableInfo> tab = sysDbmsTabsTableInfoDao.findById(list.get(0).getTabsUuid());
 		if (tab.isPresent()) {
 			for (SysDbmsTabsColsInfo SysDbmsTabsColsInfo : list) {
 				try {
