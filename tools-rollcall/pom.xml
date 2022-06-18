@@ -95,24 +95,22 @@
 				</configuration>
 			</plugin>
 			<!-- 添加docker-maven插件 -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <executions>
 		              <execution>
 		                <id>default</id>
-		                <phase>package</phase>   <!--绑定mvn的哪个命令-->
+		                <phase>package</phase>   
 		                <goals>
-		                    <goal>build</goal>  <!--要执行的命令 -->
+		                    <goal>build</goal>  
 		                    <goal>push</goal>
 		               </goals>
 		             </execution>
 	            </executions>
                 <configuration>
-	                <!-- docker.host就是docker服务的地址 -->
                 	<dockerHost>${docker.host}</dockerHost>
                 	<serverId>docker-hub</serverId>
-                	<!-- docker.repository就是私服的地址 ${docker.repository}/ -->
                     <imageName>514840279/${project.artifactId}:1.0</imageName>
                     <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     <resources>
@@ -124,7 +122,7 @@
                     </resources>
                     <forceTags>true</forceTags>
                 </configuration>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
 

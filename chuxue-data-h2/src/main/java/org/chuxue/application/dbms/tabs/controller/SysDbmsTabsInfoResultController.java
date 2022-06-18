@@ -1,8 +1,6 @@
 package org.chuxue.application.dbms.tabs.controller;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
-import org.chuxue.application.common.base.BaseController;
-import org.chuxue.application.common.base.BaseControllerImpl;
 import org.chuxue.application.common.base.BaseResult;
 import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.common.base.ResultUtil;
@@ -28,19 +26,19 @@ import org.springframework.web.bind.annotation.RestController;
  * 版 本 ： V1.0
  */
 @RestController
-@RequestMapping("/sysDbmsTabsInfo")
-public class SysDbmsTabsInfoResultController extends BaseControllerImpl<SysDbmsTabsInfoResult> implements BaseController<SysDbmsTabsInfoResult> {
-	
+@RequestMapping("/sysDbmsTabsTableInfo")
+public class SysDbmsTabsInfoResultController {
+
 	private static final Logger		logger	= LoggerFactory.getLogger(SysDbmsTabsInfoResultController.class);
-	
+
 	@Autowired
 	SysDbmsTabsInfoResultService	sysDbmsTabsInfoResultService;
-	
-	@RequestMapping(value = "/findAllByTableUuid", method = { RequestMethod.POST })
-	public BaseResult<Page<SysDbmsTabsInfoResult>> findAllByTableUuid(@RequestBody Pagination<SysDbmsTabsTableInfo> vo) {
+
+	@RequestMapping(value = "/findAllByJdbcUuid", method = { RequestMethod.POST })
+	public BaseResult<Page<SysDbmsTabsInfoResult>> findAllByJdbcUuid(@RequestBody Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("数据库表信息查询：{}", vo.toString());
-		Page<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultService.findAllByTableUuid(vo);
+		Page<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultService.findAllByJdbcUuid(vo);
 		return ResultUtil.success(page);
 	}
-	
+
 }

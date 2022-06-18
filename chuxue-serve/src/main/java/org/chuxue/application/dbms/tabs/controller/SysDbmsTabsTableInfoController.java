@@ -28,17 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysDbmsTabsTableInfo")
 public class SysDbmsTabsTableInfoController extends BaseControllerImpl<SysDbmsTabsTableInfo> implements BaseController<SysDbmsTabsTableInfo> {
-
+	
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfoController.class);
-
+	
 	@Autowired
 	SysDbmsTabsTableInfoService	sysDbmsTabsTableInfoService;
-
-	@RequestMapping(value = "/findAllByTableUuid", method = { RequestMethod.POST })
-	public BaseResult<Page<SysDbmsTabsTableInfo>> findAllByTableUuid(@RequestBody Pagination<SysDbmsTabsTableInfo> vo) {
+	
+	@RequestMapping(value = "/findAllByJdbcUuid", method = { RequestMethod.POST })
+	public BaseResult<Page<SysDbmsTabsTableInfo>> findAllByJdbcUuid(@RequestBody Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("数据库表信息查询：{}", vo.toString());
-		BaseResult<Page<SysDbmsTabsTableInfo>> page = sysDbmsTabsTableInfoService.findAllByTableUuid(vo);
+		BaseResult<Page<SysDbmsTabsTableInfo>> page = sysDbmsTabsTableInfoService.findAllByJdbcUuid(vo);
 		return page;
 	}
-	
+
 }

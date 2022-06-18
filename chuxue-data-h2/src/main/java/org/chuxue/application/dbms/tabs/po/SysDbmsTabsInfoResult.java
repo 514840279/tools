@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.chuxue.application.common.base.BaseEntity;
-
 /**
  * 文件名 ： SysDbmsTabsInfoResult.java
  * 包 名 ： org.danyuan.application.dbms.tabs.po
@@ -19,7 +17,7 @@ import org.chuxue.application.common.base.BaseEntity;
  * 版 本 ： V1.0
  */
 @Entity
-public class SysDbmsTabsInfoResult extends BaseEntity implements Serializable {
+public class SysDbmsTabsInfoResult implements Serializable {
 
 	/**
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
@@ -51,7 +49,6 @@ public class SysDbmsTabsInfoResult extends BaseEntity implements Serializable {
 	 *
 	 * @return: String
 	 */
-	@Override
 	public String getUuid() {
 		return uuid;
 	}
@@ -60,7 +57,6 @@ public class SysDbmsTabsInfoResult extends BaseEntity implements Serializable {
 	 * 方法名 ： setUuid
 	 * 功 能 ： 设置变量 uuid 的值
 	 */
-	@Override
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}

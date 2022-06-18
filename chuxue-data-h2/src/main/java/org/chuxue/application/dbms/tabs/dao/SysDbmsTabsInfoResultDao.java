@@ -1,13 +1,15 @@
 package org.chuxue.application.dbms.tabs.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
-import org.chuxue.application.common.base.BaseDao;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,15 +27,17 @@ import org.springframework.stereotype.Repository;
 @Repository("sysDbmsTabsInfoDao")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public interface SysDbmsTabsInfoResultDao extends BaseDao<SysDbmsTabsInfoResult> {
+public interface SysDbmsTabsInfoResultDao extends JpaRepository<SysDbmsTabsInfoResult, Serializable>, JpaSpecificationExecutor<SysDbmsTabsInfoResult> {
 	
 	/**
 	 * @param request
-	 *            @param list @param string 方法名： findAllByTableUuid 功 能：
+	 * @param list
+	 * @param string
+	 *            方法名： findAllByTableUuid 功 能：
 	 *            TODO(这里用一句话描述这个方法的作用) 参 数： @return 返 回： Page<SysDbmsTabsInfo> 作 者 ：
 	 *            Administrator @throws
 	 */
 	@Query(value = "select UUID() AS uuid,:jdbcUuid as jdbc_uuid,'H2' AS db_type, table_name as tabs_name ,ROW_COUNT_ESTIMATE as tabs_rows  " + " from information_schema.tables " + " where table_schema !='INFORMATION_SCHEMA' " + " and TABLE_TYPE = 'TABLE' " + " and NVL2(:tname,table_name  like CONCAT('%',:tname,'%'),1=1) " + " and NVL2(:list,table_name  NOT IN (:list),1=1)", countQuery = "select count(:jdbcUuid) as l " + " from information_schema.tables " + " where table_schema !='INFORMATION_SCHEMA' " + " and TABLE_TYPE = 'TABLE' " + " and NVL2(:tname,table_name  like  CONCAT('%',:tname,'%'),1=1) " + " and NVL2(:list ,table_name  NOT IN (:list),1=1)", nativeQuery = true)
-	Page<SysDbmsTabsInfoResult> findAllByTableUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list, Pageable pageable);
+	Page<SysDbmsTabsInfoResult> findAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list, Pageable pageable);
 	
 }

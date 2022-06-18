@@ -4,7 +4,7 @@ server:
   
 
 spring:
-  application:    name: danyuan-data-mysql
+  application:    name: chuxue-data-mysql
   banner:    charset: utf-8
   profiles:
     active:

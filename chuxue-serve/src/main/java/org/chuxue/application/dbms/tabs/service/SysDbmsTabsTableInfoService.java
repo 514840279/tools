@@ -28,13 +28,13 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service("sysDbmsTabsTableInfoService")
 public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTableInfo> implements BaseService<SysDbmsTabsTableInfo> {
-	
+
 	//
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfo.class);
-	
+
 	@Autowired
 	private RestTemplate		restTemplate;
-	
+
 	/**
 	 * 方法名： findAllByTableUuid
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -42,15 +42,16 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 	 * 参 数： @return
 	 * 返 回： Page<SysDbmsTabsInfo>
 	 * 作 者 ： Administrator
+	 *
 	 * @throws
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Cacheable(cacheNames = "test", key = "targetClass + methodName +#p0")
-	public BaseResult<Page<SysDbmsTabsTableInfo>> findAllByTableUuid(Pagination<SysDbmsTabsTableInfo> vo) {
+	public BaseResult<Page<SysDbmsTabsTableInfo>> findAllByJdbcUuid(Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("微服务访问{}开始。", vo.getInfo().getJdbcUuid());
 		List<SysDbmsTabsTableInfo> list = findAll(vo.getInfo());
 		vo.setList(list);
-		ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + vo.getInfo().getJdbcUuid() + "/data/sysDbmsTabsInfo/findAllByTableUuid", vo, BaseResult.class);
+		ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + vo.getInfo().getJdbcUuid() + "/data/sysDbmsTabsTableInfo/findAllByJdbcUuid", vo, BaseResult.class);
 		if (result.getStatusCode().value() == 200) {
 			System.out.println(result.getBody());
 			return result.getBody();
@@ -58,7 +59,7 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 			logger.error("微服务访问失败：{}异常。", vo.getInfo().getJdbcUuid());
 			return null;
 		}
-		
+
 	}
-	
+
 }
