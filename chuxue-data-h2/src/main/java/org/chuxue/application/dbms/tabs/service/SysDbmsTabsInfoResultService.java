@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
-import org.chuxue.application.common.base.Pagination;
+import org.chuxue.application.common.base.Page;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsInfoResultDao;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 文件名 ： SysTableServiceImpl.java
@@ -26,13 +25,13 @@ import org.springframework.stereotype.Service;
  */
 @Service("sysDbmsTabsInfoService")
 public class SysDbmsTabsInfoResultService {
-
+	
 	//
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsInfoResultService.class);
-
+	
 	@Autowired
 	SysDbmsTabsInfoResultDao	sysDbmsTabsInfoResultDao;
-
+	
 	/**
 	 * 方法名： findAllByTableUuid
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -41,10 +40,11 @@ public class SysDbmsTabsInfoResultService {
 	 * 返 回： Page<SysDbmsTabsInfo>
 	 * 作 者 ： Administrator @throws
 	 */
-	public Page<SysDbmsTabsInfoResult> findAllByJdbcUuid(Pagination<SysDbmsTabsTableInfo> vo) {
+	@Transactional
+	public Page<SysDbmsTabsInfoResult> findAllByJdbcUuid(Page<SysDbmsTabsTableInfo> vo) {
 		logger.info("微服务访问{}开始。", vo.getInfo().getJdbcUuid());
 		String tableName = vo.getInfo().getTabsName() != null ? vo.getInfo().getTabsName().toUpperCase() : null;
-
+		
 		List<String> list = null;
 		if (vo.getList() != null) {
 			for (SysDbmsTabsTableInfo sysDbmsTabsInfo : vo.getList()) {
@@ -54,9 +54,13 @@ public class SysDbmsTabsInfoResultService {
 				list.add(sysDbmsTabsInfo.getTabsName());
 			}
 		}
-		PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize());
-		Page<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultDao.findAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list, request);
-		return page;
+		List<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultDao.findAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list, vo.getPageNumber(), vo.getPageSize());
+		Integer total = vo.getTotalElements();
+		if (total == null || total == 0) {
+			total = sysDbmsTabsInfoResultDao.totalAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list);
+		}
+		
+		return new Page<SysDbmsTabsInfoResult>(total, page);
 	}
-
+	
 }

@@ -1,28 +1,29 @@
 package org.chuxue.application.dbms.tabs.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsJdbcInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
+import org.chuxue.application.common.base.BaseResult;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColsInfoDao;
+import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsJdbcInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 文件名 ： SysDbmsTabsColsInfoService.java 包 名 ：
@@ -32,149 +33,69 @@ import org.springframework.stereotype.Service;
  */
 @Service("sysDbmsTabsColsInfoService")
 public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsInfo> implements BaseService<SysDbmsTabsColsInfo> {
-	private static final Logger		logger	= LoggerFactory.getLogger(SysDbmsTabsColsInfoService.class);
-	//
-	@Autowired
-	private SysDbmsTabsColsInfoDao	sysDbmsTabsColsInfoDao;
-	@Autowired
-	SysDbmsTabsTableInfoDao			sysDbmsTabsTableInfoDao;
+	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsColsInfoService.class);
 
 	@Autowired
-	JdbcTemplate					jdbcTemplate;
+	RestTemplate				restTemplate;
 
-	// 分页查询
-	public Page<SysDbmsTabsColsInfo> findAllByTableUuid(int pageNumber, int pageSize, String searchText, String tableUuid) {
-		logger.info(tableUuid, SysDbmsTabsColsInfoService.class);
-		// Page<SysDbmsTabsColsInfo> list =
-		// sysDbmsTabsColsInfoDao.findAllByTableUuid(tableUuid);
-		SysDbmsTabsColsInfo info = new SysDbmsTabsColsInfo();
-		info.setTabsUuid(tableUuid);
-		Example<SysDbmsTabsColsInfo> example = Example.of(info);
-		Sort sort = Sort.by(new Order(Direction.ASC, "colsOrder"));
-		PageRequest request = this.buildPageRequest(pageNumber, pageSize, sort);
-		Page<SysDbmsTabsColsInfo> sourceCodes = sysDbmsTabsColsInfoDao.findAll(example, request);
-		return sourceCodes;
+	@Autowired
+	SysDbmsTabsJdbcInfoDao		sysDbmsTabsJdbcInfoDao;
 
-	}
+	@Autowired
+	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
 
-	// 构建PageRequest
-	private PageRequest buildPageRequest(int pageNumber, int pageSize, Sort sort) {
-		return PageRequest.of(pageNumber - 1, pageSize, sort);
-	}
+	@Autowired
+	SysDbmsTabsTableInfoDao		sysDbmsTabsTableInfoDao;
 
-	// 更新
-	public void change(SysDbmsTabsColsInfo info) {
-		try {
-			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsTableInfoDao.findById(info.getTabsUuid());
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public String findAllByTabsUuid(Pagination<SysDbmsTabsColsInfo> vo) {
+		SysDbmsTabsColsInfo cols = vo.getInfo();
+		SysDbmsTabsTableInfo tabs = new SysDbmsTabsTableInfo();
+		tabs.setUuid(cols.getTabsUuid());
+		Optional<SysDbmsTabsTableInfo> top = sysDbmsTabsTableInfoDao.findOne(Example.of(tabs));
+		if (top.isPresent()) {
+			tabs = top.get();
+			SysDbmsTabsJdbcInfo jdbc = new SysDbmsTabsJdbcInfo();
+			jdbc.setUuid(tabs.getJdbcUuid());
+			Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
 			if (op.isPresent()) {
-				SysDbmsTabsTableInfo tab = op.get();
-				Optional<SysDbmsTabsColsInfo> old = sysDbmsTabsColsInfoDao.findById(info.getUuid());
-				if (old.isPresent()) {
-					String sql = "alter table " + tab.getTabsName() + " CHANGE " + old.get().getColsName() + " " + info.getColsName() + " " + info.getColsType() + "(" + info.getColsLength() + ")";
-					jdbcTemplate.execute(sql);
-				} else {
+				jdbc = op.get();
+				
+				SysDbmsTabsColsInfo pcols = new SysDbmsTabsColsInfo();
+				pcols.setUuid(tabs.getUuid());
+				pcols.setColsName(tabs.getTabsName());
+				org.chuxue.application.common.base.Page<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.Page<>();
+				page.setInfo(cols);
+				
+				List<SysDbmsTabsColsInfo> al = sysDbmsTabsColsInfoDao.findAll(Example.of(cols));
+				page.setList(al);
 
-					String sql = "alter table " + tab.getTabsName() + " add " + info.getColsName() + " " + info.getColsType() + "(" + info.getColsLength() + ")";
-					jdbcTemplate.execute(sql);
+				// 请求微服务，获取未加载的表名称信息
+				ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/findAllByTabUuid", page, BaseResult.class);
+				if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
+					logger.info(result.getBody().toString());
+					List<LinkedHashMap<String, Object>> li = (List<LinkedHashMap<String, Object>>) result.getBody().getData();
+					List<SysDbmsTabsColsInfo> list = new ArrayList<>();
+					for (LinkedHashMap map : li) {
+						SysDbmsTabsColsInfo sysDbmsTabsColsInfo = new SysDbmsTabsColsInfo();
+						
+						try {
+							BeanUtils.populate(sysDbmsTabsColsInfo, map);
+							list.add(sysDbmsTabsColsInfo);
+						} catch (IllegalAccessException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					sysDbmsTabsColsInfoDao.saveAll(list);
+					return "OK";
 				}
 			}
-		} finally {
-			sysDbmsTabsColsInfoDao.save(info);
-
 		}
+		return null;
 	}
-
-	public void deleteSysDbmsTabsColsInfo(List<SysDbmsTabsColsInfo> list) {
-
-		Optional<SysDbmsTabsTableInfo> tab = sysDbmsTabsTableInfoDao.findById(list.get(0).getTabsUuid());
-		if (tab.isPresent()) {
-			for (SysDbmsTabsColsInfo SysDbmsTabsColsInfo : list) {
-				try {
-					// alter table user DROP COLUMN new2;
-					String sql = "alter table " + tab.get().getTabsName() + " DROP COLUMN " + SysDbmsTabsColsInfo.getColsName();
-					jdbcTemplate.execute(sql);
-				} finally {
-					sysDbmsTabsColsInfoDao.delete(SysDbmsTabsColsInfo);
-				}
-			}
-		}
-	}
-
-	public List<SysDbmsTabsColsInfo> findAllBySysDbmsTabsColsInfo(SysDbmsTabsColsInfo info) {
-		Example<SysDbmsTabsColsInfo> example = Example.of(info);
-		return sysDbmsTabsColsInfoDao.findAll(example);
-	}
-
-	public void saveSysDbmsTabsColsInfo(List<SysDbmsTabsColsInfo> list) {
-		sysDbmsTabsColsInfoDao.saveAll(list);
-	}
-
-	/**
-	 * 方法名 ： findAll 功 能 ： TODO(这里用一句话描述这个方法的作用) 参 数 ： @param info 参 数 ： @return 参 考
-	 * ： @see
-	 * tk.ainiyue.danyuan.application.common.base.BaseService#findAll(java.lang.Object)
-	 * 作 者 ： Administrator
-	 */
-
-	@Override
-	public List<SysDbmsTabsColsInfo> findAll(SysDbmsTabsColsInfo info) {
-		Sort sort = Sort.by(Order.asc("colsOrder"));
-		Example<SysDbmsTabsColsInfo> example = Example.of(info);
-		return sysDbmsTabsColsInfoDao.findAll(example, sort);
-	}
-
-	/**
-	 * 方法名 ： page 功 能 ： TODO(这里用一句话描述这个方法的作用) 参 数 ： @param pageNumber 参 数 ： @param
-	 * pageSize 参 数 ： @param info 参 数 ： @param map 参 数 ： @param order 参 数 ： @return
-	 * 参 考 ： @see tk.ainiyue.danyuan.application.common.base.BaseService#page(int,
-	 * int, java.lang.Object, java.util.Map,
-	 * org.springframework.data.domain.Sort.Order[]) 作 者 ： Administrator
-	 */
-
-	@Override
-	public Page<SysDbmsTabsColsInfo> page(Pagination<SysDbmsTabsColsInfo> vo) {
-		Sort sort = vo.sort();
-		if (sort == null) {
-			List<Order> orders = new ArrayList<>();
-			Order order = new Order(Direction.ASC, "createTime");
-			orders.add(order);
-			sort = Sort.by(orders);
-		}
-		if (vo.getInfo() == null) {
-			vo.setInfo(new SysDbmsTabsColsInfo());
-		}
-
-		Example<SysDbmsTabsColsInfo> example = Example.of(vo.getInfo());
-		PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
-		Page<SysDbmsTabsColsInfo> page = sysDbmsTabsColsInfoDao.findAll(example, request);
-		return page;
-	}
-
-	/**
-	 * 方法名 ： save 功 能 ： TODO(这里用一句话描述这个方法的作用) 参 数 ： @param list 参 考 ： @see
-	 * tk.ainiyue.danyuan.application.common.base.BaseService#save(java.util.List) 作
-	 * 者 ： Administrator
-	 */
-
-	@Override
-	public void saveAll(List<SysDbmsTabsColsInfo> list) {
-		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : list) {
-			if (sysDbmsTabsColsInfo.getUuid() == null) {
-				sysDbmsTabsColsInfo.setUuid(UUID.randomUUID().toString());
-			}
-			change(sysDbmsTabsColsInfo);
-		}
-	}
-
-	/**
-	 * 方法名 ： delete 功 能 ： TODO(这里用一句话描述这个方法的作用) 参 数 ： @param list 参 考 ： @see
-	 * tk.ainiyue.danyuan.application.common.base.BaseService#delete(java.util.List)
-	 * 作 者 ： Administrator
-	 */
-
-	@Override
-	public void deleteAll(List<SysDbmsTabsColsInfo> list) {
-		sysDbmsTabsColsInfoDao.deleteAll(list);
-	}
-
+	
 }

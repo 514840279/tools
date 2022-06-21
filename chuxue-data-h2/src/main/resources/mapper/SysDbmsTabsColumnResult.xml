@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColumnResultDao">
+   
+    <select id="findAllByTabUuid"  resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsColumnResult">
+       SELECT UUID() AS UUID
+	       ,#{tabsUuid} AS TABS_UUID
+	       ,REMARKS AS COLS_DESC
+	       ,COLUMN_NAME AS COLS_NAME
+	       , CHARACTER_MAXIMUM_LENGTH AS COLS_LENGTH
+	       ,COLUMN_TYPE AS COLS_TYPE
+	       ,NULLABLE AS NULLABLE
+	       ,ORDINAL_POSITION AS SORT  
+       FROM INFORMATION_SCHEMA.COLUMNS C 
+       <where>
+       <if test="tabsName!=null">
+       		and TABLE_NAME = #{tabsName}
+       </if>
+              <if test="list != null and list.size()>0">
+	       and COLS_NAME  NOT IN 
+	        <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
+	            #{idItem}
+	        </foreach>
+        </if>
+       </where>
+    </select>
+
+
+
+</mapper>

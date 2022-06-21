@@ -60,10 +60,6 @@ public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
 	@Column(name = "nullable")
 	private String				nullable;
 
-	// 数据排序
-	@Column(name = "cols_sort")
-	private String				colsSort;
-
 	//
 	@Column(name = "data_scale", precision = 10)
 	private Integer				dataScale;
@@ -347,24 +343,6 @@ public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
 	 */
 	public String getNullable() {
 		return nullable;
-	}
-
-	/**
-	 * 方法名 ： getColsSort
-	 * 功 能 ： 返回变量 colsSort 数据排序 的值
-	 *
-	 * @return: String
-	 */
-	public String getColsSort() {
-		return colsSort;
-	}
-
-	/**
-	 * 方法名 ： setColsSort
-	 * 功 能 ： 设置变量 colsSort 数据排序 的值
-	 */
-	public void setColsSort(String colsSort) {
-		this.colsSort = colsSort;
 	}
 
 	/**
