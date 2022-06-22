@@ -1,5 +1,5 @@
 server:
-  port: 8001  servlet:    context-path: /
+  port: 18001  servlet:    context-path: /
 spring:
   application:    name: chuxue-gateway
   banner:    charset: utf-8

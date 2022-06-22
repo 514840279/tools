@@ -1,5 +1,5 @@
 server:
-  port: 8006
+  port: 18006
   servlet:    context-path: /database
   
 

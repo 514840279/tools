@@ -1,0 +1,132 @@
+# bug 1: 需要指定 placement.constraints 没指定可能就是启动不了
+version: '3.5'
+
+services:
+  # 数据服务      
+  gateway:
+    container_name: gateway
+    image: 514840279/chuxue-gateway:1.0
+    restart: always
+    environment:
+      LOCAL_IP: 192.168.0.103
+    ports:
+      - "18001:18001"
+    networks:
+      - swarm_test
+    extra_hosts:
+      nacos.com: 192.168.0.103
+      nacos.cn: 192.168.0.103
+    volumes:
+      - "/home/java/zc-data-server/log:/log"          
+    deploy:
+      replicas: 1 # 副本数
+      update_config:
+        parallelism: 1 # 升级时数量
+        failure_action: rollback # 升级失败回滚 默认为 pause ，即服务升级失败后阻止其它副本的升级，还支持 continue
+      restart_policy: # 容器异常退出的重启策略，当前策略为：如果某个副本以非 0 返回值退出（condition: on-failure），会立即重启当前副本，重启最多重试 3 次，每次最多等待 120s，每次重启间隔是 5s。
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s 
+      placement: # 指定部署位置
+        constraints: 
+          - node.hostname == worker103
+          
+            # 数据服务      
+  h2:
+    container_name: h2
+    image: 514840279/h2:1.4.200
+    restart: always
+    environment:
+      LOCAL_IP: 192.168.0.103
+    ports:
+      - "9092:9090"
+      - "9500:9500"
+    volumes:
+      - "/home/h2/data:/home/h2/data"          
+    deploy:
+      replicas: 1 # 副本数
+      update_config:
+        parallelism: 1 # 升级时数量
+        failure_action: rollback # 升级失败回滚 默认为 pause ，即服务升级失败后阻止其它副本的升级，还支持 continue
+      restart_policy: # 容器异常退出的重启策略，当前策略为：如果某个副本以非 0 返回值退出（condition: on-failure），会立即重启当前副本，重启最多重试 3 次，每次最多等待 120s，每次重启间隔是 5s。
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s 
+      placement: # 指定部署位置
+        constraints: 
+          - node.hostname == worker103
+        
+   # 数据服务      
+  service:
+    container_name: serve
+    image: 514840279/chuxue-serve:1.0
+    restart: always
+    depends_on:
+      - gateway
+      - h2
+    environment:
+      LOCAL_IP: 192.168.0.103
+    ports:
+      - "18002:18002"
+    networks:
+      - swarm_test
+    extra_hosts:
+      nacos.com: 192.168.0.103
+      nacos.cn: 192.168.0.103
+    volumes:
+      - "/home/java/zc-data-server/log:/log"          
+    deploy:
+      replicas: 1 # 副本数
+      update_config:
+        parallelism: 1 # 升级时数量
+        failure_action: rollback # 升级失败回滚 默认为 pause ，即服务升级失败后阻止其它副本的升级，还支持 continue
+      restart_policy: # 容器异常退出的重启策略，当前策略为：如果某个副本以非 0 返回值退出（condition: on-failure），会立即重启当前副本，重启最多重试 3 次，每次最多等待 120s，每次重启间隔是 5s。
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s 
+      placement: # 指定部署位置
+        constraints: 
+          - node.hostname == worker103
+
+   # 数据服务      
+  dataH2:
+    container_name: datah2
+    image: 514840279/chuxue-data-h2:1.0
+    restart: always
+    depends_on:
+      - service
+      - h2
+    environment:
+      LOCAL_IP: 192.168.0.103
+    ports:
+      - "18004:18004"
+    networks:
+      - swarm_test
+    extra_hosts:
+      nacos.com: 192.168.0.103
+      nacos.cn: 192.168.0.103
+    volumes:
+      - "/home/java/zc-data-server/log:/log"          
+    deploy:
+      replicas: 1 # 副本数
+      update_config:
+        parallelism: 1 # 升级时数量
+        failure_action: rollback # 升级失败回滚 默认为 pause ，即服务升级失败后阻止其它副本的升级，还支持 continue
+      restart_policy: # 容器异常退出的重启策略，当前策略为：如果某个副本以非 0 返回值退出（condition: on-failure），会立即重启当前副本，重启最多重试 3 次，每次最多等待 120s，每次重启间隔是 5s。
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s 
+      placement: # 指定部署位置
+        constraints: 
+          - node.hostname == worker103
+          
+
+
+networks:
+  swarm_test:
+    external: true
+    

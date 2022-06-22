@@ -1,12 +1,8 @@
 package org.chuxue.application.dbms.tabs.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsJdbcInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
@@ -47,8 +43,8 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 	@Autowired
 	SysDbmsTabsTableInfoDao		sysDbmsTabsTableInfoDao;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String findAllByTabsUuid(Pagination<SysDbmsTabsColsInfo> vo) {
+	@SuppressWarnings({ "rawtypes" })
+	public BaseResult findAllByTabsUuid(Pagination<SysDbmsTabsColsInfo> vo) {
 		SysDbmsTabsColsInfo cols = vo.getInfo();
 		SysDbmsTabsTableInfo tabs = new SysDbmsTabsTableInfo();
 		tabs.setUuid(cols.getTabsUuid());
@@ -62,40 +58,56 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 				jdbc = op.get();
 				
 				SysDbmsTabsColsInfo pcols = new SysDbmsTabsColsInfo();
-				pcols.setUuid(tabs.getUuid());
+				pcols.setTabsUuid(tabs.getUuid());
 				pcols.setColsName(tabs.getTabsName());
 				org.chuxue.application.common.base.Page<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.Page<>();
-				page.setInfo(cols);
+				page.setInfo(pcols);
 				
 				List<SysDbmsTabsColsInfo> al = sysDbmsTabsColsInfoDao.findAll(Example.of(cols));
 				page.setList(al);
-
+				
 				// 请求微服务，获取未加载的表名称信息
 				ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/findAllByTabUuid", page, BaseResult.class);
+				
 				if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
 					logger.info(result.getBody().toString());
-					List<LinkedHashMap<String, Object>> li = (List<LinkedHashMap<String, Object>>) result.getBody().getData();
-					List<SysDbmsTabsColsInfo> list = new ArrayList<>();
-					for (LinkedHashMap map : li) {
-						SysDbmsTabsColsInfo sysDbmsTabsColsInfo = new SysDbmsTabsColsInfo();
-						
-						try {
-							BeanUtils.populate(sysDbmsTabsColsInfo, map);
-							list.add(sysDbmsTabsColsInfo);
-						} catch (IllegalAccessException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					sysDbmsTabsColsInfoDao.saveAll(list);
-					return "OK";
+					return result.getBody();
+//					List<LinkedHashMap<String, Object>> li = (List<LinkedHashMap<String, Object>>) result.getBody().getData();
+//					List<SysDbmsTabsColsInfo> list = new ArrayList<>();
+//					for (LinkedHashMap map : li) {
+//						SysDbmsTabsColsInfo sysDbmsTabsColsInfo = new SysDbmsTabsColsInfo();
+//
+//						try {
+//							BeanUtils.populate(sysDbmsTabsColsInfo, map);
+//							list.add(sysDbmsTabsColsInfo);
+//						} catch (IllegalAccessException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (InvocationTargetException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//					}
+//					sysDbmsTabsColsInfoDao.saveAll(list);
+//					return "OK";
 				}
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * 方法名： importColums
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： String
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public String importColums(SysDbmsTabsColsInfo info) {
+		sysDbmsTabsColsInfoDao.save(info);
+		return "OK";
 	}
 	
 }

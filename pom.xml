@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.chuxue</groupId>
 	<artifactId>tools</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>tools</name>
 	<description>初雪工具</description>
 	<packaging>pom</packaging>
@@ -27,8 +27,6 @@
 		<module>tools-data-clean</module>
 		<!-- 9002 -->
 		<module>tools-rollcall</module>
-		<!-- 9003 -->
-		<module>tools-jijin</module>
 	</modules>
 	<properties>
 		<java.version>1.8</java.version>

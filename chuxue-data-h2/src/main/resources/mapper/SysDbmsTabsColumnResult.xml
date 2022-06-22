@@ -7,7 +7,7 @@
 	       ,#{tabsUuid} AS TABS_UUID
 	       ,REMARKS AS COLS_DESC
 	       ,COLUMN_NAME AS COLS_NAME
-	       , CHARACTER_MAXIMUM_LENGTH AS COLS_LENGTH
+	       ,CHARACTER_MAXIMUM_LENGTH AS COLS_LENGTH
 	       ,COLUMN_TYPE AS COLS_TYPE
 	       ,NULLABLE AS NULLABLE
 	       ,ORDINAL_POSITION AS SORT  
@@ -17,7 +17,7 @@
        		and TABLE_NAME = #{tabsName}
        </if>
               <if test="list != null and list.size()>0">
-	       and COLS_NAME  NOT IN 
+	       and COLUMN_NAME  NOT IN 
 	        <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
 	            #{idItem}
 	        </foreach>

@@ -5,7 +5,7 @@ logging:
       sqltiming: DEBUG
 
 server:
-  port: 9002
+  port: 19002
   servlet:
     context-path: /rollcall
 

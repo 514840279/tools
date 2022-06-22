@@ -1,18 +1,0 @@
-server:
-  port: 9003
-  servlet:
-    context-path: /jijin
-  
-
-spring:
-  application:
-    name: tools-jijin
-  banner:
-    charset: utf-8
-  security:    user:      name: wth
-      password: 123
-      
-  profiles:
-    active:
-    - h2
-    - hikari

@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: 19001
   servlet:
     context-path: /dataClean
 spring:

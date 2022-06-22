@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 @Service("sysDbmsTabsColumnResultService")
 public class SysDbmsTabsColumnResultService {
-
+	
 	@Autowired
 	SysDbmsTabsColumnResultDao sysDbmsTabsColumnResultDao;
-	
+
 	public List<SysDbmsTabsColumnResult> findAllByTabUuid(Page<SysDbmsTabsColsInfo> vo) {
 		SysDbmsTabsColsInfo info = vo.getInfo();
 		List<String> list = null;
@@ -27,8 +27,8 @@ public class SysDbmsTabsColumnResultService {
 				list.add(sysDbmsTabsInfo.getColsName());
 			}
 		}
-		List<SysDbmsTabsColumnResult> result = sysDbmsTabsColumnResultDao.findAllByTabUuid(info.getUuid(), info.getColsName(), list);
+		List<SysDbmsTabsColumnResult> result = sysDbmsTabsColumnResultDao.findAllByTabUuid(info.getTabsUuid(), info.getColsName(), list);
 		return result;
 	}
-
+	
 }

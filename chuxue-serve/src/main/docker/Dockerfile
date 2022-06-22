@@ -1,5 +1,5 @@
 FROM openjdk-jre1.8:latest	
 #设置时区
 #RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
-COPY chuxue-gateway-1.0.jar chuxue-gateway-1.0.jar
-CMD [ "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "chuxue-gateway-1.0.jar" ]
+COPY chuxue-serve-1.0.jar chuxue-serve-1.0.jar
+CMD [ "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "chuxue-serve-1.0.jar" ]

@@ -24,8 +24,8 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 	
 	// 类型
-	@Column(name = "type_class")
-	private String				typeClass;
+	@Column(name = "type_code")
+	private String				typeCode;
 
 	// 图标
 	@Column(name = "type_icon")
@@ -43,27 +43,26 @@ public class SysDbmsTabsTypeInfo extends BaseEntity implements Serializable {
 	 * @throws
 	 */
 	public SysDbmsTabsTypeInfo() {
-		super();
 	}
 	
 	/**
-	 * 方法名 ： getTypeClass
-	 * 功 能 ： 返回变量 typeClass 类型 的值
+	 * 方法名 ： getTypeCode
+	 * 功 能 ： 返回变量 typeCode 的值
 	 *
 	 * @return: String
 	 */
-	public String getTypeClass() {
-		return typeClass;
+	public String getTypeCode() {
+		return typeCode;
 	}
-
+	
 	/**
-	 * 方法名 ： setTypeClass
-	 * 功 能 ： 设置变量 typeClass 类型 的值
+	 * 方法名 ： setTypeCode
+	 * 功 能 ： 设置变量 typeCode 的值
 	 */
-	public void setTypeClass(String typeClass) {
-		this.typeClass = typeClass;
+	public void setTypeCode(String typeCode) {
+		this.typeCode = typeCode;
 	}
-
+	
 	/**
 	 * 方法名 ： getTypeIcon
 	 * 功 能 ： 返回变量 typeIcon 图标 的值

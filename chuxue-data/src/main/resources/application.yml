@@ -1,5 +1,5 @@
 server:
-  port: 8003
+  port: 18003
   servlet:
     context-path: /data
 
@@ -13,12 +13,6 @@ spring:
     - hikari
     - nacos
     
-  resources:
-    static-locations:
-    - classpath:/META-INF/resources/
-    - classpath:/resources/
-    - classpath:/static/
-    - classpath:/public/
-    - file:./datafile/
-  batch:    initialize-schema: always
-    job:      names: jdbcItemReadJobDemo
+  batch:
+    job:      names: jdbcItemReadJobDemo    jdbc:      initialize-schema: always  web:    resources:      static-locations:      - classpath:/META-INF/resources/      - classpath:/resources/      - classpath:/static/      - classpath:/public/      - file:./datafile/
+      
