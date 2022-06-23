@@ -4,19 +4,22 @@
    
    <select id="findAllByJdbcUuid"  resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult">
       <bind name="key_offset" value="pageSize*(pageNumber -1)"></bind>
-       select 
-	       UUID() AS uuid
-	       ,#{jdbcUuid} as jdbc_uuid
-	       , table_name as tabs_name 
-	       ,ROW_COUNT_ESTIMATE as tabs_rows   
-       from information_schema.tables  
-       where table_schema !='INFORMATION_SCHEMA'  
-       		and TABLE_TYPE = 'TABLE'  
-       <if test="tname!=null">
-       		and table_name like CONCAT('%',#{tname},'%')
+		SELECT
+			UUID() AS uuid
+			,#{jdbcUuid} as jdbc_uuid,
+			concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') AS TABS_NAME
+			,TABLE_ROWS as tabsRows
+			,TABLE_COMMENT as tabsDesc
+		FROM
+			`INFORMATION_SCHEMA`.`TABLES` a
+		WHERE
+			TABLE_SCHEMA not in ( 'information_schema' ,'mysql','performance_schema','sys')
+			AND TABLE_TYPE = 'BASE TABLE'
+       <if test="tname!=null and tname !=''">
+       		and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') like CONCAT('%',#{tname},'%')
        </if>
        <if test="list != null and list.size()>0">
-	       and table_name  NOT IN 
+	       and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`')  NOT IN 
 	        <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
 	            #{idItem}
 	        </foreach>
@@ -25,16 +28,17 @@
     </select>
 
     <select id="totalAllByJdbcUuid"  resultType="java.lang.Integer">
-       select 
+       SELECT 
 	       count(1) as total
-       from information_schema.tables  
-       where table_schema !='INFORMATION_SCHEMA'  
-       		and TABLE_TYPE = 'TABLE'  
-       <if test="tname!=null">
-       		and table_name like CONCAT('%',#{tname},'%')
+       FROM `INFORMATION_SCHEMA`.`TABLES`  a
+	   WHERE 
+			TABLE_SCHEMA not in ( 'information_schema' ,'mysql','performance_schema','sys')
+			AND TABLE_TYPE = 'BASE TABLE'
+       <if test="tname!=null and tname !=''">
+       		and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') like CONCAT('%',#{tname},'%')
        </if>
        <if test="list != null and list.size()>0">
-	       and table_name  NOT IN 
+	       AND concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`')  NOT IN 
 	       <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
 	            #{idItem}
 	        </foreach>

@@ -5,17 +5,17 @@
     <select id="findAllByTabUuid"  resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsColumnResult">
        SELECT UUID() AS UUID
 	       ,#{tabsUuid} AS TABS_UUID
-	       ,REMARKS AS COLS_DESC
 	       ,COLUMN_NAME AS COLS_NAME
 	       ,CHARACTER_MAXIMUM_LENGTH AS COLS_LENGTH
 	       ,COLUMN_TYPE AS COLS_TYPE
-	       ,TYPE_NAME AS DATA_TYPE
-	       ,NULLABLE AS NULLABLE
+ 	       ,IS_NULLABLE AS NULLABLE
+		   ,DATA_TYPE as DATA_TYPE
+ 	       ,COLUMN_COMMENT AS COLS_DESC
 	       ,ORDINAL_POSITION AS SORT  
        FROM INFORMATION_SCHEMA.COLUMNS C 
        <where>
        <if test="tabsName!=null">
-       		and TABLE_NAME = #{tabsName}
+       		and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') = #{tabsName}
        </if>
               <if test="list != null and list.size()>0">
 	       and COLUMN_NAME  NOT IN 
@@ -25,7 +25,5 @@
         </if>
        </where>
     </select>
-
-
 
 </mapper>

@@ -29,4 +29,6 @@ public class SysDbmsTabsInfoResult {
 	// 数据库表名
 	private String	tabsName;
 
+	// 表的含义
+	private String	tabsDesc;
 }

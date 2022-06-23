@@ -76,7 +76,9 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 		if (op.isPresent()) {
 			jdbc = op.get();
 			// 对应库的已经加载过 的过滤
-			List<SysDbmsTabsTableInfo> list = findAll(vo.getInfo());
+			SysDbmsTabsTableInfo info = new SysDbmsTabsTableInfo();
+			info.setJdbcUuid(jdbc.getUuid());
+			List<SysDbmsTabsTableInfo> list = findAll(info);
 			vo.setList(list);
 			// 请求微服务，获取未加载的表名称信息
 			ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsTableInfo/findAllByJdbcUuid", vo, BaseResult.class);
@@ -102,7 +104,7 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 			jdbc = op.get();
 
 			SysDbmsTabsColsInfo cols = new SysDbmsTabsColsInfo();
-			cols.setUuid(info.getUuid());
+			cols.setTabsUuid(info.getUuid());
 			cols.setColsName(info.getTabsName());
 			org.chuxue.application.common.base.Page<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.Page<>();
 			page.setInfo(cols);
