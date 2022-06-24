@@ -14,10 +14,9 @@ services:
     networks:
       - swarm_test
     extra_hosts:
-      nacos.com: 192.168.0.103
       nacos.cn: 192.168.0.103
     volumes:
-      - "/home/java/zc-data-server/log:/log"          
+      - "/home/java/chuxue-gateway/log:/log"          
     deploy:
       replicas: 1 # 副本数
       update_config:
@@ -73,10 +72,9 @@ services:
     networks:
       - swarm_test
     extra_hosts:
-      nacos.com: 192.168.0.103
       nacos.cn: 192.168.0.103
     volumes:
-      - "/home/java/zc-data-server/log:/log"          
+      - "/home/java/chuxue-serve/log:/log"          
     deploy:
       replicas: 1 # 副本数
       update_config:
@@ -106,10 +104,9 @@ services:
     networks:
       - swarm_test
     extra_hosts:
-      nacos.com: 192.168.0.103
       nacos.cn: 192.168.0.103
     volumes:
-      - "/home/java/zc-data-server/log:/log"          
+      - "/home/java/chuxue-data-h2/log:/log"          
     deploy:
       replicas: 1 # 副本数
       update_config:
@@ -123,7 +120,38 @@ services:
       placement: # 指定部署位置
         constraints: 
           - node.hostname == worker103
-          
+
+   # 数据服务      
+  dataMysql:
+    container_name: dataMysql
+    image: 514840279/chuxue-data-mysql:1.0
+    restart: always
+    depends_on:
+      - service
+ #     - mysql
+    environment:
+      LOCAL_IP: 192.168.0.103
+    ports:
+      - "18005:18005"
+    networks:
+      - swarm_test
+    extra_hosts:
+      nacos.cn: 192.168.0.103
+    volumes:
+      - "/home/java/chuxue-data-mysql/log:/log"          
+    deploy:
+      replicas: 1 # 副本数
+      update_config:
+        parallelism: 1 # 升级时数量
+        failure_action: rollback # 升级失败回滚 默认为 pause ，即服务升级失败后阻止其它副本的升级，还支持 continue
+      restart_policy: # 容器异常退出的重启策略，当前策略为：如果某个副本以非 0 返回值退出（condition: on-failure），会立即重启当前副本，重启最多重试 3 次，每次最多等待 120s，每次重启间隔是 5s。
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s 
+      placement: # 指定部署位置
+        constraints: 
+          - node.hostname == worker103
 
 
 networks:
