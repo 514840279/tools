@@ -20,8 +20,8 @@ public class SysDbmsTabsInfoResult {
 	
 	private String	uuid;
 
-	// 数据库表空间大小
-	private Integer	tabsSpace;
+	// 数据库表空间
+	private String	tabsSpace;
 	
 	// 数据库表id
 	private String	jdbcUuid;

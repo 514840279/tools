@@ -3,27 +3,30 @@
 <mapper namespace="org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColumnResultDao">
    
     <select id="findAllByTabUuid"  resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsColumnResult">
-       SELECT UUID() AS UUID
-	       ,#{tabsUuid} AS TABS_UUID
-	       ,COLUMN_NAME AS COLS_NAME
-	       ,CHARACTER_MAXIMUM_LENGTH AS COLS_LENGTH
-	       ,COLUMN_TYPE AS COLS_TYPE
- 	       ,IS_NULLABLE AS NULLABLE
-		   ,DATA_TYPE as DATA_TYPE
- 	       ,COLUMN_COMMENT AS COLS_DESC
-	       ,ORDINAL_POSITION AS SORT  
-       FROM INFORMATION_SCHEMA.COLUMNS C 
-       <where>
+		select lower(SYS_GUID()) AS UUID
+		,#{tabsUuid} AS TABS_UUID
+		,a.COLUMN_NAME as COLS_NAME
+		,c.COMMENTS as COLS_DESC
+		,a.DATA_LENGTH as COLS_LENGTH
+		,a.DATA_TYPE as DATA_TYPE
+		,a.DATA_TYPE as COLS_TYPE
+		,a.NULLABLE as NULLABLE
+		,a.COLUMN_ID as SORT
+		
+		FROM  ALL_TAB_COLUMNS a
+		LEFT JOIN ALL_COL_COMMENTS c  ON a.OWNER = c.OWNER AND a.TABLE_NAME = c.TABLE_NAME AND a.COLUMN_NAME = c.COLUMN_NAME
+		WHERE a.OWNER NOT IN 
+		('SYS','SYSTEM','DBSNMP','CTXSYS','MDSYS','FLOWS_020100','FLOWS_FILES','TSMSYS','XDB','OUTLN','APEX_030200','SYSMAN','ORDSYS','TOAD','ORDSYS','ORDDATA','OLAPSYS','APPQOSSYS','OWBSYS','ANONYMOUS','APEX_PUBLIC_USER','APEX_040000')
+		       
        <if test="tabsName!=null">
-       		and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') = #{tabsName}
+       		AND '"'||a.OWNER||'"."'||a.TABLE_NAME||'"' = #{tabsName}
        </if>
-              <if test="list != null and list.size()>0">
-	       and COLUMN_NAME  NOT IN 
+        <if test="list != null and list.size()>0">
+	       AND a.COLUMN_NAME  NOT IN 
 	        <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
 	            #{idItem}
 	        </foreach>
         </if>
-       </where>
     </select>
 
 </mapper>

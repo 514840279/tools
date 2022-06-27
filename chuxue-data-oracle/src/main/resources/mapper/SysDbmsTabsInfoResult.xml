@@ -4,42 +4,47 @@
    
    <select id="findAllByJdbcUuid"  resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult">
       <bind name="key_offset" value="pageSize*(pageNumber -1)"></bind>
-		SELECT
-			UUID() AS uuid
-			,#{jdbcUuid} as jdbc_uuid,
-			concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') AS TABS_NAME
-			,TABLE_ROWS as tabsRows
-			,TABLE_COMMENT as tabsDesc
-		FROM
-			`INFORMATION_SCHEMA`.`TABLES` a
-		WHERE
-			TABLE_SCHEMA not in ( 'information_schema' ,'mysql','performance_schema','sys')
-			AND TABLE_TYPE = 'BASE TABLE'
-       <if test="tname!=null and tname !=''">
-       		and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') like CONCAT('%',#{tname},'%')
-       </if>
-       <if test="list != null and list.size()>0">
-	       and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`')  NOT IN 
-	        <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
-	            #{idItem}
-	        </foreach>
-        </if>
-        <![CDATA[ limit ${key_offset},${pageSize}  ]]>
+		select * from (
+			select 
+			rownum  as row_num
+			,lower(sys_guid()) AS UUID
+			,'"'||a.owner||'"."'||a.table_name||'"' as tabs_Name 
+			,c.COMMENTs as tabs_desc
+			,a.tablespace_name as tabs_space
+			,a.num_rows as tabs_rows
+			,#{jdbcUuid} as jdbc_uuid
+			 from all_tables a
+			left join all_tab_comments c on a.owner = c.owner and a.table_name = c.table_name
+			where a.owner not in 
+			('SYS','SYSTEM','DBSNMP','CTXSYS','MDSYS','FLOWS_020100','FLOWS_FILES','TSMSYS','XDB','OUTLN','APEX_030200','SYSMAN','ORDSYS','TOAD','ORDSYS','ORDDATA','OLAPSYS','APPQOSSYS','OWBSYS','ANONYMOUS','APEX_PUBLIC_USER','APEX_040000')
+	       <if test="tname!=null and tname !=''">
+	       		and '"'||a.owner||'"."'||a.table_name||'"' like CONCAT('%',#{tname},'%')
+	       </if>
+	       <if test="list != null and list.size()>0">
+		       and '"'||a.owner||'"."'||a.table_name||'"'  NOT IN 
+		        <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
+		            #{idItem}
+		        </foreach>
+	        </if>
+        <![CDATA[ ) ab
+		where ab.row_num > ${key_offset}
+		and ab.ROW_NUM <= ${pageSize}  ]]>
     </select>
 
     <select id="totalAllByJdbcUuid"  resultType="java.lang.Integer">
        SELECT 
 	       count(1) as total
-       FROM `INFORMATION_SCHEMA`.`TABLES`  a
-	   WHERE 
-			TABLE_SCHEMA not in ( 'information_schema' ,'mysql','performance_schema','sys')
-			AND TABLE_TYPE = 'BASE TABLE'
+       from all_tables a
+		left join all_tab_comments c on a.owner = c.owner and a.table_name = c.table_name
+		where a.owner not in 
+		('SYS','SYSTEM','DBSNMP','CTXSYS','MDSYS','FLOWS_020100','FLOWS_FILES','TSMSYS','XDB','OUTLN','APEX_030200','SYSMAN','ORDSYS','TOAD','ORDSYS','ORDDATA','OLAPSYS','APPQOSSYS','OWBSYS','ANONYMOUS','APEX_PUBLIC_USER','APEX_040000')
+ 
        <if test="tname!=null and tname !=''">
-       		and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') like CONCAT('%',#{tname},'%')
+       		and '"'||a.owner||'"."'||a.table_name||'"' like CONCAT('%',#{tname},'%')
        </if>
        <if test="list != null and list.size()>0">
-	       AND concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`')  NOT IN 
-	       <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
+	       and '"'||a.owner||'"."'||a.table_name||'"'  NOT IN 
+	        <foreach collection="list" item="idItem" open="(" close=")" separator="," index="idIndex">
 	            #{idItem}
 	        </foreach>
         </if>
