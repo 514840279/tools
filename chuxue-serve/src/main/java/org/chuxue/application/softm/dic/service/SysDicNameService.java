@@ -3,7 +3,6 @@
  */
 package org.chuxue.application.softm.dic.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,17 +10,13 @@ import org.chuxue.application.bean.manager.dic.SysDicKeyList;
 import org.chuxue.application.bean.manager.dic.SysDicName;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
-import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.softm.dic.dao.SysDicKeyListDao;
 import org.chuxue.application.softm.dic.dao.SysDicNameDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 /**
@@ -40,42 +35,6 @@ public class SysDicNameService extends BaseServiceImpl<SysDicName> implements Ba
 	private SysDicNameDao		sysDicNameDao;
 	@Autowired
 	private SysDicKeyListDao	sysDicKeyListDao;
-	
-	/**
-	 * 方法名 ： page
-	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
-	 * 参 数 ： @param pageNumber
-	 * 参 数 ： @param pageSize
-	 * 参 数 ： @param info
-	 * 参 数 ： @param map
-	 * 参 数 ： @param order
-	 * 参 数 ： @return
-	 * 参 考 ： @see com.shumeng.application.common.base.BaseService#page(int, int, java.lang.Object, java.util.Map, org.springframework.data.domain.Sort.Order[])
-	 * 作 者 ： Administrator
-	 */
-	
-	@Override
-	public Page<SysDicName> page(Pagination<SysDicName> vo) {
-		Sort sort = vo.sort();
-		if (sort == null) {
-			List<Order> orders = new ArrayList<>();
-			Order order = new Order(Direction.ASC, "createTime");
-			orders.add(order);
-			sort = Sort.by(orders);
-		}
-		if (vo.getInfo() == null) {
-			vo.setInfo(new SysDicName());
-		}
-		
-		PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
-		return sysDicNameDao.findAll((Specification<SysDicName>) (root, query, cb) -> {
-			if (vo.getInfo().getName() != null) {
-				return cb.like(root.get("name").as(String.class), "%" + vo.getInfo().getName() + "%");
-			} else {
-				return null;
-			}
-		}, request);
-	}
 	
 	/**
 	 * 方法名： checkCode
@@ -113,7 +72,7 @@ public class SysDicNameService extends BaseServiceImpl<SysDicName> implements Ba
 		if (reinfo.isPresent()) {
 			info = reinfo.get();
 			SysDicKeyList key = new SysDicKeyList();
-			key.setNameUuid(info.getUuid());
+			key.setParentsUuid(info.getUuid());
 			
 			Example<SysDicKeyList> ke = Example.of(key);
 			Order[] order = { new Order(Direction.ASC, "keyOrder"), new Order(Direction.ASC, "createTime") };

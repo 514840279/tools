@@ -15,13 +15,10 @@ import org.chuxue.application.softm.dic.service.SysDicNameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 文件名 ： SysDicNameController.java
@@ -41,7 +38,7 @@ public class SysDicNameController extends BaseControllerImpl<SysDicName> impleme
 	//
 	@Autowired
 	private SysDicNameService	sysDicNameService;
-
+	
 	@RequestMapping(path = "/checkCode", method = RequestMethod.POST)
 	public Map<String, Boolean> checkCode(String code) {
 		logger.info("checkCode", SysDicNameController.class);
@@ -50,22 +47,12 @@ public class SysDicNameController extends BaseControllerImpl<SysDicName> impleme
 		map.put("valid", boo);
 		return map;
 	}
-
+	
 	@RequestMapping(path = "/findkeyList", method = RequestMethod.POST)
 	public List<SysDicKeyList> findkeyList(@RequestBody SysDicName info) {
 		logger.info("findkeyList", SysDicNameController.class);
 		List<SysDicKeyList> list = sysDicNameService.findkeyList(info);
 		return list;
 	}
-
-	@GetMapping("/detail/{uuid}")
-	public ModelAndView name(@PathVariable("uuid") String uuid) {
-		logger.info("detail", SysDicNameController.class);
-		ModelAndView modelAndView = new ModelAndView("softm/dic/sysdicnamedetail");
-		SysDicName info = new SysDicName();
-		info.setUuid(uuid);
-		modelAndView.addObject("sysDicName", sysDicNameService.findOne(info));
-		return modelAndView;
-	}
-
+	
 }

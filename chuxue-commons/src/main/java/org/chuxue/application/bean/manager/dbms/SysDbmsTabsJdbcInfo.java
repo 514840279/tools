@@ -42,6 +42,10 @@ public class SysDbmsTabsJdbcInfo extends BaseEntity implements Serializable {
 	@Column(name = "app_name")
 	private String				appName;
 	
+	// 数据连接使用的框架 mybatis,jpa,
+	@Column(name = "orm_uuid")
+	private String				ormUuid;
+	
 	/**
 	 * 构造方法：
 	 * 描 述： 默认构造函数
@@ -140,6 +144,24 @@ public class SysDbmsTabsJdbcInfo extends BaseEntity implements Serializable {
 	 */
 	public void setAppName(String appName) {
 		this.appName = appName;
+	}
+
+	/**
+	 * 方法名 ： getOrmUuid
+	 * 功 能 ： 返回变量 ormUuid 的值
+	 *
+	 * @return: String
+	 */
+	public String getOrmUuid() {
+		return ormUuid;
+	}
+	
+	/**
+	 * 方法名 ： setOrmUuid
+	 * 功 能 ： 设置变量 ormUuid 的值
+	 */
+	public void setOrmUuid(String ormUuid) {
+		this.ormUuid = ormUuid;
 	}
 
 }

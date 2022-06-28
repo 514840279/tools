@@ -4,21 +4,19 @@
 package org.chuxue.application.softm.dic.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.chuxue.application.bean.manager.dic.SysDicKeyList;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
-import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.softm.dic.dao.SysDicKeyListDao;
+import org.chuxue.application.softm.dic.vo.SysDicKeyListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
+
+import com.alibaba.nacos.common.utils.StringUtils;
 
 /**
  * 文件名 ： SysDicKeyListService.java
@@ -32,41 +30,88 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysDicKeyListService extends BaseServiceImpl<SysDicKeyList> implements BaseService<SysDicKeyList> {
-
+	
 	@Autowired
 	private SysDicKeyListDao sysDicKeyListDao;
-
+	
 	/**
-	 * 方法名 ： page
-	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
-	 * 参 数 ： @param pageNumber
-	 * 参 数 ： @param pageSize
-	 * 参 数 ： @param info
-	 * 参 数 ： @param map
-	 * 参 数 ： @param order
-	 * 参 数 ： @return
-	 * 参 考 ： @see com.shumeng.application.common.base.BaseService#page(int, int, java.lang.Object, java.util.Map, org.springframework.data.domain.Sort.Order[])
+	 * 方法名： tree
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： List<SysDicKeyListVo>
 	 * 作 者 ： Administrator
+	 * @throws
 	 */
+	public List<SysDicKeyListVo> tree(SysDicKeyList info) {
+		List<SysDicKeyList> list = sysDicKeyListDao.findAll(Example.of(info));
+		List<SysDicKeyListVo> re = new ArrayList<>();
 
-	@Override
-	public Page<SysDicKeyList> page(Pagination<SysDicKeyList> vo) {
-		Sort sort = vo.sort();
-		if (sort == null) {
-			List<Order> orders = new ArrayList<>();
-			Order order = new Order(Direction.ASC, "keyOrder");
-			orders.add(order);
-			sort = Sort.by(orders);
+		re = resultList(list, re);
+		
+		return re;
+	}
+	
+	/**
+	 * @return
+	 * 方法名： resultList
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param list
+	 * 参 数： @param re
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	private List<SysDicKeyListVo> resultList(List<SysDicKeyList> list, List<SysDicKeyListVo> re) {
+		if (list == null || list.size() == 0) {
+			return null;
 		}
-		if (vo.getInfo() == null) {
-			vo.setInfo(new SysDicKeyList());
+		for (SysDicKeyList sysDicKeyList : list) {
+			if (StringUtils.isBlank(sysDicKeyList.getParentsUuid())) {
+				re.add(toVo(sysDicKeyList, list));
+			}
 		}
+		toSortVo(re);
 
-		Example<SysDicKeyList> example = Example.of(vo.getInfo());
-
-		PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
-		Page<SysDicKeyList> page = sysDicKeyListDao.findAll(example, request);
-		return page;
+		return re;
 	}
 
+	/**
+	 * @param list
+	 * 方法名： toVo
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param sysDicKeyList
+	 * 参 数： @return
+	 * 返 回： SysDicKeyListVo
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	private SysDicKeyListVo toVo(SysDicKeyList sysDicKeyList, List<SysDicKeyList> list) {
+		SysDicKeyListVo vo = new SysDicKeyListVo(sysDicKeyList);
+		List<SysDicKeyListVo> re = new ArrayList<>();
+		for (SysDicKeyList sysDicKeyList2 : list) {
+			if (sysDicKeyList2.getParentsUuid().equals(vo.getUuid()) && (vo.getChildren() == null)) {
+				re.add(toVo(sysDicKeyList, list));
+			}
+		}
+		if (re.size() > 0) {
+			// sort
+			toSortVo(re);
+			vo.setChildren(re);
+		}
+		return vo;
+	}
+	
+	/**
+	 * 方法名： toSortVo
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param re
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	private void toSortVo(List<SysDicKeyListVo> re) {
+		Collections.sort(re, (o1, o2) -> o2.getSort().compareTo(o1.getSort()));
+	}
+	
 }
