@@ -29,9 +29,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.chuxue.application.bean.manager.dbms.SysDbmsGenerateCodeInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetView;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STSheetViewType;
 import org.springframework.core.io.ClassPathResource;
+
+import com.alibaba.nacos.common.utils.StringUtils;
 
 /**
  * @文件名 GenerateDoc.java
@@ -42,11 +42,11 @@ import org.springframework.core.io.ClassPathResource;
  * @版本 V1.0
  */
 public class GenerateDoc {
-
+	
 	// 构造constraint对象
 	static String	dataList	= "●,○";
 	static String	dataList2	= "INT,FLOAT,DOUBLE,DECIMAL,DATE,TIME,TIMESTAMP,DATETIME,CHAR,VARCHAR,TEXT";
-
+	
 	/**
 	 * @throws IOException
 	 * @throws FileNotFoundException
@@ -78,16 +78,20 @@ public class GenerateDoc {
 			FileInputStream fins = new FileInputStream(file);
 			POIFSFileSystem fs = new POIFSFileSystem(fins);
 			wb = new HSSFWorkbook(fs);
-
+			
 		}
 		HSSFSheet demoSheet = wb.getSheet("demo");
-		HSSFSheet newSheet = wb.createSheet(tabsInfo.getTabsDesc());
-
+		String sheetName = tabsInfo.getTabsDesc();
+		if (StringUtils.isBlank(sheetName)) {
+			sheetName = tabsInfo.getTabsName();
+		}
+		HSSFSheet newSheet = wb.createSheet(sheetName);
+		
 		newSheet = copySheet(demoSheet, newSheet);
-
+		
 		// 日期
 		newSheet.getRow(1).getCell(42).setCellValue(new Date());
-
+		
 		// 作成者
 		newSheet.getRow(1).getCell(52).setCellValue(sysDbmsGenerateCodeInfo.getCreateUser());
 		// 数据库选择
@@ -103,9 +107,9 @@ public class GenerateDoc {
 		int index = 0;
 		int index2 = 0;
 		for (SysDbmsTabsColsInfo cols : colsInfos) {
-
+			
 			String colsNameString = cols.getColsName();
-			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString)) {
+			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString) || "sort".equals(colsNameString)) {
 				index2++;
 				setDataValidationList((11 + index2), (11 + index2), 26, 29, dataList, newSheet);
 				setDataValidationList((11 + index2), (11 + index2), 30, 34, dataList2, newSheet);
@@ -118,19 +122,19 @@ public class GenerateDoc {
 				Row rowTo = newSheet.createRow(18 + index);
 				rowTo.setHeight(rowFrom.getHeight());
 				// 合并单元格
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + (18 + 1 + index) + ":B" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + (18 + 1 + index) + ":K" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + (18 + 1 + index) + ":Z" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + (18 + 1 + index) + ":AD" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + (18 + 1 + index) + ":AI" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + (18 + 1 + index) + ":B" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + (18 + 1 + index) + ":K" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + (18 + 1 + index) + ":Z" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + (18 + 1 + index) + ":AD" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + (18 + 1 + index) + ":AI" + (18 + 1 + index)));
 				setDataValidationList((18 + index), (18 + index), 27 - 1, 30 - 1, dataList, newSheet);
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + (18 + 1 + index) + ":AL" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + (18 + 1 + index) + ":AL" + (18 + 1 + index)));
 				setDataValidationList((18 + index), (18 + index), 31 - 1, 35 - 1, dataList2, newSheet);
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + (18 + 1 + index) + ":AP" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + (18 + 1 + index) + ":AU" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + (18 + 1 + index) + ":AP" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + (18 + 1 + index) + ":AU" + (18 + 1 + index)));
 				setDataValidationList((18 + index), (18 + index), 39 - 1, 42 - 1, dataList, newSheet);
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + (18 + 1 + index) + ":BJ" + (18 + 1 + index)));
-
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + (18 + 1 + index) + ":BJ" + (18 + 1 + index)));
+				
 				Cell cellFrom = null;
 				Cell cellTo = null;
 				newSheet.setDefaultColumnStyle(18 + index, newSheet.getColumnStyle(13));
@@ -141,14 +145,14 @@ public class GenerateDoc {
 					newSheet.setColumnWidth(intCol, newSheet.getColumnWidth(intCol));
 					cellFrom = rowFrom.getCell(intCol);
 					cellTo = rowTo.createCell(intCol);
-
+					
 					// セルスタイルとタイプのコピー
 					cellTo.setCellStyle(cellFrom.getCellStyle());
-
+					
 					// タイトル内容のコピー
 					// 不同数据类型处理
 					CellType cellFromType = cellFrom.getCellType();
-					cellTo.setCellType(cellFromType);
+//					cellTo.setCellType(cellFromType);
 					if (cellFromType == CellType.NUMERIC) {
 						if (DateUtil.isCellDateFormatted(cellFrom)) {
 							cellTo.setCellValue(cellFrom.getDateCellValue());
@@ -168,7 +172,7 @@ public class GenerateDoc {
 					} else { // nothing29
 					}
 				}
-
+				
 				// 字段名
 				newSheet.getRow(18 + index).getCell(2).setCellValue(cols.getColsName());
 				// 字段含义
@@ -186,14 +190,14 @@ public class GenerateDoc {
 				// 描述信息
 				newSheet.getRow(18 + index).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
 			}
-
+			
 		}
-
+		
 		newSheet.setZoom(85);
 		newSheet.setActiveCell(new CellAddress("A1"));
-
+		
 		wb.setActiveSheet(0);
-
+		
 		// 设置打印区域
 		// wb.setPrintArea(wb.getSheetIndex(tabsInfo.getTabsDesc()), "$A$1:$BO$" +
 		// (colsInfos.size() + 14));
@@ -201,7 +205,7 @@ public class GenerateDoc {
 		wb.write(fout);
 		fout.close();
 	}
-
+	
 	/**
 	 * @方法名 copySheet
 	 * @功能 复制sheet
@@ -213,7 +217,7 @@ public class GenerateDoc {
 	 */
 	@SuppressWarnings("deprecation")
 	private static HSSFSheet copySheet(HSSFSheet sheetFrom, HSSFSheet sheetTo) {
-
+		
 		// 初期化
 		CellRangeAddress region = null;
 		Row rowFrom = null;
@@ -223,12 +227,12 @@ public class GenerateDoc {
 		// セル結合のコピー
 		for (int i = 0; i < sheetFrom.getNumMergedRegions(); i++) {
 			region = sheetFrom.getMergedRegion(i);
-
+			
 			if ((region.getFirstColumn() >= sheetFrom.getFirstRowNum()) && (region.getLastRow() <= sheetFrom.getLastRowNum())) {
 				sheetTo.addMergedRegion(region);
 			}
 		}
-
+		
 		// セルのコピー
 		for (int intRow = sheetFrom.getFirstRowNum(); intRow <= sheetFrom.getLastRowNum(); intRow++) {
 			rowFrom = sheetFrom.getRow(intRow);
@@ -251,7 +255,7 @@ public class GenerateDoc {
 				// タイトル内容のコピー
 				// 不同数据类型处理
 				CellType cellFromType = cellFrom.getCellType();
-				cellTo.setCellType(cellFromType);
+//				cellTo.setCellType(cellFromType);
 				if (cellFromType == CellType.NUMERIC) {
 					if (DateUtil.isCellDateFormatted(cellFrom)) {
 						cellTo.setCellValue(cellFrom.getDateCellValue());
@@ -272,7 +276,7 @@ public class GenerateDoc {
 				}
 			}
 		}
-
+		
 		// 枠線の設定
 		sheetTo.setDisplayGridlines(false);
 		// sheetTo.setDisplayGuts(true);
@@ -281,19 +285,19 @@ public class GenerateDoc {
 		// sheetTo.shiftRows(13, 15, 31, false, false, false);
 		// Excelのズーム設定
 		sheetTo.setZoom(85, 100);
-
+		
 		// シートを戻る。
 		return sheetTo;
-
+		
 	}
-
+	
 	private static void setDataValidationList(int j, int k, int l, int m, String data, HSSFSheet sheet) {
 		// 设置下拉列表的内容
 		String[] textlist = data.split(",");
 		// 加载下拉列表内容
 		DVConstraint constraint = DVConstraint.createExplicitListConstraint(textlist);
 		// 设置数据有效性加载在哪个单元格上。
-
+		
 		// 四个参数分别是：起始行、终止行、起始列、终止列
 		CellRangeAddressList regions = new CellRangeAddressList(j, k, l, m);
 		/*
@@ -304,7 +308,7 @@ public class GenerateDoc {
 		data_validation_list.setSuppressDropDownArrow(false);
 		sheet.addValidationData(data_validation_list);
 	}
-
+	
 	private static void setDataValidationList(int j, int k, int l, int m, String data, XSSFSheet sheet) {
 		// 设置下拉列表的内容
 		String[] textlist = data.split(",");
@@ -320,11 +324,11 @@ public class GenerateDoc {
 		// 数据有效性对象
 		XSSFDataValidation data_validation_list = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, regions);
 		// data_validation_list.setSuppressDropDownArrow(false);
-
+		
 		sheet.addValidationData(data_validation_list);
 	}
-
-	@SuppressWarnings({ "resource", "deprecation" })
+	
+	@SuppressWarnings({ "resource" })
 	public static void generateXlsx(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) throws IOException {
 		File file = new File(pathString);
 		XSSFWorkbook wb = null;
@@ -340,16 +344,20 @@ public class GenerateDoc {
 			//
 			FileInputStream fins = new FileInputStream(file);
 			wb = new XSSFWorkbook(fins);
-
+			
 		}
 		XSSFSheet demoSheet = wb.getSheet("demo");
-		XSSFSheet newSheet = wb.createSheet(tabsInfo.getTabsDesc());
-
+		String sheetName = tabsInfo.getTabsDesc();
+		if (StringUtils.isBlank(sheetName)) {
+			sheetName = tabsInfo.getTabsName();
+		}
+		XSSFSheet newSheet = wb.createSheet(sheetName);
+		
 		newSheet = copySheet(demoSheet, newSheet);
-
+		
 		// 日期
 		newSheet.getRow(1).getCell(42).setCellValue(new Date());
-
+		
 		// 作成者
 		newSheet.getRow(1).getCell(52).setCellValue(sysDbmsGenerateCodeInfo.getCreateUser());
 		// 数据库选择
@@ -365,9 +373,9 @@ public class GenerateDoc {
 		int index = 0;
 		int index2 = 0;
 		for (SysDbmsTabsColsInfo cols : colsInfos) {
-
+			
 			String colsNameString = cols.getColsName();
-			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString)) {
+			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString) || "sort".equals(colsNameString)) {
 				index2++;
 				setDataValidationList((11 + index2), (11 + index2), 26, 29, dataList, newSheet);
 				setDataValidationList((11 + index2), (11 + index2), 30, 34, dataList2, newSheet);
@@ -380,19 +388,20 @@ public class GenerateDoc {
 				Row rowTo = newSheet.createRow(18 + index);
 				rowTo.setHeight(rowFrom.getHeight());
 				// 合并单元格
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + (18 + 1 + index) + ":B" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + (18 + 1 + index) + ":K" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + (18 + 1 + index) + ":Z" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + (18 + 1 + index) + ":AD" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + (18 + 1 + index) + ":AI" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + (18 + 1 + index) + ":B" + (18 + 1 + index)));
+//
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + (18 + 1 + index) + ":K" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + (18 + 1 + index) + ":Z" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + (18 + 1 + index) + ":AD" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + (18 + 1 + index) + ":AI" + (18 + 1 + index)));
 				setDataValidationList((18 + index), (18 + index), 27 - 1, 30 - 1, dataList, newSheet);
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + (18 + 1 + index) + ":AL" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + (18 + 1 + index) + ":AL" + (18 + 1 + index)));
 				setDataValidationList((18 + index), (18 + index), 31 - 1, 35 - 1, dataList2, newSheet);
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + (18 + 1 + index) + ":AP" + (18 + 1 + index)));
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + (18 + 1 + index) + ":AU" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + (18 + 1 + index) + ":AP" + (18 + 1 + index)));
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + (18 + 1 + index) + ":AU" + (18 + 1 + index)));
 				setDataValidationList((18 + index), (18 + index), 39 - 1, 42 - 1, dataList, newSheet);
-				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + (18 + 1 + index) + ":BJ" + (18 + 1 + index)));
-
+//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + (18 + 1 + index) + ":BJ" + (18 + 1 + index)));
+				
 				Cell cellFrom = null;
 				Cell cellTo = null;
 				newSheet.setDefaultColumnStyle(18 + index, newSheet.getColumnStyle(13));
@@ -403,14 +412,14 @@ public class GenerateDoc {
 					newSheet.setColumnWidth(intCol, newSheet.getColumnWidth(intCol));
 					cellFrom = rowFrom.getCell(intCol);
 					cellTo = rowTo.createCell(intCol);
-
+					
 					// セルスタイルとタイプのコピー
 					cellTo.setCellStyle(cellFrom.getCellStyle());
-
+					
 					// タイトル内容のコピー
 					// 不同数据类型处理
 					CellType cellFromType = cellFrom.getCellType();
-					cellTo.setCellType(cellFromType);
+//					cellTo.setCellType(cellFromType);
 					if (cellFromType == CellType.NUMERIC) {
 						if (DateUtil.isCellDateFormatted(cellFrom)) {
 							cellTo.setCellValue(cellFrom.getDateCellValue());
@@ -430,7 +439,7 @@ public class GenerateDoc {
 					} else { // nothing29
 					}
 				}
-
+				
 				// 字段名
 				newSheet.getRow(18 + index).getCell(2).setCellValue(cols.getColsName());
 				// 字段含义
@@ -448,24 +457,23 @@ public class GenerateDoc {
 				// 描述信息
 				newSheet.getRow(18 + index).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
 			}
-
+			
 		}
-
+		
 		newSheet.setZoom(85);
 		newSheet.setActiveCell(new CellAddress("A1"));
-
-		CTSheetView view = newSheet.getCTWorksheet().getSheetViews().getSheetViewArray(0);
-		view.setView(STSheetViewType.PAGE_BREAK_PREVIEW);
+		
+//		CTSheetView view = newSheet.getCTWorksheet().getSheetViews().getSheetViewArray(0);
+//		view.setView(STSheetViewType.PAGE_BREAK_PREVIEW);
 		wb.setActiveSheet(0);
 		// 设置打印区域
-		wb.setPrintArea(wb.getSheetIndex(tabsInfo.getTabsDesc()), "$A$1:$BL$" + (colsInfos.size() + 13));
+		wb.setPrintArea(wb.getSheetIndex(sheetName), "$A$1:$BL$" + (colsInfos.size() + 13));
 		FileOutputStream fout = new FileOutputStream(pathString);
 		wb.write(fout);
 		fout.close();
-
+		
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	private static XSSFSheet copySheet(XSSFSheet sheetFrom, XSSFSheet sheetTo) {
 		// 初期化
 		CellRangeAddress region = null;
@@ -476,12 +484,12 @@ public class GenerateDoc {
 		// セル結合のコピー
 		for (int i = 0; i < sheetFrom.getNumMergedRegions(); i++) {
 			region = sheetFrom.getMergedRegion(i);
-
+			
 			if ((region.getFirstColumn() >= sheetFrom.getFirstRowNum()) && (region.getLastRow() <= sheetFrom.getLastRowNum())) {
 				sheetTo.addMergedRegion(region);
 			}
 		}
-
+		
 		// セルのコピー
 		for (int intRow = sheetFrom.getFirstRowNum(); intRow <= sheetFrom.getLastRowNum(); intRow++) {
 			rowFrom = sheetFrom.getRow(intRow);
@@ -504,7 +512,7 @@ public class GenerateDoc {
 				// タイトル内容のコピー
 				// 不同数据类型处理
 				CellType cellFromType = cellFrom.getCellType();
-				cellTo.setCellType(cellFromType);
+//				cellTo.setCellType(cellFromType);
 				if (cellFromType == CellType.NUMERIC) {
 					if (DateUtil.isCellDateFormatted(cellFrom)) {
 						cellTo.setCellValue(cellFrom.getDateCellValue());
@@ -525,7 +533,7 @@ public class GenerateDoc {
 				}
 			}
 		}
-
+		
 		// 枠線の設定
 		sheetTo.setDisplayGridlines(false);
 		// sheetTo.setDisplayGuts(true);
@@ -534,9 +542,9 @@ public class GenerateDoc {
 		// sheetTo.shiftRows(13, 15, 31, false, false, false);
 		// Excelのズーム設定
 		sheetTo.setZoom(85);
-
+		
 		// シートを戻る。
 		return sheetTo;
 	}
-
+	
 }

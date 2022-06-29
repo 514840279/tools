@@ -63,12 +63,12 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 				file.mkdirs();
 			}
 			SysDbmsTabsColsInfo colsInfo = new SysDbmsTabsColsInfo();
-			colsInfo.setTabsUuid(sysDbmsGenerateCodeInfo.getUuid());
+			colsInfo.setTabsUuid(sysDbmsGenerateCodeInfo.getTableUuid());
 			Example<SysDbmsTabsColsInfo> example = Example.of(colsInfo);
 			List<SysDbmsTabsColsInfo> colsInfos = sysDbmsTabsColsInfoDao.findAll(example);
 			
 			SysDbmsTabsTableInfo tabsInfo = new SysDbmsTabsTableInfo();
-			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getUuid());
+			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getTableUuid());
 			if (op.isPresent()) {
 				tabsInfo = op.get();
 
@@ -107,7 +107,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 				
 				String thirdString = "";
 				String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i < subpathString.length && i < 3; i++) {
 					thirdString += subpathString[i] + ".";
 				}
 				// html类生成
@@ -165,7 +165,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 					// sql 脚本文件路径
 					try {
 						pathtempString = path + "/数据结构.xlsx";
-						GenerateDoc.generateXlsx(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+//						GenerateDoc.generateXlsx(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 						pathtempString = path + "/数据结构.xls";
 						GenerateDoc.generateXls(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 					} catch (IOException e) {
@@ -196,7 +196,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	private void getGenerateController(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
 			thirdString += subpathString[i] + ".";
 		}
 		StringBuilder stringBuilder = new StringBuilder();
@@ -266,7 +266,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	private void getGenerateService(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		String thirdString = "";
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
 			thirdString += subpathString[i] + ".";
 		}
 		StringBuilder stringBuilder = new StringBuilder();
@@ -318,7 +318,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	private void getGenerateDao(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
 			thirdString.append(subpathString[i]).append(".");
 		}
 		StringBuilder stringBuilder = new StringBuilder();

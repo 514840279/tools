@@ -37,26 +37,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysDbmsGenerateCodeInfo")
 public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbmsGenerateCodeInfo> implements BaseController<SysDbmsGenerateCodeInfo> {
-
+	
 	private static final Logger		logger		= LoggerFactory.getLogger(SysDbmsGenerateCodeInfoController.class);
 	private static final String		OUTPUTFILE	= "outputfile";
-
+	
 	@Autowired
 	SysDbmsGenerateCodeInfoService	sysDbmsGenerateCodeInfoService;
-
+	
 	@RequestMapping("/generate")
 	public BaseResult<String> generate(@RequestBody Pagination<SysDbmsGenerateCodeInfo> vo) {
 		try {
-			String pathString;
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-			pathString = simpleDateFormat.format(new Date());
+			String pathString = simpleDateFormat.format(new Date());
 			sysDbmsGenerateCodeInfoService.generate(vo.getList(), vo.getUsername(), pathString);
 			return ResultUtil.success(pathString);
 		} catch (Exception e) {
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/downloadCode/{path}", method = RequestMethod.GET)
 	public void downloadCode(HttpServletResponse response, @PathVariable("path") String path) throws IOException {
 		// 根据参数进行导出xml 并打包返回zip文件路径
@@ -90,7 +89,7 @@ public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbm
 		if (!file.delete()) {
 			logger.error("文件刪除失敗.");
 		}
-
+		
 	}
-
+	
 }

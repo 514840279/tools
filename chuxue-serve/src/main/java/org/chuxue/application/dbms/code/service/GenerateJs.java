@@ -30,13 +30,13 @@ public class GenerateJs {
 	 * @author Administrator @throws
 	 */
 	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
-		String thirdString = "";
+		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
-			thirdString += subpathString[i] + ".";
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
+			thirdString.append(subpathString[i]).append(".");
 		}
 		String tabsNameString = sysDbmsGenerateCodeInfo.getClassName().substring(0, 1).toLowerCase() + sysDbmsGenerateCodeInfo.getClassName().substring(1);
-		String subNameIdString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString, "").replace(".", "_") + "_" + tabsNameString;
+		String subNameIdString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString.toString(), "").replace(".", "_") + "_" + tabsNameString;
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("window." + tabsNameString + "OperateEvents = {\r\n");
 		stringBuilder.append("	// 修改\r\n");
@@ -284,7 +284,7 @@ public class GenerateJs {
 			if (colsDescString == null || "".equals(colsDescString)) {
 				colsDescString = colsNameString;
 			}
-			Integer widthInteger = Integer.valueOf(150);
+			Integer widthInteger = 150;
 			if (sysDbmsTabsColsInfo.getColsWidth() != null && sysDbmsTabsColsInfo.getColsWidth().intValue() > 0) {
 				widthInteger = sysDbmsTabsColsInfo.getColsWidth();
 			}
@@ -364,13 +364,13 @@ public class GenerateJs {
 	 * author Administrator @throws
 	 */
 	public static void generateDetail(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
-		String thirdString = "";
+		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
-			thirdString += subpathString[i] + ".";
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
+			thirdString.append(subpathString[i]).append(".");
 		}
 		String tabsNameString = sysDbmsGenerateCodeInfo.getClassName().substring(0, 1).toLowerCase() + sysDbmsGenerateCodeInfo.getClassName().substring(1);
-		String subNameIdString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString, "").replace(".", "_") + "_" + tabsNameString;
+		String subNameIdString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString.toString(), "").replace(".", "_") + "_" + tabsNameString;
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("$(function(){\r\n");
 		stringBuilder.append("	init();\r\n");

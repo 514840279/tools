@@ -18,7 +18,7 @@ import org.chuxue.application.common.utils.files.TxtFilesWriter;
  * @版本 V1.0
  */
 public class GenerateEntity {
-	
+
 	/**
 	 * 方法名 generate
 	 * 功能 生成实体类文件
@@ -32,10 +32,10 @@ public class GenerateEntity {
 	 * @author Administrator @throws
 	 */
 	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
-		String thirdString = "";
+		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
-			thirdString += subpathString[i] + ".";
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
+			thirdString.append(subpathString[i]).append(".");
 		}
 		// 拼接文件内容
 		StringBuilder stringBuilder = new StringBuilder();
@@ -59,7 +59,7 @@ public class GenerateEntity {
 			stringBuilderImport.append("import com.fasterxml.jackson.annotation.JsonFormat;\r\n");
 		}
 		stringBuilder.append("\r\n");
-		stringBuilder.append("import " + thirdString + "common.base.BaseEntity;\r\n");
+		stringBuilder.append("import " + thirdString.append("common.base.BaseEntity;\r\n").toString());
 		stringBuilder.append("\r\n");
 		stringBuilder.append("/**\r\n");
 		stringBuilder.append(" * @文件名 " + sysDbmsGenerateCodeInfo.getClassName() + ".java\r\n");
@@ -76,7 +76,7 @@ public class GenerateEntity {
 		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + " extends BaseEntity implements Serializable {\r\n");
 		stringBuilder.append("	private static final long	serialVersionUID	= 1L;\r\n");
 		stringBuilder.append("\r\n");
-		
+
 		// 拼接属性
 		stringBuilder.append(stringBuilderProperties);
 		stringBuilder.append("\r\n");
@@ -95,20 +95,20 @@ public class GenerateEntity {
 		// 拼接get，set
 		stringBuilder.append(stringBuilderMethod);
 		stringBuilder.append("\r\n");
-		
+
 		// TODO 构造
-		
+
 		// TODO tostring
-		
+
 		// ...
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}");
-		
+
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + ".java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-	
+
 	/**
 	 * 方法名： spellString
 	 * 功 能： 拼接字段和get，set方法
@@ -119,7 +119,7 @@ public class GenerateEntity {
 	 * 作 者 ：wang @throws
 	 */
 	private static void spellString(List<SysDbmsTabsColsInfo> colsInfos, StringBuilder stringBuilderProperties, StringBuilder stringBuilderMethod, StringBuilder stringBuilderImport) {
-		
+
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
 			// 属性
 			String colsName = sysDbmsTabsColsInfo.getColsName().toLowerCase();
@@ -154,19 +154,19 @@ public class GenerateEntity {
 			} else if (colsType.contains("double") || colsType.contains("float") || colsType.contains("decimal")) {
 				propertiesType = " BigDecimal ";
 			}
-			
+
 			// 拼写属性
 			spellProperties(stringBuilderProperties, propertiesName, propertiesType, colsDesc, colsType, colsName, length, nullable, dataprecision, datascale);
-			
+
 			// 拼写get，set
 			spellMethod(stringBuilderMethod, propertiesName, propertiesType, colsDesc, colsType, colsName);
 		}
 		if (stringBuilderImport.toString().length() > 0) {
 			stringBuilderImport.append("\r\n");
 		}
-		
+
 	}
-	
+
 	/**
 	 * 方法名： spellMethod
 	 * 功 能： 拼写get，set
@@ -202,7 +202,7 @@ public class GenerateEntity {
 		stringBuilderMethod.append("		this." + propertiesName + " = " + propertiesName + ";\r\n");
 		stringBuilderMethod.append("	}\r\n");
 	}
-	
+
 	/**
 	 * 方法名： spellProperties
 	 * 功 能： 拼写属性
@@ -244,14 +244,14 @@ public class GenerateEntity {
 			stringBuilderProperties.append("	@Column(name = \"" + colsName + "\"" + (dataprecision == null ? "" : ",precision=" + dataprecision) + (scale == null ? "" : ",scale=" + scale) + ")\r\n");
 		} else if ("char".equals(colsType.toLowerCase()) || "varchar".equals(colsType.toLowerCase()) || "text".equals(colsType.toLowerCase()) || "varchar2".equals(colsType.toLowerCase())) {
 			stringBuilderProperties.append("	@Column(name = \"" + colsName + "\"" + (dataprecision == null ? "" : ",precision=" + dataprecision) + (scale == null ? "" : ",scale=" + scale) + ")\r\n");
-			
+
 		} else {
 			stringBuilderProperties.append("	@Column(name = \"" + colsName + "\")\r\n");
 		}
-		
+
 		stringBuilderProperties.append("	private " + propertiesType + "	" + propertiesName + ";\r\n");
 	}
-	
+
 	/**
 	 * 方法名： makeProperties
 	 * 功 能： 属性生成
@@ -272,5 +272,5 @@ public class GenerateEntity {
 		}
 		return propertiesName;
 	}
-	
+
 }

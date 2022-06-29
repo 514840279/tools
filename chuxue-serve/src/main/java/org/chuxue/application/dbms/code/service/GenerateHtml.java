@@ -30,12 +30,12 @@ public class GenerateHtml {
 	 * @author Administrator @throws
 	 */
 	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
-		String thirdString = "";
+		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
-			thirdString += subpathString[i] + ".";
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
+			thirdString.append(subpathString[i]).append(".");
 		}
-		String subPathString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString, "");
+		String subPathString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString.toString(), "");
 		String subNameIdString = subPathString.replace(".", "_") + "_" + sysDbmsGenerateCodeInfo.getClassName().substring(0, 1).toLowerCase() + sysDbmsGenerateCodeInfo.getClassName().substring(1);
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("<!DOCTYPE html>\r\n");
@@ -207,12 +207,12 @@ public class GenerateHtml {
 	 * author Administrator @throws
 	 */
 	public static void generateDetail(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
-		String thirdString = "";
+		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
-		for (int i = 0; i < 3; i++) {
-			thirdString += subpathString[i] + ".";
+		for (int i = 0; i < subpathString.length && i < 3; i++) {
+			thirdString.append(subpathString[i]).append(".");
 		}
-		String subPathString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString, "");
+		String subPathString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString.toString(), "");
 		String tabsNameString = sysDbmsGenerateCodeInfo.getClassName().substring(0, 1).toLowerCase() + sysDbmsGenerateCodeInfo.getClassName().substring(1);
 		String subNameIdString = subPathString.replace(".", "_") + "_" + tabsNameString;
 		StringBuilder stringBuilder = new StringBuilder();
