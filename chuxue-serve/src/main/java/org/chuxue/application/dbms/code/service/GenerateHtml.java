@@ -16,7 +16,7 @@ import org.chuxue.application.common.utils.files.TxtFilesWriter;
  * @版本 V1.0
  */
 public class GenerateHtml {
-	
+
 	/**
 	 * 方法名 generate
 	 * 功能 查询页面
@@ -29,6 +29,7 @@ public class GenerateHtml {
 	 *
 	 * @author Administrator @throws
 	 */
+	@Deprecated
 	public static void generate(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
@@ -60,7 +61,7 @@ public class GenerateHtml {
 		stringBuilder.append("\r\n");
 		stringBuilder.append("	<!-- Main content -->\r\n");
 		stringBuilder.append("	<section class=\"content\">\r\n");
-		
+
 		// 表格展示区域
 		stringBuilder.append("		<div class=\"box\">\r\n");
 		stringBuilder.append("			<div class=\"box-header with-border\">\r\n");
@@ -80,7 +81,7 @@ public class GenerateHtml {
 		stringBuilder.append("				</div>\r\n");
 		stringBuilder.append("			</div>\r\n");
 		stringBuilder.append("			<div class=\"box-body\">\r\n");
-		
+
 		// 条件查询区域
 		stringBuilder.append("				<div class=\"row\">\r\n");
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
@@ -112,7 +113,7 @@ public class GenerateHtml {
 		stringBuilder.append("						<button class=\"btn btn-primary\" id=\"make_sure_search_" + subNameIdString + "_button_id\">确定</button>\r\n");
 		stringBuilder.append("					</div>\r\n");
 		stringBuilder.append("				</div>\r\n");
-		
+
 		stringBuilder.append("				<div id=\"" + subNameIdString + "_toolbar\" class=\"btn-group\">\r\n");
 		stringBuilder.append("					<button type=\"button\" class=\"btn btn-default\" id=\"addnew_" + subNameIdString + "\">\r\n");
 		stringBuilder.append("						<i class=\"glyphicon glyphicon-plus\"></i> 新增\r\n");
@@ -161,7 +162,7 @@ public class GenerateHtml {
 			if (colsDescString == null || "".equals(colsDescString)) {
 				colsDescString = colsNameString;
 			}
-			
+
 			stringBuilder.append("					<div class=\" row form-group\">\r\n");
 			stringBuilder.append("						<label class=\"col-sm-3 control-label text-right font16\" style=\"height: 34px;padding-top: 5px;\">" + colsDescString + ":</label>\r\n");
 			stringBuilder.append("						<div class=\"col-sm-9\">\r\n");
@@ -169,7 +170,7 @@ public class GenerateHtml {
 			stringBuilder.append("						</div>\r\n");
 			stringBuilder.append("					</div>\r\n");
 		}
-		
+
 		stringBuilder.append("				</div>\r\n");
 		stringBuilder.append("				<div class=\"modal-footer\">\r\n");
 		stringBuilder.append("					<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭</button>\r\n");
@@ -189,12 +190,12 @@ public class GenerateHtml {
 		stringBuilder.append("</body>\r\n");
 		stringBuilder.append("</html>\r\n");
 		stringBuilder.append("\r\n");
-		
+
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName().toLowerCase() + ".html";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-	
+
 	/**
 	 * 方法名 generateDetail
 	 * 功能 详细编辑页面
@@ -206,6 +207,7 @@ public class GenerateHtml {
 	 * 返回 void
 	 * author Administrator @throws
 	 */
+	@Deprecated
 	public static void generateDetail(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		StringBuilder thirdString = new StringBuilder();
 		String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
@@ -237,15 +239,15 @@ public class GenerateHtml {
 		stringBuilder.append("				</div>\r\n");
 		stringBuilder.append("			</div>\r\n");
 		stringBuilder.append("			<div class=\"box-body\">\r\n");
-		
+
 		stringBuilder.append("				<input type=\"text\" style=\"display:none;\" id=\"" + subNameIdString + "_uuid\" name=\"uuid\" th:value=\"${" + tabsNameString + ".uuid}\"/>\r\n");
 		stringBuilder.append("				<input type=\"text\" style=\"display:none;\" id=\"" + subNameIdString + "_deleteFlag\" name=\"deleteFlag\"  th:value=\"${" + tabsNameString + ".deleteFlag}\"/>\r\n");
 		stringBuilder.append("				<input type=\"text\" style=\"display:none;\" id=\"" + subNameIdString + "_discription\" name=\"discription\" th:value=\"${" + tabsNameString + ".discription}\"/>\r\n");
-		
+
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
 			// 属性
 			String colsName = sysDbmsTabsColsInfo.getColsName().toLowerCase();
-			if ("uuid".equals(colsName) || "discription".equals(colsName) || "create_time".equals(colsName) || "create_user".equals(colsName) || "update_time".equals(colsName) || "update_user".equals(colsName) || "delete_flag".equals(colsName)) {
+			if ("uuid".equals(colsName) || "discription".equals(colsName) || "create_time".equals(colsName) || "create_user".equals(colsName) || "update_time".equals(colsName) || "update_user".equals(colsName) || "delete_flag".equals(colsName) || "sort".equals(colsName)) {
 				continue;
 			}
 			String[] colsNames = sysDbmsTabsColsInfo.getColsName().toLowerCase().split("_");
@@ -257,12 +259,12 @@ public class GenerateHtml {
 					colsNameString = colsNames[i];
 				}
 			}
-			
+
 			String colsDescString = sysDbmsTabsColsInfo.getColsDesc();
 			if (colsDescString == null || "".equals(colsDescString)) {
 				colsDescString = colsNameString;
 			}
-			
+
 			stringBuilder.append("					<div class=\" row form-group\">\r\n");
 			stringBuilder.append("						<label class=\"col-sm-3 control-label text-right font16\" style=\"height: 34px;padding-top: 5px;\">" + colsDescString + ":</label>\r\n");
 			stringBuilder.append("						<div class=\"col-sm-9\">\r\n");
@@ -270,7 +272,7 @@ public class GenerateHtml {
 			stringBuilder.append("						</div>\r\n");
 			stringBuilder.append("					</div>\r\n");
 		}
-		
+
 		stringBuilder.append("				<div class=\"row text-center\">\r\n");
 		stringBuilder.append("					<button type=\"button\" class=\"btn btn-primary\" id=\"" + subNameIdString + "_edit_button\">编辑</button>\r\n");
 		stringBuilder.append("					<button type=\"button\" class=\"btn btn-primary\" id=\"" + subNameIdString + "_save_button\" style=\"display: none;\">提交</button>\r\n");
@@ -281,22 +283,71 @@ public class GenerateHtml {
 		stringBuilder.append("	</section>\r\n");
 		stringBuilder.append("	\r\n");
 		stringBuilder.append("	\r\n");
-		
+
 		// theamleaf传值部分
 		stringBuilder.append("	<script th:inline=\"javascript\">\r\n");
 		stringBuilder.append("		var " + tabsNameString + " = [[${" + tabsNameString + "}]];\r\n");
 		stringBuilder.append("	</script>\r\n");
-		
+
 		// 结尾
 		stringBuilder.append("	<script type=\"text/javascript\" src=\"/pages/" + subPathString.replace(".", "/") + "/" + sysDbmsGenerateCodeInfo.getClassName().toLowerCase() + "detail.js\"></script>\r\n");
 		stringBuilder.append("</body>\r\n");
 		stringBuilder.append("</html>\r\n");
 		stringBuilder.append("\r\n");
-		
+
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName().toLowerCase() + "detail.html";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
+
+	}
+	
+	/**
+	 * 方法名： generateVue3
+	 * 功 能： 生成vue3版本的代码 依赖于 tools-manager ：https://github.com/514840279/tools-manager
+	 * 参 数： @param sysDbmsGenerateCodeInfo
+	 * 参 数： @param tabsInfo
+	 * 参 数： @param colsInfos
+	 * 参 数： @param username
+	 * 参 数： @param pathString
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public static void generateVue3(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+		
+	}
+
+	/**
+	 * 方法名： generateRouter
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param sysDbmsGenerateCodeInfo
+	 * 参 数： @param tabsInfo
+	 * 参 数： @param colsInfos
+	 * 参 数： @param username
+	 * 参 数： @param pathString
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public static void generateRouter(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+		// TODO Auto-generated method stub
 		
 	}
 	
+	/**
+	 * 方法名： generateVue3Detail
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param sysDbmsGenerateCodeInfo
+	 * 参 数： @param tabsInfo
+	 * 参 数： @param colsInfos
+	 * 参 数： @param username
+	 * 参 数： @param pathString
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public static void generateVue3Detail(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
+		// TODO Auto-generated method stub
+
+	}
 }

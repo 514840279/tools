@@ -29,6 +29,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.chuxue.application.bean.manager.dbms.SysDbmsGenerateCodeInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetView;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STSheetViewType;
 import org.springframework.core.io.ClassPathResource;
 
 import com.alibaba.nacos.common.utils.StringUtils;
@@ -60,7 +62,7 @@ public class GenerateDoc {
 	 * @返回 void
 	 * @author Administrator @throws
 	 */
-	@SuppressWarnings({ "resource", "deprecation" })
+	@SuppressWarnings({ "resource" })
 	public static void generateXls(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) throws IOException {
 		File file = new File(pathString);
 		HSSFWorkbook wb = null;
@@ -108,7 +110,7 @@ public class GenerateDoc {
 		int index2 = 0;
 		for (SysDbmsTabsColsInfo cols : colsInfos) {
 			
-			String colsNameString = cols.getColsName();
+			String colsNameString = cols.getColsName().toLowerCase();
 			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString) || "sort".equals(colsNameString)) {
 				index2++;
 				setDataValidationList((11 + index2), (11 + index2), 26, 29, dataList, newSheet);
@@ -119,21 +121,23 @@ public class GenerateDoc {
 				index++;
 				// セル幅のコピー
 				Row rowFrom = newSheet.getRow(13);
-				Row rowTo = newSheet.createRow(18 + index);
+				int rowIndex = 19 + index;
+				int nextRowIndex = rowIndex + 1;
+				Row rowTo = newSheet.createRow(rowIndex);
 				rowTo.setHeight(rowFrom.getHeight());
 				// 合并单元格
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + (18 + 1 + index) + ":B" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + (18 + 1 + index) + ":K" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + (18 + 1 + index) + ":Z" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + (18 + 1 + index) + ":AD" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + (18 + 1 + index) + ":AI" + (18 + 1 + index)));
-				setDataValidationList((18 + index), (18 + index), 27 - 1, 30 - 1, dataList, newSheet);
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + (18 + 1 + index) + ":AL" + (18 + 1 + index)));
-				setDataValidationList((18 + index), (18 + index), 31 - 1, 35 - 1, dataList2, newSheet);
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + (18 + 1 + index) + ":AP" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + (18 + 1 + index) + ":AU" + (18 + 1 + index)));
-				setDataValidationList((18 + index), (18 + index), 39 - 1, 42 - 1, dataList, newSheet);
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + (18 + 1 + index) + ":BJ" + (18 + 1 + index)));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + nextRowIndex + ":B" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + nextRowIndex + ":K" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + nextRowIndex + ":Z" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + nextRowIndex + ":AD" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + nextRowIndex + ":AI" + nextRowIndex));
+				setDataValidationList(rowIndex, rowIndex, 27 - 1, 30 - 1, dataList, newSheet);
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + nextRowIndex + ":AL" + nextRowIndex));
+				setDataValidationList(rowIndex, rowIndex, 31 - 1, 35 - 1, dataList2, newSheet);
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + nextRowIndex + ":AP" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + nextRowIndex + ":AU" + nextRowIndex));
+				setDataValidationList(rowIndex, rowIndex, 39 - 1, 42 - 1, dataList, newSheet);
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + nextRowIndex + ":BJ" + nextRowIndex));
 				
 				Cell cellFrom = null;
 				Cell cellTo = null;
@@ -174,33 +178,34 @@ public class GenerateDoc {
 				}
 				
 				// 字段名
-				newSheet.getRow(18 + index).getCell(2).setCellValue(cols.getColsName());
+				newSheet.getRow(rowIndex).getCell(2).setCellValue(cols.getColsName());
 				// 字段含义
-				newSheet.getRow(18 + index).getCell(11).setCellValue(cols.getColsDesc() == null ? "" : cols.getColsDesc());
+				newSheet.getRow(rowIndex).getCell(11).setCellValue(cols.getColsDesc() == null ? "" : cols.getColsDesc());
 				// 是否主键
-				newSheet.getRow(18 + index).getCell(26).setCellValue("");
+				newSheet.getRow(rowIndex).getCell(26).setCellValue("");
 				// 数据类型
-				newSheet.getRow(18 + index).getCell(30).setCellValue(cols.getColsType() == null ? "" : cols.getColsType().toString().toUpperCase());
+				newSheet.getRow(rowIndex).getCell(30).setCellValue(cols.getColsType() == null ? "" : cols.getColsType().toString().toUpperCase());
 				// 数据长度
-				newSheet.getRow(18 + index).getCell(35).setCellValue(cols.getColsLength() == null ? "255" : cols.getColsLength().toString());
+				newSheet.getRow(rowIndex).getCell(35).setCellValue(cols.getColsLength() == null ? "255" : cols.getColsLength().toString());
 				// 不为空
-				newSheet.getRow(18 + index).getCell(38).setCellValue("");
+				newSheet.getRow(rowIndex).getCell(38).setCellValue("");
 				// default value
-				newSheet.getRow(18 + index).getCell(42).setCellValue("");
+				newSheet.getRow(rowIndex).getCell(42).setCellValue("");
 				// 描述信息
-				newSheet.getRow(18 + index).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
+				newSheet.getRow(rowIndex).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
 			}
 			
 		}
 		
 		newSheet.setZoom(85);
 		newSheet.setActiveCell(new CellAddress("A1"));
+
+		newSheet.setPrintGridlines(true);
 		
 		wb.setActiveSheet(0);
 		
 		// 设置打印区域
-		// wb.setPrintArea(wb.getSheetIndex(tabsInfo.getTabsDesc()), "$A$1:$BO$" +
-		// (colsInfos.size() + 14));
+		wb.setPrintArea(wb.getSheetIndex(sheetName), "$A$1:$BO$" + (colsInfos.size() + 14));
 		FileOutputStream fout = new FileOutputStream(pathString);
 		wb.write(fout);
 		fout.close();
@@ -215,7 +220,6 @@ public class GenerateDoc {
 	 * @返回 HSSFSheet
 	 * @author Administrator @throws
 	 */
-	@SuppressWarnings("deprecation")
 	private static HSSFSheet copySheet(HSSFSheet sheetFrom, HSSFSheet sheetTo) {
 		
 		// 初期化
@@ -374,7 +378,7 @@ public class GenerateDoc {
 		int index2 = 0;
 		for (SysDbmsTabsColsInfo cols : colsInfos) {
 			
-			String colsNameString = cols.getColsName();
+			String colsNameString = cols.getColsName().toLowerCase();
 			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString) || "sort".equals(colsNameString)) {
 				index2++;
 				setDataValidationList((11 + index2), (11 + index2), 26, 29, dataList, newSheet);
@@ -385,22 +389,24 @@ public class GenerateDoc {
 				index++;
 				// セル幅のコピー
 				Row rowFrom = newSheet.getRow(13);
-				Row rowTo = newSheet.createRow(18 + index);
+				int newRowIndex = 19 + index;
+				int nextRowIndex = newRowIndex + 1;
+				Row rowTo = newSheet.createRow(newRowIndex);
 				rowTo.setHeight(rowFrom.getHeight());
 				// 合并单元格
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + (18 + 1 + index) + ":B" + (18 + 1 + index)));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("A" + nextRowIndex + ":B" + nextRowIndex));
 //
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + (18 + 1 + index) + ":K" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + (18 + 1 + index) + ":Z" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + (18 + 1 + index) + ":AD" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + (18 + 1 + index) + ":AI" + (18 + 1 + index)));
-				setDataValidationList((18 + index), (18 + index), 27 - 1, 30 - 1, dataList, newSheet);
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + (18 + 1 + index) + ":AL" + (18 + 1 + index)));
-				setDataValidationList((18 + index), (18 + index), 31 - 1, 35 - 1, dataList2, newSheet);
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + (18 + 1 + index) + ":AP" + (18 + 1 + index)));
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + (18 + 1 + index) + ":AU" + (18 + 1 + index)));
-				setDataValidationList((18 + index), (18 + index), 39 - 1, 42 - 1, dataList, newSheet);
-//				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + (18 + 1 + index) + ":BJ" + (18 + 1 + index)));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("C" + nextRowIndex + ":K" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("L" + nextRowIndex + ":Z" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AA" + nextRowIndex + ":AD" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AE" + nextRowIndex + ":AI" + nextRowIndex));
+				setDataValidationList(newRowIndex, newRowIndex, 27 - 1, 30 - 1, dataList, newSheet);
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AJ" + nextRowIndex + ":AL" + nextRowIndex));
+				setDataValidationList(newRowIndex, newRowIndex, 31 - 1, 35 - 1, dataList2, newSheet);
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AM" + nextRowIndex + ":AP" + nextRowIndex));
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + nextRowIndex + ":AU" + nextRowIndex));
+				setDataValidationList(newRowIndex, newRowIndex, 39 - 1, 42 - 1, dataList, newSheet);
+				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + nextRowIndex + ":BJ" + nextRowIndex));
 				
 				Cell cellFrom = null;
 				Cell cellTo = null;
@@ -441,33 +447,33 @@ public class GenerateDoc {
 				}
 				
 				// 字段名
-				newSheet.getRow(18 + index).getCell(2).setCellValue(cols.getColsName());
+				newSheet.getRow(newRowIndex).getCell(2).setCellValue(cols.getColsName());
 				// 字段含义
-				newSheet.getRow(18 + index).getCell(11).setCellValue(cols.getColsDesc() == null ? "" : cols.getColsDesc());
+				newSheet.getRow(newRowIndex).getCell(11).setCellValue(cols.getColsDesc() == null ? "" : cols.getColsDesc());
 				// 是否主键
-				newSheet.getRow(18 + index).getCell(26).setCellValue("");
+				newSheet.getRow(newRowIndex).getCell(26).setCellValue("");
 				// 数据类型
-				newSheet.getRow(18 + index).getCell(30).setCellValue(cols.getColsType() == null ? "" : cols.getColsType().toString().toUpperCase());
+				newSheet.getRow(newRowIndex).getCell(30).setCellValue(cols.getColsType() == null ? "" : cols.getColsType().toString().toUpperCase());
 				// 数据长度
-				newSheet.getRow(18 + index).getCell(35).setCellValue(cols.getColsLength() == null ? "255" : cols.getColsLength().toString());
+				newSheet.getRow(newRowIndex).getCell(35).setCellValue(cols.getColsLength() == null ? "255" : cols.getColsLength().toString());
 				// 不为空
-				newSheet.getRow(18 + index).getCell(38).setCellValue("");
+				newSheet.getRow(newRowIndex).getCell(38).setCellValue("");
 				// default value
-				newSheet.getRow(18 + index).getCell(42).setCellValue("");
+				newSheet.getRow(newRowIndex).getCell(42).setCellValue("");
 				// 描述信息
-				newSheet.getRow(18 + index).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
+				newSheet.getRow(newRowIndex).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
 			}
 			
 		}
 		
 		newSheet.setZoom(85);
 		newSheet.setActiveCell(new CellAddress("A1"));
-		
-//		CTSheetView view = newSheet.getCTWorksheet().getSheetViews().getSheetViewArray(0);
-//		view.setView(STSheetViewType.PAGE_BREAK_PREVIEW);
-		wb.setActiveSheet(0);
+		// 打印预览试图
+		CTSheetView view = newSheet.getCTWorksheet().getSheetViews().getSheetViewArray(0);
+		view.setView(STSheetViewType.PAGE_BREAK_PREVIEW);
 		// 设置打印区域
-		wb.setPrintArea(wb.getSheetIndex(sheetName), "$A$1:$BL$" + (colsInfos.size() + 13));
+		wb.setPrintArea(wb.getSheetIndex(sheetName), "$A$1:$BL$" + (colsInfos.size() + 14));
+		wb.setActiveSheet(0);
 		FileOutputStream fout = new FileOutputStream(pathString);
 		wb.write(fout);
 		fout.close();

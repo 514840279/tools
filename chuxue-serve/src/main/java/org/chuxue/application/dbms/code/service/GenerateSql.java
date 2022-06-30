@@ -18,7 +18,7 @@ import org.chuxue.application.common.utils.string.StringUtils;
  * @版本 V1.0
  */
 public class GenerateSql {
-
+	
 	/**
 	 * 方法名 generate
 	 * 功能 生成数据定义语句
@@ -38,7 +38,7 @@ public class GenerateSql {
 		stringBuilder.append("-- 表创建 表创建语句并不完全正确，需要确认后在执行 \r\n");
 		stringBuilder.append("create table " + tabsInfo.getTabsName() + "(\r\n");
 		stringBuilder.append(" uuid varchar(36) NOT NULL COMMENT '主键' primary key,\r\n");
-
+		
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
 			String colsName = sysDbmsTabsColsInfo.getColsName().toLowerCase();
 			if ("uuid".equals(colsName) || "discription".equals(colsName) || "create_time".equals(colsName) || "create_user".equals(colsName) || "update_time".equals(colsName) || "update_user".equals(colsName) || "delete_flag".equals(colsName)) {
@@ -69,17 +69,18 @@ public class GenerateSql {
 			}
 			stringBuilder.append(" " + colsName + " " + colsTypeString + nullable + colsdefault + colsDescString + ",\r\n");
 		}
-
+		
 		// fda VARCHAR(20) NOT NULL DEFAULT '1' COMMENT 'fdsa'
 		stringBuilder.append(" create_time timestamp NOT NULL default CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '记录时间',\r\n");
 		stringBuilder.append(" update_time timestamp NOT NULL default CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT  '更新时间',\r\n");
 		stringBuilder.append(" create_user varchar(50) NOT NULL default 'system' COMMENT '记录人',\r\n");
 		stringBuilder.append(" update_user varchar(50) NOT NULL default 'system' COMMENT '更新人',\r\n");
 		stringBuilder.append(" delete_flag tinyint NOT NULL default 0 COMMENT '应用标识',\r\n");
+		stringBuilder.append(" sort int  NULL  COMMENT '排序标识',\r\n");
 		stringBuilder.append(" discription varchar(200) COMMENT '数据描述',\r\n");
 		stringBuilder.append(")  ENGINE=InnoDB DEFAULT CHARSET=utf8;\r\n");
 		stringBuilder.append("\r\n");
-
+		
 		// 修改字段非空
 		stringBuilder.append("-- 修改字段非空 \r\n");
 		stringBuilder.append(" update " + tabsInfo.getTabsName() + " set uuid = UUID();\r\n");
@@ -120,7 +121,7 @@ public class GenerateSql {
 		String fineName = pathString + "/application_ddl.sql";
 		TxtFilesWriter.appendWriteToFile(stringBuilder.toString(), fineName);
 	}
-
+	
 	/**
 	 * 方法名 generateConfig
 	 * 功能 生成用户权限语句
@@ -140,7 +141,7 @@ public class GenerateSql {
 			thirdString.append(subpathString[i]).append(".");
 		}
 		String subPathString = sysDbmsGenerateCodeInfo.getClassPath().toLowerCase().replace(thirdString.toString(), "");
-
+		
 		// 路径配置
 		stringBuilder.append("-- ================" + tabsInfo.getTabsName() + "(" + tabsInfo.getTabsDesc() + ")配置开始======================= \r\n");
 		stringBuilder.append("-- 菜单配置 \r\n");
@@ -152,19 +153,19 @@ public class GenerateSql {
 		// 文件写入
 		String fineName = pathString + "/application_config.sql";
 		TxtFilesWriter.appendWriteToFile(stringBuilder.toString(), fineName);
-
+		
 	}
-
+	
 	public static void generateOracle(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) {
 		StringBuilder stringBuilder = new StringBuilder();
 		String tableNameString = tabsInfo.getTabsName().substring(tabsInfo.getTabsName().indexOf(".") + 1);
-
+		
 		stringBuilder.append("-- ================" + tableNameString + "(" + tabsInfo.getTabsDesc() + ")配置开始======================= \r\n");
 		// 创建表
 		stringBuilder.append("-- 表创建 表创建语句并不完全正确，需要确认后在执行 \r\n");
 		stringBuilder.append("create table " + tableNameString + "(\r\n");
 		stringBuilder.append(" uuid varchar(36) NOT NULL primary key,\r\n");
-
+		
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
 			String colsName = sysDbmsTabsColsInfo.getColsName().toLowerCase();
 			if ("uuid".equals(colsName) || "discription".equals(colsName) || "create_time".equals(colsName) || "create_user".equals(colsName) || "update_time".equals(colsName) || "update_user".equals(colsName) || "delete_flag".equals(colsName)) {
@@ -179,7 +180,7 @@ public class GenerateSql {
 				Integer scale = sysDbmsTabsColsInfo.getDataScale() == null ? 0 : sysDbmsTabsColsInfo.getDataScale();
 				colsTypeString = colsTypeString.contains("(") ? colsTypeString : colsTypeString + "(" + precision.intValue() + "," + scale.intValue() + ")";
 			}
-
+			
 			String colsdefault = sysDbmsTabsColsInfo.getColsDefault() == null ? "" : sysDbmsTabsColsInfo.getColsDefault();
 			if (!"".equals(colsdefault)) {
 				colsdefault = " default " + colsdefault;
@@ -192,7 +193,7 @@ public class GenerateSql {
 			}
 			stringBuilder.append(" " + colsName + " " + colsTypeString + nullable + colsdefault + ",\r\n");
 		}
-
+		
 		// fda VARCHAR(20) NOT NULL DEFAULT '1' COMMENT 'fdsa'
 		stringBuilder.append(" create_time timestamp NOT NULL DEFAULT sysdate ,\r\n");
 		stringBuilder.append(" update_time timestamp NOT NULL DEFAULT sysdate ,\r\n");
@@ -202,7 +203,7 @@ public class GenerateSql {
 		stringBuilder.append(" discription varchar(200) COMMENT '数据描述',\r\n");
 		stringBuilder.append(");\r\n");
 		stringBuilder.append("\r\n");
-
+		
 		// 修改字段非空
 		stringBuilder.append("-- 修改字段非空 \r\n");
 		stringBuilder.append(" update " + tableNameString + " set uuid = SYS_GUID();\r\n");
@@ -242,7 +243,7 @@ public class GenerateSql {
 		// 文件写入
 		String fineName = pathString + "/application_oracle_ddl.sql";
 		TxtFilesWriter.appendWriteToFile(stringBuilder.toString(), fineName);
-
+		
 	}
-
+	
 }

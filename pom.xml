@@ -167,6 +167,12 @@
 				<artifactId>mybatis-spring-boot-starter</artifactId>
 				<version>2.2.2</version>
 			</dependency>
+			<!--mybatis-plus 是自己开发的，非官方的！-->
+			<dependency>
+		        <groupId>com.baomidou</groupId>
+		        <artifactId>mybatis-plus-boot-starter</artifactId>
+		        <version>3.3.1.tmp</version>
+		    </dependency>
 			<dependency>
 				<groupId>io.lettuce</groupId>
 				<artifactId>lettuce-core</artifactId>
