@@ -19,7 +19,7 @@ import org.chuxue.application.common.utils.string.StringUtils;
  * @版本 V1.0
  */
 public class GenerateEntity {
-	
+
 	/**
 	 * 方法名 generate
 	 * 功能 生成实体类文件 jpa 版
@@ -77,7 +77,7 @@ public class GenerateEntity {
 		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + " extends BaseEntity implements Serializable {\r\n");
 		stringBuilder.append("	private static final long	serialVersionUID	= 1L;\r\n");
 		stringBuilder.append("\r\n");
-		
+
 		// 拼接属性
 		stringBuilder.append(stringBuilderProperties);
 		stringBuilder.append("\r\n");
@@ -96,20 +96,20 @@ public class GenerateEntity {
 		// 拼接get，set
 		stringBuilder.append(stringBuilderMethod);
 		stringBuilder.append("\r\n");
-		
+
 		// TODO 构造
-		
+
 		// TODO tostring
-		
+
 		// ...
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}");
-		
+
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + ".java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-	
+
 	/**
 	 * 方法名： spellString
 	 * 功 能： 拼接字段和get，set方法
@@ -120,7 +120,7 @@ public class GenerateEntity {
 	 * 作 者 ：wang @throws
 	 */
 	private static void spellString(List<SysDbmsTabsColsInfo> colsInfos, StringBuilder stringBuilderProperties, StringBuilder stringBuilderMethod, StringBuilder stringBuilderImport) {
-		
+
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
 			// 属性
 			String colsName = sysDbmsTabsColsInfo.getColsName().toLowerCase();
@@ -132,7 +132,7 @@ public class GenerateEntity {
 			String colsType = sysDbmsTabsColsInfo.getColsType().toLowerCase();
 			Integer length = sysDbmsTabsColsInfo.getColsLength();
 			String nullable = nullableFormatter(sysDbmsTabsColsInfo.getNullable());
-
+			
 			Integer dataprecision = sysDbmsTabsColsInfo.getDataPrecision();
 			Integer datascale = sysDbmsTabsColsInfo.getDataScale();
 			// 确定 对应的数据类型
@@ -156,19 +156,19 @@ public class GenerateEntity {
 			} else if (colsType.contains("double") || colsType.contains("float") || colsType.contains("decimal")) {
 				propertiesType = " BigDecimal ";
 			}
-			
+
 			// 拼写属性
 			spellProperties(stringBuilderProperties, propertiesName, propertiesType, colsDesc, colsType, colsName, length, nullable, dataprecision, datascale);
-			
+
 			// 拼写get，set
 			spellMethod(stringBuilderMethod, propertiesName, propertiesType, colsDesc, colsType, colsName);
 		}
 		if (stringBuilderImport.toString().length() > 0) {
 			stringBuilderImport.append("\r\n");
 		}
-		
+
 	}
-	
+
 	/**
 	 * 方法名： nullableFormatter
 	 * 功 能： 格式化nullable
@@ -190,7 +190,7 @@ public class GenerateEntity {
 			return nullable;
 		}
 	}
-	
+
 	/**
 	 * 方法名： spellMethod
 	 * 功 能： 拼写get，set
@@ -226,7 +226,7 @@ public class GenerateEntity {
 		stringBuilderMethod.append("		this." + propertiesName + " = " + propertiesName + ";\r\n");
 		stringBuilderMethod.append("	}\r\n");
 	}
-	
+
 	/**
 	 * 方法名： spellProperties
 	 * 功 能： 拼写属性
@@ -269,17 +269,17 @@ public class GenerateEntity {
 				stringBuilderProperties.append("	@Column(name = \"" + colsName + "\"" + (dataprecision == null ? "" : ",precision=" + dataprecision) + (scale == null ? "" : ",scale=" + scale) + ")\r\n");
 			} else if ("char".equals(colsType.toLowerCase()) || "varchar".equals(colsType.toLowerCase()) || "text".equals(colsType.toLowerCase()) || "varchar2".equals(colsType.toLowerCase()) || colsType.toLowerCase().contains("char")) {
 				stringBuilderProperties.append("	@Column(name = \"" + colsName + "\"" + (dataprecision == null ? "" : ",precision=" + dataprecision) + ")\r\n");
-				
+
 			} else {
 				stringBuilderProperties.append("	@Column(name = \"" + colsName + "\")\r\n");
 			}
 		} else {
 			stringBuilderProperties.append("	@Column(name = \"" + colsName + "\")\r\n");
 		}
-		
+
 		stringBuilderProperties.append("	private " + propertiesType + "	" + propertiesName + ";\r\n");
 	}
-	
+
 	/**
 	 * 方法名： makeProperties
 	 * 功 能： 属性生成
@@ -288,7 +288,7 @@ public class GenerateEntity {
 	 * 返 回： String
 	 * 作 者 ： wang @throws
 	 */
-	private static String makeProperties(String colsName) {
+	public static String makeProperties(String colsName) {
 		String[] strs = colsName.split("_");
 		String propertiesName = "";
 		for (int i = 0; i < strs.length; i++) {
@@ -300,5 +300,5 @@ public class GenerateEntity {
 		}
 		return propertiesName;
 	}
-	
+
 }

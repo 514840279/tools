@@ -1,6 +1,5 @@
 package org.chuxue.application.dbms.code.service;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -30,14 +29,14 @@ import com.alibaba.nacos.common.utils.StringUtils;
  */
 @Service
 public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGenerateCodeInfo> implements BaseService<SysDbmsGenerateCodeInfo> {
-	
+
 	@Autowired
 	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
 	@Autowired
 	SysDbmsTabsTableInfoDao		sysDbmsTabsInfoDao;
-	
+
 	private static final String	OUTPUTFILE	= "outputfile";
-	
+
 	/**
 	 * @throws FileNotFoundException
 	 *             方法名 generate
@@ -50,79 +49,66 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	 */
 	public void generate(List<SysDbmsGenerateCodeInfo> list, String username, String pathString) throws FileNotFoundException {
 		String path = System.getProperty("user.dir") + "/" + OUTPUTFILE + "/" + pathString;
-		File file = new File(path);
 		for (SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo : list) {
 			// javafile 路径
 			String pathtempString = path + "/src/main/java/" + sysDbmsGenerateCodeInfo.getClassPath().replace(".", "/");
-			file = new File(path);
-			if (!file.exists()) {
-				file.mkdirs();
-			}
+			
 			SysDbmsTabsColsInfo colsInfo = new SysDbmsTabsColsInfo();
 			colsInfo.setTabsUuid(sysDbmsGenerateCodeInfo.getTableUuid());
 			Example<SysDbmsTabsColsInfo> example = Example.of(colsInfo);
 			List<SysDbmsTabsColsInfo> colsInfos = sysDbmsTabsColsInfoDao.findAll(example);
-			
+
 			SysDbmsTabsTableInfo tabsInfo = new SysDbmsTabsTableInfo();
 			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getTableUuid());
 			if (op.isPresent()) {
 				tabsInfo = op.get();
 				if ("JPA".equals(sysDbmsGenerateCodeInfo.getGenerateOrm()) || StringUtils.isBlank(sysDbmsGenerateCodeInfo.getGenerateOrm())) {
 					generateJpa(username, sysDbmsGenerateCodeInfo, pathtempString, colsInfos, tabsInfo);
-
 				} else if ("mybatis".equals(sysDbmsGenerateCodeInfo.getGenerateOrm())) {
-
+					
 				}
-				String thirdString = "";
+				StringBuilder thirdString = new StringBuilder();
 				String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
 				for (int i = 0; i < subpathString.length && i < 3; i++) {
-					thirdString += subpathString[i] + ".";
+					thirdString.append(subpathString[i]).append(".");
 				}
 				// html类生成
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateHtml())) {
 					// static 资源文件路径
-					pathtempString = path + "/src/views/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
-					file = new File(pathtempString);
-					if (!file.exists()) {
-						file.mkdirs();
-					}
-					GenerateHtml.generateVue3(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathString);
-					GenerateHtml.generateRouter(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathString);
+					pathtempString = path + "/src/views/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString.toString(), "").replace(".", "/").toLowerCase();
+					GenerateHtml.generateVue3(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					GenerateHtml.generateRouter(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 //					// html类生成
 //					GenerateHtml.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 //					// js类生成
 //					GenerateJs.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 				}
-				
+
 				// detailhtml类生成
-				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDetail())) {
-					// templates 模板路径
-					pathtempString = path + "/src/views/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
-					file = new File(pathtempString);
-					if (!file.exists()) {
-						file.mkdirs();
-					}
-//					GenerateHtml.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-					GenerateHtml.generateVue3Detail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathString);
-					
-					// js类生成
-					// static 资源文件路径
-//					pathtempString = path + "/src/main/resources/static/pages/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
+//				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDetail())) {
+//					// templates 模板路径
+//					pathtempString = path + "/src/views/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
 //					file = new File(pathtempString);
 //					if (!file.exists()) {
 //						file.mkdirs();
 //					}
-//					GenerateJs.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-				}
-				
+////					GenerateHtml.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+////					GenerateHtml.generateVue3Detail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathString);
+//
+//					// js类生成
+//					// static 资源文件路径
+////					pathtempString = path + "/src/main/resources/static/pages/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
+////					file = new File(pathtempString);
+////					if (!file.exists()) {
+////						file.mkdirs();
+////					}
+////					GenerateJs.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+//				}
+
 				// Sql 语句
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateSql())) {
 					// sql 脚本文件路径
 					pathtempString = path + "/src/main/resources/sql/";
-					file = new File(pathtempString);
-					if (!file.exists()) {
-						file.mkdirs();
-					}
 					// Sql ddl 语句
 					GenerateSql.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 					// Sql ddl 语句
@@ -130,7 +116,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 					// Sql 管理员权限 语句
 //					GenerateSql.generateConfig(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 				}
-				
+
 				// 数据文当 接口文档 功能介绍
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDoc())) {
 					// sql 脚本文件路径
@@ -148,11 +134,11 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		// 打包文件
 //		FileOutputStream fos1 = new FileOutputStream(new File(path + ".zip"));
 //		CompressFile.toZip(path, fos1, true);
-		
+
 		// 清空 文件夹
 //		FileDelete.delFolder(path);
 	}
-
+	
 	/**
 	 * 方法名： generateJpa
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -166,39 +152,22 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 	 * @throws
 	 */
 	private void generateJpa(String username, SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, String pathtempString, List<SysDbmsTabsColsInfo> colsInfos, SysDbmsTabsTableInfo tabsInfo) {
-		File file;
 		// 实体类生成
 		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateEntity())) {
-			file = new File(pathtempString + "/po");
-			if (!file.exists()) {
-				file.mkdirs();
-			}
 			GenerateEntity.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/po");
 		}
 		// dao类生成
 		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDao())) {
-			file = new File(pathtempString + "/dao");
-			if (!file.exists()) {
-				file.mkdirs();
-			}
 			GenerateDao.getGenerateDao(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/dao");
 		}
 		// service类生成
 		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateService())) {
-			file = new File(pathtempString + "/service");
-			if (!file.exists()) {
-				file.mkdirs();
-			}
 			GenerateService.getGenerateService(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/service");
 		}
 		// controller类生成
 		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateController())) {
-			file = new File(pathtempString + "/controller");
-			if (!file.exists()) {
-				file.mkdirs();
-			}
 			GenerateController.getGenerateController(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/controller");
 		}
 	}
-
+	
 }

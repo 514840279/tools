@@ -31,19 +31,19 @@ public class TxtFilesWriter {
 	 * @throws
 	 */
 	public static void appendWriteToFile(String data, String filepath) {
+		if (filepath == null) {
+			return;
+		}
 		FileWriter fileWritter = null;
 		try {
-			String path = filepath.substring(0, filepath.lastIndexOf("\\") > 0 ? filepath.lastIndexOf("\\") : filepath.lastIndexOf("/") > 0 ? filepath.lastIndexOf("/") : filepath.length());
-			File dir = new File(path);
-			if (!dir.exists()) {
-				dir.mkdirs();
-			}
+			filepath = filepath.replace("/", "\\");
 			File file = new File(filepath);
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
 			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				if (!file.createNewFile()) {
-					throw new BaseException(-1, "創建文件錯誤");
-				}
+			if (!file.exists() && !file.createNewFile()) {
+				throw new BaseException(-1, "創建文件錯誤");
 			}
 			// true = append file
 			fileWritter = new FileWriter(filepath, true);
@@ -75,19 +75,19 @@ public class TxtFilesWriter {
 	 * @throws
 	 */
 	public static void writeToFile(String data, String filepath) {
+		if (filepath == null) {
+			return;
+		}
 		FileWriter fileWritter = null;
 		try {
-			String path = filepath.substring(0, filepath.lastIndexOf("\\") > 0 ? filepath.lastIndexOf("\\") : filepath.lastIndexOf("/") > 0 ? filepath.lastIndexOf("/") : filepath.length());
-			File dir = new File(path);
-			if (!dir.exists()) {
-				dir.mkdirs();
-			}
+			filepath = filepath.replace("/", "\\");
 			File file = new File(filepath);
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
 			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				if (!file.createNewFile()) {
-					throw new BaseException(-1, "創建文件錯誤");
-				}
+			if (!file.exists() && !file.createNewFile()) {
+				throw new BaseException(-1, "創建文件錯誤");
 			}
 			// true = append file
 			fileWritter = new FileWriter(filepath);
