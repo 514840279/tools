@@ -38,10 +38,6 @@ public class SysDbmsGenerateCodeInfo extends BaseEntity implements Serializable 
 	@Column(name = "generate_html", length = 1)
 	private String				generateHtml;
 
-	// 生成detail标识
-	@Column(name = "generate_detail", length = 1)
-	private String				generateDetail;
-
 	// 生成orm的框架依赖 jpa/mybatis
 	@Column(name = "generate_orm", length = 10)
 	private String				generateOrm;
@@ -136,24 +132,6 @@ public class SysDbmsGenerateCodeInfo extends BaseEntity implements Serializable 
 	 */
 	public void setGenerateHtml(String generateHtml) {
 		this.generateHtml = generateHtml;
-	}
-	
-	/**
-	 * 方法名 ： getGenerateDetail
-	 * 功 能 ： 返回变量 generateDetail 的值
-	 *
-	 * @return: String
-	 */
-	public String getGenerateDetail() {
-		return generateDetail;
-	}
-	
-	/**
-	 * 方法名 ： setGenerateDetail
-	 * 功 能 ： 设置变量 generateDetail 的值
-	 */
-	public void setGenerateDetail(String generateDetail) {
-		this.generateDetail = generateDetail;
 	}
 	
 	/**

@@ -20,7 +20,7 @@ import org.chuxue.application.common.utils.files.TxtFilesWriter;
  * 版 本 ： V1.0
  */
 public class GenerateController {
-	
+
 	/**
 	 * 方法名 getGenerateController
 	 * 功能 生成controller
@@ -45,13 +45,13 @@ public class GenerateController {
 		stringBuilder.append("import org.chuxue.application.common.base.BaseControllerImpl;\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".service." + sysDbmsGenerateCodeInfo.getClassName() + "Service;\r\n");
-
+		
 //		import org.chuxue.application.common.base.BaseController;
 //		import org.chuxue.application.common.base.BaseControllerImpl;
 //		import org.chuxue.application.common.base.BaseResult;
 //		import org.chuxue.application.common.base.Pagination;
 //		import org.chuxue.application.common.base.ResultUtil;
-		
+
 		stringBuilder.append("import org.slf4j.Logger;\r\n");
 		stringBuilder.append("import org.slf4j.LoggerFactory;\r\n");
 		stringBuilder.append("import org.springframework.beans.factory.annotation.Autowired;\r\n");
@@ -91,9 +91,26 @@ public class GenerateController {
 //		stringBuilder.append("	}\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}");
-		
+
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Controller.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
+	}
+	
+	/**
+	 * 方法名： getGenerateMybatisController
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param sysDbmsGenerateCodeInfo
+	 * 参 数： @param tabsInfo
+	 * 参 数： @param colsInfos
+	 * 参 数： @param username
+	 * 参 数： @param string
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public static void getGenerateMybatisController(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String string) {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -65,45 +65,28 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 				if ("JPA".equals(sysDbmsGenerateCodeInfo.getGenerateOrm()) || StringUtils.isBlank(sysDbmsGenerateCodeInfo.getGenerateOrm())) {
 					generateJpa(username, sysDbmsGenerateCodeInfo, pathtempString, colsInfos, tabsInfo);
 				} else if ("mybatis".equals(sysDbmsGenerateCodeInfo.getGenerateOrm())) {
-					
+					generateMybatis(username, sysDbmsGenerateCodeInfo, path, pathtempString, colsInfos, tabsInfo);
 				}
 				StringBuilder thirdString = new StringBuilder();
 				String[] subpathString = sysDbmsGenerateCodeInfo.getClassPath().split("\\.");
 				for (int i = 0; i < subpathString.length && i < 3; i++) {
-					thirdString.append(subpathString[i]).append(".");
+					if (i > 0) {
+						thirdString.append(".");
+					}
+					thirdString.append(subpathString[i]);
 				}
 				// html类生成
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateHtml())) {
 					// static 资源文件路径
-					pathtempString = path + "/src/views/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString.toString(), "").replace(".", "/").toLowerCase();
+					pathtempString = path + "/src/views/manager/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString.toString(), "").replace(".", "/").toLowerCase();
+					if ("/".equals(pathtempString.substring(pathtempString.length() - 1))) {
+						pathtempString = pathtempString.substring(0, pathtempString.length() - 1);
+					}
 					GenerateHtml.generateVue3(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					pathtempString = path;
 					GenerateHtml.generateRouter(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-//					// html类生成
-//					GenerateHtml.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-//					// js类生成
-//					GenerateJs.generate(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-				}
 
-				// detailhtml类生成
-//				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDetail())) {
-//					// templates 模板路径
-//					pathtempString = path + "/src/views/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
-//					file = new File(pathtempString);
-//					if (!file.exists()) {
-//						file.mkdirs();
-//					}
-////					GenerateHtml.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-////					GenerateHtml.generateVue3Detail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathString);
-//
-//					// js类生成
-//					// static 资源文件路径
-////					pathtempString = path + "/src/main/resources/static/pages/" + sysDbmsGenerateCodeInfo.getClassPath().replace(thirdString, "").replace(".", "/").toLowerCase();
-////					file = new File(pathtempString);
-////					if (!file.exists()) {
-////						file.mkdirs();
-////					}
-////					GenerateJs.generateDetail(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-//				}
+				}
 
 				// Sql 语句
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateSql())) {
@@ -137,6 +120,41 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 
 		// 清空 文件夹
 //		FileDelete.delFolder(path);
+	}
+	
+	/**
+	 * @param pathtempString2
+	 * 方法名： generateMybatis
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param username
+	 * 参 数： @param sysDbmsGenerateCodeInfo
+	 * 参 数： @param pathtempString
+	 * 参 数： @param colsInfos
+	 * 参 数： @param tabsInfo
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	private void generateMybatis(String username, SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, String path, String pathtempString, List<SysDbmsTabsColsInfo> colsInfos, SysDbmsTabsTableInfo tabsInfo) {
+		// 实体类生成
+		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateEntity())) {
+			GenerateEntity.generateMybatis(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/po");
+		}
+		// dao类生成
+		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDao())) {
+			GenerateDao.getGenerateMybatisDao(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/dao");
+			String pathtemp = path + "/src/main/resources/mapper/";
+			GenerateDao.getGenerateMybatisXml(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtemp);
+		}
+		// service类生成
+		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateService())) {
+			GenerateService.getGenerateMybatisService(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/service");
+		}
+		// controller类生成
+		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateController())) {
+			GenerateController.getGenerateMybatisController(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/controller");
+		}
+
 	}
 	
 	/**

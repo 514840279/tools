@@ -54,7 +54,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	
 	// 首页
 	@Column(name = "home_page", precision = 3)
-	private Boolean				homePage;
+	private String				homePage;
 	
 	// 菜单还是方法
 	@Column(name = "type")
@@ -75,12 +75,12 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	 * @throws
 	 */
 	public SysMenuInfo() {
-		super();
 	}
 	
 	/**
 	 * 方法名 ： getUri
 	 * 功 能 ： 返回变量 uri 地址资源 的值
+	 *
 	 * @return: String
 	 */
 	public String getUri() {
@@ -98,6 +98,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getChecked
 	 * 功 能 ： 返回变量 checked 显示图标样式 的值
+	 *
 	 * @return: String
 	 */
 	public Integer getChecked() {
@@ -115,6 +116,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getSystemId
 	 * 功 能 ： 返回变量 systemId 系统id 的值
+	 *
 	 * @return: String
 	 */
 	public String getSystemId() {
@@ -132,6 +134,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getIcon
 	 * 功 能 ： 返回变量 icon 显示图标样式 的值
+	 *
 	 * @return: String
 	 */
 	public String getIcon() {
@@ -149,8 +152,10 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getSort
 	 * 功 能 ： 返回变量 sort 排序 的值
+	 *
 	 * @return: String
 	 */
+	@Override
 	public Integer getSort() {
 		return sort;
 	}
@@ -159,6 +164,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	 * 方法名 ： setSort
 	 * 功 能 ： 设置变量 sort 排序 的值
 	 */
+	@Override
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
@@ -166,6 +172,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getName
 	 * 功 能 ： 返回变量 name 地址名称 的值
+	 *
 	 * @return: String
 	 */
 	public String getName() {
@@ -183,6 +190,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getParentsId
 	 * 功 能 ： 返回变量 parentsId 父id 的值
+	 *
 	 * @return: String
 	 */
 	public String getParentsId() {
@@ -200,6 +208,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getMoveType
 	 * 功 能 ： 返回变量 moveType 的值
+	 *
 	 * @return: String
 	 */
 	public String getMoveType() {
@@ -216,24 +225,26 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	
 	/**
 	 * 方法名 ： getHomePage
-	 * 功 能 ： 返回变量 homePage 首页 的值
+	 * 功 能 ： 返回变量 homePage 的值
+	 *
 	 * @return: String
 	 */
-	public Boolean getHomePage() {
+	public String getHomePage() {
 		return homePage;
 	}
 	
 	/**
 	 * 方法名 ： setHomePage
-	 * 功 能 ： 设置变量 homePage 首页 的值
+	 * 功 能 ： 设置变量 homePage 的值
 	 */
-	public void setHomePage(Boolean homePage) {
+	public void setHomePage(String homePage) {
 		this.homePage = homePage;
 	}
 	
 	/**
 	 * 方法名 ： getType
 	 * 功 能 ： 返回变量 type 菜单还是方法 的值
+	 *
 	 * @return: String
 	 */
 	public String getType() {
@@ -251,6 +262,7 @@ public class SysMenuInfo extends BaseEntity implements Serializable {
 	/**
 	 * 方法名 ： getIconSkin
 	 * 功 能 ： 返回变量 iconSkin 显示图标样式 的值
+	 *
 	 * @return: String
 	 */
 	public String getIconSkin() {
