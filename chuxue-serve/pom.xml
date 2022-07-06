@@ -23,6 +23,12 @@
 			<groupId>org.chuxue</groupId>
 			<version>${project.version}</version>
 			<artifactId>chuxue-commons</artifactId>
+			<exclusions>
+				<exclusion>
+           			<groupId>com.baomidou</groupId>
+		        	<artifactId>mybatis-plus-boot-starter</artifactId>
+        		</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- spring boot web支持：mvc,aop... -->
 		<dependency>

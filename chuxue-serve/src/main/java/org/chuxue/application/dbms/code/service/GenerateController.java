@@ -20,7 +20,7 @@ import org.chuxue.application.common.utils.files.TxtFilesWriter;
  * 版 本 ： V1.0
  */
 public class GenerateController {
-
+	
 	/**
 	 * 方法名 getGenerateController
 	 * 功能 生成controller
@@ -40,7 +40,7 @@ public class GenerateController {
 		stringBuilder.append("import org.chuxue.application.common.base.BaseControllerImpl;\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".service." + sysDbmsGenerateCodeInfo.getClassName() + "Service;\r\n");
-
+		
 		stringBuilder.append("import org.slf4j.Logger;\r\n");
 		stringBuilder.append("import org.slf4j.LoggerFactory;\r\n");
 		stringBuilder.append("import org.springframework.beans.factory.annotation.Autowired;\r\n");
@@ -63,12 +63,12 @@ public class GenerateController {
 		stringBuilder.append("\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Controller.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-	
+
 	/**
 	 * 方法名： getGenerateMybatisController
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -86,13 +86,10 @@ public class GenerateController {
 		stringBuilder.append("package " + sysDbmsGenerateCodeInfo.getClassPath() + ".controller;\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("import org.chuxue.application.common.base.BaseController;\r\n");
-		stringBuilder.append("import org.chuxue.application.common.base.BaseControllerImpl;\r\n");
+		stringBuilder.append("import org.chuxue.application.common.base.MybatisBaseConrollerImpl;\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".service." + sysDbmsGenerateCodeInfo.getClassName() + "Service;\r\n");
-
-		stringBuilder.append("import org.slf4j.Logger;\r\n");
-		stringBuilder.append("import org.slf4j.LoggerFactory;\r\n");
-		stringBuilder.append("import org.springframework.beans.factory.annotation.Autowired;\r\n");
+		
 		stringBuilder.append("import org.springframework.web.bind.annotation.RequestMapping;\r\n");
 		stringBuilder.append("import org.springframework.web.bind.annotation.RestController;\r\n");
 		stringBuilder.append("\r\n");
@@ -108,14 +105,14 @@ public class GenerateController {
 		stringBuilder.append("@RestController\r\n");
 		String subServiceNameString = sysDbmsGenerateCodeInfo.getClassName().substring(0, 1).toLowerCase() + sysDbmsGenerateCodeInfo.getClassName().substring(1);
 		stringBuilder.append("@RequestMapping(\"/" + subServiceNameString + "\")\r\n");
-		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + "Controller extends BaseControllerImpl<" + sysDbmsGenerateCodeInfo.getClassName() + "> implements BaseController<" + sysDbmsGenerateCodeInfo.getClassName() + "> {\r\n");
+		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + "Controller extends MybatisBaseConrollerImpl<" + sysDbmsGenerateCodeInfo.getClassName() + "> implements BaseController<" + sysDbmsGenerateCodeInfo.getClassName() + "> {\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Controller.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
-
+		
 	}
 }

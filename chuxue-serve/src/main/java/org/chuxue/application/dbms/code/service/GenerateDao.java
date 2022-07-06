@@ -20,7 +20,7 @@ import org.chuxue.application.common.utils.files.TxtFilesWriter;
  * 版 本 ： V1.0
  */
 public class GenerateDao {
-
+	
 	/**
 	 * 方法名 getGenerateDao
 	 * 功能 jpa dao层代码生成
@@ -42,7 +42,7 @@ public class GenerateDao {
 		stringBuilder.append("package " + sysDbmsGenerateCodeInfo.getClassPath() + ".dao;\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("import org.chuxue.application.common.base.BaseDao;\r\n");
-		
+
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import org.springframework.stereotype.Repository;\r\n");
 		stringBuilder.append("\r\n");
@@ -60,13 +60,13 @@ public class GenerateDao {
 		stringBuilder.append(" \r\n");
 		stringBuilder.append("}\r\n");
 		stringBuilder.append("");
-		
+
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Dao.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
-		
-	}
 
+	}
+	
 	/**
 	 * 方法名： getGenerateMybatisDao
 	 * 功 能： Mybatis 的dao
@@ -88,14 +88,12 @@ public class GenerateDao {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("package " + sysDbmsGenerateCodeInfo.getClassPath() + ".dao;\r\n");
 		stringBuilder.append("\r\n");
-		stringBuilder.append("import org.chuxue.application.common.base.BaseDao;\r\n");
-		
+		stringBuilder.append("import org.chuxue.application.common.base.MybatisBaseDao;\r\n");
+
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import org.apache.ibatis.annotations.Mapper;\r\n");
 		stringBuilder.append("import org.apache.ibatis.annotations.Param;\r\n");
-		
-		stringBuilder.append("\r\n");
-		stringBuilder.append("import com.baomidou.mybatisplus.core.mapper.BaseMapper;\r\n");
+
 		stringBuilder.append("\r\n");
 		stringBuilder.append("/**\r\n");
 		stringBuilder.append(" * @文件名 " + sysDbmsGenerateCodeInfo.getClassName() + "Dao.java\r\n");
@@ -107,17 +105,17 @@ public class GenerateDao {
 		stringBuilder.append(" * @版本 V1.0\r\n");
 		stringBuilder.append(" */\r\n");
 		stringBuilder.append("@Mapper\r\n");
-		stringBuilder.append("public interface " + sysDbmsGenerateCodeInfo.getClassName() + "Dao extends BaseMapper<" + sysDbmsGenerateCodeInfo.getClassName() + "> {\r\n");
+		stringBuilder.append("public interface " + sysDbmsGenerateCodeInfo.getClassName() + "Dao extends MybatisBaseDao<" + sysDbmsGenerateCodeInfo.getClassName() + "> {\r\n");
 		stringBuilder.append(" \r\n");
 		stringBuilder.append("}\r\n");
 		stringBuilder.append("");
-		
+
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Dao.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
-		
-	}
 
+	}
+	
 	/**
 	 * 方法名： getGenerateMybatisXml
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -138,10 +136,10 @@ public class GenerateDao {
 		stringBuilder.append("");
 		stringBuilder.append("</mapper>");
 		stringBuilder.append("");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + ".xml";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
-
+		
 	}
 }
