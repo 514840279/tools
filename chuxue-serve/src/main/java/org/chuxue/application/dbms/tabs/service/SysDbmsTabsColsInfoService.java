@@ -60,7 +60,7 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 				SysDbmsTabsColsInfo pcols = new SysDbmsTabsColsInfo();
 				pcols.setTabsUuid(tabs.getUuid());
 				pcols.setColsName(tabs.getTabsName());
-				org.chuxue.application.common.base.Page<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.Page<>();
+				org.chuxue.application.common.base.ResultPage<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.ResultPage<>();
 				page.setInfo(pcols);
 				
 				List<SysDbmsTabsColsInfo> al = sysDbmsTabsColsInfoDao.findAll(Example.of(cols));

@@ -2,7 +2,7 @@ package org.chuxue.application.common.base;
 
 import java.util.List;
 
-public class Page<T> {
+public class ResultPage<T> {
 	// 页码
 	protected Integer	pageNumber	= 1;
 	// 每页数据量大小
@@ -16,11 +16,11 @@ public class Page<T> {
 
 	protected T			info;
 
-	public Page() {
+	public ResultPage() {
 		super();
 	}
 
-	public Page(Integer totalElements, List<T> content) {
+	public ResultPage(Integer totalElements, List<T> content) {
 		super();
 		this.totalElements = totalElements;
 		this.content = content;

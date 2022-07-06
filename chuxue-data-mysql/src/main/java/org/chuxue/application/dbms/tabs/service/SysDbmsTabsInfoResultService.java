@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
-import org.chuxue.application.common.base.Page;
+import org.chuxue.application.common.base.ResultPage;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsInfoResultDao;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class SysDbmsTabsInfoResultService {
 	 * 作 者 ： Administrator @throws
 	 */
 	@Transactional
-	public Page<SysDbmsTabsInfoResult> findAllByJdbcUuid(Page<SysDbmsTabsTableInfo> vo) {
+	public ResultPage<SysDbmsTabsInfoResult> findAllByJdbcUuid(ResultPage<SysDbmsTabsTableInfo> vo) {
 		logger.info("微服务访问{}开始。", vo.getInfo().getJdbcUuid());
 		String tableName = vo.getInfo().getTabsName();
 
@@ -60,7 +60,7 @@ public class SysDbmsTabsInfoResultService {
 			total = sysDbmsTabsInfoResultDao.totalAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list);
 		}
 
-		return new Page<>(total, page);
+		return new ResultPage<>(total, page);
 	}
 
 }

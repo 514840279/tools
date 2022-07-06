@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.common.base.BaseResult;
-import org.chuxue.application.common.base.Page;
+import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsColumnResult;
 import org.chuxue.application.dbms.tabs.service.SysDbmsTabsColumnResultService;
@@ -22,7 +22,7 @@ public class SysDbmsTabsColumnResultController {
 	SysDbmsTabsColumnResultService sysDbmsTabsColumnResultService;
 
 	@PostMapping("/findAllByTabUuid")
-	public BaseResult<List<SysDbmsTabsColumnResult>> findAllByTabUuid(@RequestBody Page<SysDbmsTabsColsInfo> vo) {
+	public BaseResult<List<SysDbmsTabsColumnResult>> findAllByTabUuid(@RequestBody Pagination<SysDbmsTabsColsInfo> vo) {
 		List<SysDbmsTabsColumnResult> list = sysDbmsTabsColumnResultService.findAllByTabUuid(vo);
 		return ResultUtil.success(list);
 	}

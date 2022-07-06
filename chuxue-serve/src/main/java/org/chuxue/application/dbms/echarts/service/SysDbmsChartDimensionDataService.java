@@ -7,6 +7,7 @@ import org.chuxue.application.bean.manager.dbms.SysDbmsChartDimensionData;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.common.base.Pagination;
+import org.chuxue.application.common.base.SortList;
 import org.chuxue.application.dbms.echarts.dao.SysDbmsChartDimensionDataDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -27,10 +28,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysDbmsChartDimensionDataService extends BaseServiceImpl<SysDbmsChartDimensionData> implements BaseService<SysDbmsChartDimensionData> {
-
+	
 	@Autowired
 	SysDbmsChartDimensionDataDao sysDbmsChartDimensionDataDao;
-
+	
 	/**
 	 * 方法名 ： page
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -43,10 +44,10 @@ public class SysDbmsChartDimensionDataService extends BaseServiceImpl<SysDbmsCha
 	 * 参 考 ： @see com.shumeng.application.common.base.BaseService#page(int, int, java.lang.Object, java.util.Map, org.springframework.data.domain.Sort.Order[])
 	 * 作 者 ： Administrator
 	 */
-
+	
 	@Override
 	public Page<SysDbmsChartDimensionData> page(Pagination<SysDbmsChartDimensionData> vo) {
-		Sort sort = vo.sort();
+		Sort sort = SortList.sort(vo.getSortList());
 		if (sort == null) {
 			List<Order> orders = new ArrayList<>();
 			Order order = new Order(Direction.ASC, "createTime");
@@ -56,7 +57,7 @@ public class SysDbmsChartDimensionDataService extends BaseServiceImpl<SysDbmsCha
 		if (vo.getInfo() == null) {
 			vo.setInfo(new SysDbmsChartDimensionData());
 		}
-
+		
 		Example<SysDbmsChartDimensionData> example = Example.of(vo.getInfo());
 		PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
 		return sysDbmsChartDimensionDataDao.findAll(example, request);

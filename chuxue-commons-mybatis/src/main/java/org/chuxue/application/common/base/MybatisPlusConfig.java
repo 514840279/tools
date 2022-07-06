@@ -11,8 +11,12 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 public class MybatisPlusConfig {
 	@Bean
 	public MybatisPlusInterceptor mybatisPlusInterceptor() {
-		MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-		interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
-		return interceptor;
+		try {
+			MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+			interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+			return interceptor;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

@@ -1,6 +1,8 @@
 package org.chuxue.application.dbms.code.service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +13,8 @@ import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseException;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
+import org.chuxue.application.common.utils.files.CompressFile;
+import org.chuxue.application.common.utils.files.FileDelete;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColsInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +61,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 			colsInfo.setTabsUuid(sysDbmsGenerateCodeInfo.getTableUuid());
 			Example<SysDbmsTabsColsInfo> example = Example.of(colsInfo);
 			List<SysDbmsTabsColsInfo> colsInfos = sysDbmsTabsColsInfoDao.findAll(example);
-
+			
 			SysDbmsTabsTableInfo tabsInfo = new SysDbmsTabsTableInfo();
 			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getTableUuid());
 			if (op.isPresent()) {
@@ -85,9 +89,9 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 					GenerateHtml.generateVue3(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 					pathtempString = path;
 					GenerateHtml.generateRouter(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
-
+					
 				}
-
+				
 				// Sql 语句
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateSql())) {
 					// sql 脚本文件路径
@@ -99,7 +103,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 					// Sql 管理员权限 语句
 //					GenerateSql.generateConfig(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 				}
-
+				
 				// 数据文当 接口文档 功能介绍
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDoc())) {
 					// sql 脚本文件路径
@@ -114,12 +118,15 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 				}
 			}
 		}
-		// 打包文件
-//		FileOutputStream fos1 = new FileOutputStream(new File(path + ".zip"));
-//		CompressFile.toZip(path, fos1, true);
-
+		try (FileOutputStream fos1 = new FileOutputStream(new File(path + ".zip"))) {
+			// 打包文件
+			CompressFile.toZip(path, fos1, true);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		// 清空 文件夹
-//		FileDelete.delFolder(path);
+		FileDelete.delFolder(path);
 	}
 	
 	/**

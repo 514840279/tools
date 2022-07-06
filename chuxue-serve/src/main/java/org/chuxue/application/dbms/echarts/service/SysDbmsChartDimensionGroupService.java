@@ -12,6 +12,7 @@ import org.chuxue.application.bean.manager.dbms.SysDbmsChartDimensionGroup;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.common.base.Pagination;
+import org.chuxue.application.common.base.SortList;
 import org.chuxue.application.dbms.echarts.dao.SysDbmsChartDimensionGroupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Service;
 public class SysDbmsChartDimensionGroupService extends BaseServiceImpl<SysDbmsChartDimensionGroup> implements BaseService<SysDbmsChartDimensionGroup> {
 	@Autowired
 	SysDbmsChartDimensionGroupDao sysDbmsChartDimensionGroupDao;
-	
+
 	/**
 	 * 方法名 ： page
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -47,10 +48,10 @@ public class SysDbmsChartDimensionGroupService extends BaseServiceImpl<SysDbmsCh
 	 * 参 考 ： @see com.shumeng.application.common.base.BaseService#page(int, int, java.lang.Object, java.util.Map, org.springframework.data.domain.Sort.Order[])
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public Page<SysDbmsChartDimensionGroup> page(Pagination<SysDbmsChartDimensionGroup> vo) {
-		Sort sort = vo.sort();
+		Sort sort = SortList.sort(vo.getSortList());
 		if (sort == null) {
 			List<Order> orders = new ArrayList<>();
 			Order order = new Order(Direction.ASC, "createTime");
@@ -60,12 +61,12 @@ public class SysDbmsChartDimensionGroupService extends BaseServiceImpl<SysDbmsCh
 		if (vo.getInfo() == null) {
 			vo.setInfo(new SysDbmsChartDimensionGroup());
 		}
-		
+
 		PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
-		
+
 		return sysDbmsChartDimensionGroupDao.findAll(new Specification<SysDbmsChartDimensionGroup>() {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public Predicate toPredicate(Root<SysDbmsChartDimensionGroup> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return cb.like(root.get("title"), "%" + vo.getInfo().getTitle() + "%");

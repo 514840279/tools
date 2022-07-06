@@ -335,6 +335,9 @@ public class GenerateEntity {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("package " + sysDbmsGenerateCodeInfo.getClassPath() + ".po;\r\n");
 		stringBuilder.append("\r\n");
+		stringBuilder.append("import org.chuxue.application.common.base.MybatisBaseEntity;\r\n");
+		stringBuilder.append("import com.baomidou.mybatisplus.annotation.TableName;\r\n");
+		stringBuilder.append("\r\n");
 		stringBuilder.append("import java.io.Serializable;\r\n");
 		// 拼接字段和get，set方法和需要的引入
 		StringBuilder stringBuilderProperties = new StringBuilder();
@@ -366,7 +369,7 @@ public class GenerateEntity {
 			stringBuilder.append("@Getter\r\n");
 		}
 		stringBuilder.append("@TableName(value =  \"" + tabsInfo.getTabsName().substring(tabsInfo.getTabsName().lastIndexOf(".") + 1) + "\")\r\n");
-		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + " extends BaseEntity implements Serializable {\r\n");
+		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + " extends MybatisBaseEntity implements Serializable {\r\n");
 		stringBuilder.append("	private static final long	serialVersionUID	= 1L;\r\n");
 		stringBuilder.append("\r\n");
 		

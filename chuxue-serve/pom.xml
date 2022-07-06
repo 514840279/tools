@@ -21,14 +21,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.chuxue</groupId>
+			<artifactId>chuxue-commons-utils</artifactId>
 			<version>${project.version}</version>
-			<artifactId>chuxue-commons</artifactId>
-			<exclusions>
-				<exclusion>
-           			<groupId>com.baomidou</groupId>
-		        	<artifactId>mybatis-plus-boot-starter</artifactId>
-        		</exclusion>
-			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.chuxue</groupId>
+			<artifactId>chuxue-commons-jpa</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- spring boot web支持：mvc,aop... -->
 		<dependency>

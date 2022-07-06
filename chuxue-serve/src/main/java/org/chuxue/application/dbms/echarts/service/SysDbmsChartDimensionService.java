@@ -7,6 +7,7 @@ import org.chuxue.application.bean.manager.dbms.SysDbmsChartDimension;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.common.base.Pagination;
+import org.chuxue.application.common.base.SortList;
 import org.chuxue.application.dbms.echarts.dao.SysDbmsChartDimensionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Service;
 public class SysDbmsChartDimensionService extends BaseServiceImpl<SysDbmsChartDimension> implements BaseService<SysDbmsChartDimension> {
 	@Autowired
 	SysDbmsChartDimensionDao sysDbmsChartDimensionDao;
-	
+
 	/**
 	 * 方法名 ： findAll
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -38,7 +39,7 @@ public class SysDbmsChartDimensionService extends BaseServiceImpl<SysDbmsChartDi
 	 * 参 考 ： @see com.shumeng.application.common.base.BaseService#findAll(java.lang.Object)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public List<SysDbmsChartDimension> findAll(SysDbmsChartDimension info) {
 		Example<SysDbmsChartDimension> example = Example.of(info);
@@ -46,7 +47,7 @@ public class SysDbmsChartDimensionService extends BaseServiceImpl<SysDbmsChartDi
 		Sort sort = Sort.by(order);
 		return sysDbmsChartDimensionDao.findAll(example, sort);
 	}
-	
+
 	/**
 	 * 方法名 ： page
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -59,11 +60,11 @@ public class SysDbmsChartDimensionService extends BaseServiceImpl<SysDbmsChartDi
 	 * 参 考 ： @see com.shumeng.application.common.base.BaseService#page(int, int, java.lang.Object, java.util.Map, org.springframework.data.domain.Sort.Order[])
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public Page<SysDbmsChartDimension> page(Pagination<SysDbmsChartDimension> vo) {
 		List<Order> orders = new ArrayList<>();
-		Sort sort = vo.sort();
+		Sort sort = SortList.sort(vo.getSortList());
 		if (sort == null) {
 			Order order = new Order(Direction.ASC, "createTime");
 			orders.add(order);
@@ -72,12 +73,12 @@ public class SysDbmsChartDimensionService extends BaseServiceImpl<SysDbmsChartDi
 		if (vo.getInfo() == null) {
 			vo.setInfo(new SysDbmsChartDimension());
 		}
-		
+
 		Example<SysDbmsChartDimension> example = Example.of(vo.getInfo());
 		PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
 		return sysDbmsChartDimensionDao.findAll(example, request);
 	}
-	
+
 	/**
 	 * 方法名： updBefor
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -90,7 +91,7 @@ public class SysDbmsChartDimensionService extends BaseServiceImpl<SysDbmsChartDi
 	public SysDbmsChartDimension updBefor(SysDbmsChartDimension task) {
 		return null;
 	}
-	
+
 	/**
 	 * 方法名： findAllDime
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -106,7 +107,7 @@ public class SysDbmsChartDimensionService extends BaseServiceImpl<SysDbmsChartDi
 		// Sort sort = new Sort(order);
 		return sysDbmsChartDimensionDao.findAllDime();
 	}
-	
+
 	/**
 	 * 方法名： changeGroup
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)

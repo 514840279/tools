@@ -106,7 +106,7 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 			SysDbmsTabsColsInfo cols = new SysDbmsTabsColsInfo();
 			cols.setTabsUuid(info.getUuid());
 			cols.setColsName(info.getTabsName());
-			org.chuxue.application.common.base.Page<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.Page<>();
+			org.chuxue.application.common.base.ResultPage<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.ResultPage<>();
 			page.setInfo(cols);
 			// 请求微服务，获取未加载的表名称信息
 			ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/findAllByTabUuid", page, BaseResult.class);

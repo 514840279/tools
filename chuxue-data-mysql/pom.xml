@@ -19,19 +19,15 @@
 		<skipTests>true</skipTests>
 	</properties>
 	<dependencies>
-	
+		<dependency>
+			<groupId>org.chuxue</groupId>
+			<artifactId>chuxue-commons-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		 <dependency>
 			<groupId>org.chuxue</groupId>
-			<artifactId>chuxue-commons</artifactId>
+			<artifactId>chuxue-commons-mybatis</artifactId>
 			<version>${project.version}</version>
-			<exclusions>
-<!-- 				<exclusion> -->
-<!-- 					<groupId>org.springframework.boot</groupId> -->
-<!-- 					<artifactId> -->
-<!-- 						spring-boot-starter-data-jpa -->
-<!-- 					</artifactId> -->
-<!-- 				</exclusion> -->
-			</exclusions>
 		</dependency>
 		
 		<!-- spring boot web支持：mvc,aop... -->

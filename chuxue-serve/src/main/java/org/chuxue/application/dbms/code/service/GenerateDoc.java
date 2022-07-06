@@ -44,11 +44,11 @@ import com.alibaba.nacos.common.utils.StringUtils;
  * @版本 V1.0
  */
 public class GenerateDoc {
-	
+
 	// 构造constraint对象
 	static String	dataList	= "●,○";
 	static String	dataList2	= "INT,FLOAT,DOUBLE,DECIMAL,DATE,TIME,TIMESTAMP,DATETIME,CHAR,VARCHAR,TEXT";
-	
+
 	/**
 	 * @throws IOException
 	 * @throws FileNotFoundException
@@ -80,7 +80,7 @@ public class GenerateDoc {
 			FileInputStream fins = new FileInputStream(file);
 			POIFSFileSystem fs = new POIFSFileSystem(fins);
 			wb = new HSSFWorkbook(fs);
-			
+
 		}
 		HSSFSheet demoSheet = wb.getSheet("demo");
 		String sheetName = tabsInfo.getTabsDesc();
@@ -88,12 +88,12 @@ public class GenerateDoc {
 			sheetName = tabsInfo.getTabsName();
 		}
 		HSSFSheet newSheet = wb.createSheet(sheetName);
-		
+
 		newSheet = copySheet(demoSheet, newSheet);
-		
+
 		// 日期
 		newSheet.getRow(1).getCell(42).setCellValue(new Date());
-		
+
 		// 作成者
 		newSheet.getRow(1).getCell(52).setCellValue(sysDbmsGenerateCodeInfo.getCreateUser());
 		// 数据库选择
@@ -109,7 +109,7 @@ public class GenerateDoc {
 		int index = 0;
 		int index2 = 0;
 		for (SysDbmsTabsColsInfo cols : colsInfos) {
-			
+
 			String colsNameString = cols.getColsName().toLowerCase();
 			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString) || "sort".equals(colsNameString)) {
 				index2++;
@@ -138,7 +138,7 @@ public class GenerateDoc {
 				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + nextRowIndex + ":AU" + nextRowIndex));
 				setDataValidationList(rowIndex, rowIndex, 39 - 1, 42 - 1, dataList, newSheet);
 				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + nextRowIndex + ":BJ" + nextRowIndex));
-				
+
 				Cell cellFrom = null;
 				Cell cellTo = null;
 				newSheet.setDefaultColumnStyle(18 + index, newSheet.getColumnStyle(13));
@@ -149,10 +149,10 @@ public class GenerateDoc {
 					newSheet.setColumnWidth(intCol, newSheet.getColumnWidth(intCol));
 					cellFrom = rowFrom.getCell(intCol);
 					cellTo = rowTo.createCell(intCol);
-					
+
 					// セルスタイルとタイプのコピー
 					cellTo.setCellStyle(cellFrom.getCellStyle());
-					
+
 					// タイトル内容のコピー
 					// 不同数据类型处理
 					CellType cellFromType = cellFrom.getCellType();
@@ -176,7 +176,7 @@ public class GenerateDoc {
 					} else { // nothing29
 					}
 				}
-				
+
 				// 字段名
 				newSheet.getRow(rowIndex).getCell(2).setCellValue(cols.getColsName());
 				// 字段含义
@@ -194,23 +194,25 @@ public class GenerateDoc {
 				// 描述信息
 				newSheet.getRow(rowIndex).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
 			}
-			
+
 		}
-		
+
 		newSheet.setZoom(85);
 		newSheet.setActiveCell(new CellAddress("A1"));
-
+		
 		newSheet.setPrintGridlines(true);
-		
+
 		wb.setActiveSheet(0);
-		
+
 		// 设置打印区域
 		wb.setPrintArea(wb.getSheetIndex(sheetName), "$A$1:$BO$" + (colsInfos.size() + 14));
 		FileOutputStream fout = new FileOutputStream(pathString);
 		wb.write(fout);
 		fout.close();
+
+		wb.close();
 	}
-	
+
 	/**
 	 * @方法名 copySheet
 	 * @功能 复制sheet
@@ -221,7 +223,7 @@ public class GenerateDoc {
 	 * @author Administrator @throws
 	 */
 	private static HSSFSheet copySheet(HSSFSheet sheetFrom, HSSFSheet sheetTo) {
-		
+
 		// 初期化
 		CellRangeAddress region = null;
 		Row rowFrom = null;
@@ -231,12 +233,12 @@ public class GenerateDoc {
 		// セル結合のコピー
 		for (int i = 0; i < sheetFrom.getNumMergedRegions(); i++) {
 			region = sheetFrom.getMergedRegion(i);
-			
+
 			if ((region.getFirstColumn() >= sheetFrom.getFirstRowNum()) && (region.getLastRow() <= sheetFrom.getLastRowNum())) {
 				sheetTo.addMergedRegion(region);
 			}
 		}
-		
+
 		// セルのコピー
 		for (int intRow = sheetFrom.getFirstRowNum(); intRow <= sheetFrom.getLastRowNum(); intRow++) {
 			rowFrom = sheetFrom.getRow(intRow);
@@ -280,7 +282,7 @@ public class GenerateDoc {
 				}
 			}
 		}
-		
+
 		// 枠線の設定
 		sheetTo.setDisplayGridlines(false);
 		// sheetTo.setDisplayGuts(true);
@@ -289,19 +291,19 @@ public class GenerateDoc {
 		// sheetTo.shiftRows(13, 15, 31, false, false, false);
 		// Excelのズーム設定
 		sheetTo.setZoom(85, 100);
-		
+
 		// シートを戻る。
 		return sheetTo;
-		
+
 	}
-	
+
 	private static void setDataValidationList(int j, int k, int l, int m, String data, HSSFSheet sheet) {
 		// 设置下拉列表的内容
 		String[] textlist = data.split(",");
 		// 加载下拉列表内容
 		DVConstraint constraint = DVConstraint.createExplicitListConstraint(textlist);
 		// 设置数据有效性加载在哪个单元格上。
-		
+
 		// 四个参数分别是：起始行、终止行、起始列、终止列
 		CellRangeAddressList regions = new CellRangeAddressList(j, k, l, m);
 		/*
@@ -312,7 +314,7 @@ public class GenerateDoc {
 		data_validation_list.setSuppressDropDownArrow(false);
 		sheet.addValidationData(data_validation_list);
 	}
-	
+
 	private static void setDataValidationList(int j, int k, int l, int m, String data, XSSFSheet sheet) {
 		// 设置下拉列表的内容
 		String[] textlist = data.split(",");
@@ -328,10 +330,10 @@ public class GenerateDoc {
 		// 数据有效性对象
 		XSSFDataValidation data_validation_list = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, regions);
 		// data_validation_list.setSuppressDropDownArrow(false);
-		
+
 		sheet.addValidationData(data_validation_list);
 	}
-	
+
 	@SuppressWarnings({ "resource" })
 	public static void generateXlsx(SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo, SysDbmsTabsTableInfo tabsInfo, List<SysDbmsTabsColsInfo> colsInfos, String username, String pathString) throws IOException {
 		File file = new File(pathString);
@@ -348,7 +350,7 @@ public class GenerateDoc {
 			//
 			FileInputStream fins = new FileInputStream(file);
 			wb = new XSSFWorkbook(fins);
-			
+
 		}
 		XSSFSheet demoSheet = wb.getSheet("demo");
 		String sheetName = tabsInfo.getTabsDesc();
@@ -356,12 +358,12 @@ public class GenerateDoc {
 			sheetName = tabsInfo.getTabsName();
 		}
 		XSSFSheet newSheet = wb.createSheet(sheetName);
-		
+
 		newSheet = copySheet(demoSheet, newSheet);
-		
+
 		// 日期
 		newSheet.getRow(1).getCell(42).setCellValue(new Date());
-		
+
 		// 作成者
 		newSheet.getRow(1).getCell(52).setCellValue(sysDbmsGenerateCodeInfo.getCreateUser());
 		// 数据库选择
@@ -377,7 +379,7 @@ public class GenerateDoc {
 		int index = 0;
 		int index2 = 0;
 		for (SysDbmsTabsColsInfo cols : colsInfos) {
-			
+
 			String colsNameString = cols.getColsName().toLowerCase();
 			if ("uuid".equals(colsNameString) || "delete_flag".equals(colsNameString) || "discription".equals(colsNameString) || "create_time".equals(colsNameString) || "create_user".equals(colsNameString) || "update_time".equals(colsNameString) || "update_user".equals(colsNameString) || "sort".equals(colsNameString)) {
 				index2++;
@@ -407,7 +409,7 @@ public class GenerateDoc {
 				newSheet.addMergedRegion(CellRangeAddress.valueOf("AQ" + nextRowIndex + ":AU" + nextRowIndex));
 				setDataValidationList(newRowIndex, newRowIndex, 39 - 1, 42 - 1, dataList, newSheet);
 				newSheet.addMergedRegion(CellRangeAddress.valueOf("AV" + nextRowIndex + ":BJ" + nextRowIndex));
-				
+
 				Cell cellFrom = null;
 				Cell cellTo = null;
 				newSheet.setDefaultColumnStyle(18 + index, newSheet.getColumnStyle(13));
@@ -418,10 +420,10 @@ public class GenerateDoc {
 					newSheet.setColumnWidth(intCol, newSheet.getColumnWidth(intCol));
 					cellFrom = rowFrom.getCell(intCol);
 					cellTo = rowTo.createCell(intCol);
-					
+
 					// セルスタイルとタイプのコピー
 					cellTo.setCellStyle(cellFrom.getCellStyle());
-					
+
 					// タイトル内容のコピー
 					// 不同数据类型处理
 					CellType cellFromType = cellFrom.getCellType();
@@ -445,7 +447,7 @@ public class GenerateDoc {
 					} else { // nothing29
 					}
 				}
-				
+
 				// 字段名
 				newSheet.getRow(newRowIndex).getCell(2).setCellValue(cols.getColsName());
 				// 字段含义
@@ -463,9 +465,9 @@ public class GenerateDoc {
 				// 描述信息
 				newSheet.getRow(newRowIndex).getCell(47).setCellValue(cols.getDiscription() == null ? "" : cols.getDiscription());
 			}
-			
+
 		}
-		
+
 		newSheet.setZoom(85);
 		newSheet.setActiveCell(new CellAddress("A1"));
 		// 打印预览试图
@@ -477,9 +479,11 @@ public class GenerateDoc {
 		FileOutputStream fout = new FileOutputStream(pathString);
 		wb.write(fout);
 		fout.close();
-		
+
+		wb.close();
+
 	}
-	
+
 	private static XSSFSheet copySheet(XSSFSheet sheetFrom, XSSFSheet sheetTo) {
 		// 初期化
 		CellRangeAddress region = null;
@@ -490,12 +494,12 @@ public class GenerateDoc {
 		// セル結合のコピー
 		for (int i = 0; i < sheetFrom.getNumMergedRegions(); i++) {
 			region = sheetFrom.getMergedRegion(i);
-			
+
 			if ((region.getFirstColumn() >= sheetFrom.getFirstRowNum()) && (region.getLastRow() <= sheetFrom.getLastRowNum())) {
 				sheetTo.addMergedRegion(region);
 			}
 		}
-		
+
 		// セルのコピー
 		for (int intRow = sheetFrom.getFirstRowNum(); intRow <= sheetFrom.getLastRowNum(); intRow++) {
 			rowFrom = sheetFrom.getRow(intRow);
@@ -539,7 +543,7 @@ public class GenerateDoc {
 				}
 			}
 		}
-		
+
 		// 枠線の設定
 		sheetTo.setDisplayGridlines(false);
 		// sheetTo.setDisplayGuts(true);
@@ -548,9 +552,9 @@ public class GenerateDoc {
 		// sheetTo.shiftRows(13, 15, 31, false, false, false);
 		// Excelのズーム設定
 		sheetTo.setZoom(85);
-		
+
 		// シートを戻る。
 		return sheetTo;
 	}
-	
+
 }

@@ -5,12 +5,14 @@
 	<artifactId>tools</artifactId>
 	<version>1.0</version>
 	<name>tools</name>
-	<description>初雪工具</description>
+	<description>???????</description>
 	<packaging>pom</packaging>
 	<modules>
+    	<module>chuxue-commons-utils</module>
+		<module>chuxue-commons-jpa</module>
+    	<module>chuxue-commons-mybatis</module>
 		<!-- 8001 -->
 		<module>chuxue-gateway</module>
-		<module>chuxue-commons</module>
 		<!-- 8002 -->
 		<module>chuxue-serve</module>
 		<!-- 8003 -->
@@ -25,7 +27,7 @@
 		<module>tools-data-clean</module>
 		<!-- 9002 -->
 		<module>tools-rollcall</module>
-	</modules>
+  </modules>
 	<properties>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -78,19 +80,19 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!--支持Word文档的操作 -->
+			<!--???Word???????? -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-scratchpad</artifactId>
 				<version>${poi.version}</version>
 			</dependency>
-			<!-- 加入POI核心依赖 -->
+			<!-- ????POI???????? -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi</artifactId>
 				<version>${poi.version}</version>
 			</dependency>
-			<!-- 为POI支持Office Open XML -->
+			<!-- ?POI???Office Open XML -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml</artifactId>
@@ -141,7 +143,7 @@
 				<artifactId>httpclient</artifactId>
 				<version>4.5.13</version>
 			</dependency>
-			<!-- apache io操作通用jar包 -->
+			<!-- apache io???????jar?? -->
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
@@ -167,7 +169,7 @@
 				<artifactId>mybatis-spring-boot-starter</artifactId>
 				<version>2.2.2</version>
 			</dependency>
-			<!--mybatis-plus 是自己开发的，非官方的！-->
+			<!--mybatis-plus ???????????????????-->
 			<dependency>
 		        <groupId>com.baomidou</groupId>
 		        <artifactId>mybatis-plus-boot-starter</artifactId>

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.common.base.MybatisBaseServiceImpl;
-import org.chuxue.application.common.base.Page;
+import org.chuxue.application.common.base.ResultPage;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColumnResultDao;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsColumnResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class SysDbmsTabsColumnResultService extends MybatisBaseServiceImpl<SysDb
 	@Autowired
 	SysDbmsTabsColumnResultDao sysDbmsTabsColumnResultDao;
 	
-	public List<SysDbmsTabsColumnResult> findAllByTabUuid(Page<SysDbmsTabsColsInfo> vo) {
+	public List<SysDbmsTabsColumnResult> findAllByTabUuid(ResultPage<SysDbmsTabsColsInfo> vo) {
 		SysDbmsTabsColsInfo info = vo.getInfo();
 		List<String> list = null;
 		if (vo.getList() != null) {

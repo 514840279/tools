@@ -1,15 +1,9 @@
 package org.chuxue.application.common.base;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.beanutils.BeanComparator;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 
 /**
  * 文件名 ： Pagination.java
@@ -44,11 +38,9 @@ public class Pagination<T> implements Serializable {
 	protected Map<String, String>		map					= new HashMap<>();
 
 	public Pagination() {
-		super();
 	}
 
 	public Pagination(List<T> page, Integer total) {
-		super();
 		this.list = page;
 		this.totalElements = total;
 	}
@@ -208,39 +200,25 @@ public class Pagination<T> implements Serializable {
 	public void setSortList(List<SortParameters> sortList) {
 		this.sortList = sortList;
 	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Sort sort() {
-		if (this.sortList == null || this.sortList.size() == 0) {
-			return null;
-		}
-		Sort sort = null;
-		// 排序
-		Collections.sort(this.sortList, new BeanComparator("sortIndex"));
-		List<Order> orderList = new ArrayList<>();
-		this.sortList.forEach(item -> {
-			if (item.getSortName() != null) {
-				Order order = null;
-				switch (item.getSortOrder()) {
-					case "asc":
-						order = Order.asc(item.getSortName());
-						break;
-					case "desc":
-						order = Order.desc(item.getSortName());
-						break;
-					default:
-						order = Order.asc(item.getSortName());
-						break;
-				}
-				orderList.add(order);
-			}
-		});
-		if (orderList != null && orderList.size() > 0) {
-			sort = Sort.by(orderList);
-		}
-		return sort;
+	
+	/**
+	 * 方法名 ： getTotalElements
+	 * 功 能 ： 返回变量 totalElements 的值
+	 *
+	 * @return: Integer
+	 */
+	public Integer getTotalElements() {
+		return totalElements;
 	}
-
+	
+	/**
+	 * 方法名 ： setTotalElements
+	 * 功 能 ： 设置变量 totalElements 的值
+	 */
+	public void setTotalElements(Integer totalElements) {
+		this.totalElements = totalElements;
+	}
+	
 	/**
 	 * 方法名 ： toString
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)

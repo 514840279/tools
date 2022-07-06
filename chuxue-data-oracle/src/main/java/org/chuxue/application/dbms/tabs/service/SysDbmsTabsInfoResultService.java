@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
-import org.chuxue.application.common.base.Page;
+import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsInfoResultDao;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 import org.slf4j.Logger;
@@ -25,13 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("sysDbmsTabsInfoService")
 public class SysDbmsTabsInfoResultService {
-
+	
 	//
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsInfoResultService.class);
-
+	
 	@Autowired
 	SysDbmsTabsInfoResultDao	sysDbmsTabsInfoResultDao;
-
+	
 	/**
 	 * 方法名： findAllByTableUuid
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -41,10 +41,10 @@ public class SysDbmsTabsInfoResultService {
 	 * 作 者 ： Administrator @throws
 	 */
 	@Transactional
-	public Page<SysDbmsTabsInfoResult> findAllByJdbcUuid(Page<SysDbmsTabsTableInfo> vo) {
+	public Pagination<SysDbmsTabsInfoResult> findAllByJdbcUuid(Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("微服务访问{}开始。", vo.getInfo().getJdbcUuid());
 		String tableName = vo.getInfo().getTabsName();
-
+		
 		List<String> list = null;
 		if (vo.getList() != null) {
 			for (SysDbmsTabsTableInfo sysDbmsTabsInfo : vo.getList()) {
@@ -59,8 +59,8 @@ public class SysDbmsTabsInfoResultService {
 		if (total == null || total == 0) {
 			total = sysDbmsTabsInfoResultDao.totalAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list);
 		}
-
-		return new Page<>(total, page);
+		
+		return new Pagination<>(page, total);
 	}
-
+	
 }

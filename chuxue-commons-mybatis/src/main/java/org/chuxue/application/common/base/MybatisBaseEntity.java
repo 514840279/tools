@@ -5,12 +5,9 @@ package org.chuxue.application.common.base;
 
 import java.util.Date;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
-
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -25,9 +22,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * 时 间 ： 2018年6月4日 上午11:11:47
  * 版 本 ： V1.0
  */
-
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@NoRepositoryBean
 public class MybatisBaseEntity {
 
 	// 主键
