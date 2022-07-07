@@ -33,14 +33,14 @@ import com.alibaba.nacos.common.utils.StringUtils;
  */
 @Service
 public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGenerateCodeInfo> implements BaseService<SysDbmsGenerateCodeInfo> {
-
+	
 	@Autowired
 	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
 	@Autowired
 	SysDbmsTabsTableInfoDao		sysDbmsTabsInfoDao;
-
+	
 	private static final String	OUTPUTFILE	= "outputfile";
-
+	
 	/**
 	 * @throws FileNotFoundException
 	 *             方法名 generate
@@ -56,12 +56,12 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		for (SysDbmsGenerateCodeInfo sysDbmsGenerateCodeInfo : list) {
 			// javafile 路径
 			String pathtempString = path + "/src/main/java/" + sysDbmsGenerateCodeInfo.getClassPath().replace(".", "/");
-			
+
 			SysDbmsTabsColsInfo colsInfo = new SysDbmsTabsColsInfo();
 			colsInfo.setTabsUuid(sysDbmsGenerateCodeInfo.getTableUuid());
 			Example<SysDbmsTabsColsInfo> example = Example.of(colsInfo);
 			List<SysDbmsTabsColsInfo> colsInfos = sysDbmsTabsColsInfoDao.findAll(example);
-			
+
 			SysDbmsTabsTableInfo tabsInfo = new SysDbmsTabsTableInfo();
 			Optional<SysDbmsTabsTableInfo> op = sysDbmsTabsInfoDao.findById(sysDbmsGenerateCodeInfo.getTableUuid());
 			if (op.isPresent()) {
@@ -89,9 +89,11 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 					GenerateHtml.generateVue3(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 					pathtempString = path;
 					GenerateHtml.generateRouter(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
+					pathtempString = path + "/src/interface";
+					GenerateHtml.generateTsEntity(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 					
 				}
-				
+
 				// Sql 语句
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateSql())) {
 					// sql 脚本文件路径
@@ -103,7 +105,7 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 					// Sql 管理员权限 语句
 //					GenerateSql.generateConfig(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString);
 				}
-				
+
 				// 数据文当 接口文档 功能介绍
 				if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateDoc())) {
 					// sql 脚本文件路径
@@ -124,11 +126,11 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 		// 清空 文件夹
 		FileDelete.delFolder(path);
 	}
-	
+
 	/**
 	 * @param pathtempString2
 	 * 方法名： generateMybatis
@@ -161,9 +163,9 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 		if ("Y".equals(sysDbmsGenerateCodeInfo.getGenerateController())) {
 			GenerateController.getGenerateMybatisController(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/controller");
 		}
-
+		
 	}
-	
+
 	/**
 	 * 方法名： generateJpa
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -194,5 +196,5 @@ public class SysDbmsGenerateCodeInfoService extends BaseServiceImpl<SysDbmsGener
 			GenerateController.getGenerateController(sysDbmsGenerateCodeInfo, tabsInfo, colsInfos, username, pathtempString + "/controller");
 		}
 	}
-	
+
 }
