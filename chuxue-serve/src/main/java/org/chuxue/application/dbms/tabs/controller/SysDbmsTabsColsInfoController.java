@@ -29,22 +29,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sysDbmsTabsColsInfo")
 public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTabsColsInfo> implements BaseController<SysDbmsTabsColsInfo> {
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfoController.class);
-	
+
 	@Autowired
 	SysDbmsTabsColsInfoService	sysDbmsTabsColsInfoService;
-
+	
 	@RequestMapping(value = "/findAllByTabsUuid", method = { RequestMethod.POST })
 	public BaseResult<?> findAllByTabsUuid(@RequestBody Pagination<SysDbmsTabsColsInfo> vo) {
 		logger.info("数据库表信息查询：{}", vo.toString());
 		BaseResult<?> result = sysDbmsTabsColsInfoService.findAllByTabsUuid(vo);
-		
+
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/importColums", method = { RequestMethod.POST })
 	public BaseResult<String> importColums(@RequestBody SysDbmsTabsColsInfo info) {
 		logger.info("数据库表字段信息查询：{}", info.toString());
 		String result = sysDbmsTabsColsInfoService.importColums(info);
 		return ResultUtil.success(result);
 	}
+	
 }
