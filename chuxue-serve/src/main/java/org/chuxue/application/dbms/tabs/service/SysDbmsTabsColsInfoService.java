@@ -13,6 +13,7 @@ import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColsInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsJdbcInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,24 +73,7 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 				if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
 					logger.info(result.getBody().toString());
 					return result.getBody();
-//					List<LinkedHashMap<String, Object>> li = (List<LinkedHashMap<String, Object>>) result.getBody().getData();
-//					List<SysDbmsTabsColsInfo> list = new ArrayList<>();
-//					for (LinkedHashMap map : li) {
-//						SysDbmsTabsColsInfo sysDbmsTabsColsInfo = new SysDbmsTabsColsInfo();
-//
-//						try {
-//							BeanUtils.populate(sysDbmsTabsColsInfo, map);
-//							list.add(sysDbmsTabsColsInfo);
-//						} catch (IllegalAccessException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (InvocationTargetException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//					}
-//					sysDbmsTabsColsInfoDao.saveAll(list);
-//					return "OK";
+					
 				}
 			}
 		}
@@ -108,6 +92,32 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 	public String importColums(SysDbmsTabsColsInfo info) {
 		sysDbmsTabsColsInfoDao.save(info);
 		return "OK";
+	}
+
+	/**
+	 * 方法名： searchData
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param vo
+	 * 参 数： @return
+	 * 返 回： List<Map<String,?>>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	@SuppressWarnings("rawtypes")
+	public BaseResult searchData(SysDbmsTabsTableVo vo) {
+		SysDbmsTabsJdbcInfo jdbc = new SysDbmsTabsJdbcInfo();
+		jdbc.setUuid(vo.getInfo().getJdbcUuid());
+		Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
+		if (op.isPresent()) {
+			jdbc = op.get();
+			// 请求微服务，获取未加载的表名称信息
+			ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/searchData", vo, BaseResult.class);
+			if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
+				logger.info(result.getBody().toString());
+				return result.getBody();
+			}
+		}
+		return null;
 	}
 	
 }

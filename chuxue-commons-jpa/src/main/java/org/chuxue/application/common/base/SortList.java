@@ -1,8 +1,11 @@
 package org.chuxue.application.common.base;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 /**
  * 文件名 ： SortList.java
@@ -15,7 +18,7 @@ import org.springframework.data.domain.Sort;
  * 版 本 ： V1.0
  */
 public class SortList {
-	
+
 	/**
 	 * 方法名： sort
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -26,8 +29,29 @@ public class SortList {
 	 * @throws
 	 */
 	public static Sort sort(List<SortParameters> sortList) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Collections.sort(sortList, (o1, o2) -> o1.getSortIndex() - o2.getSortIndex());
+		Sort sort = null;
+		List<Order> orders = new ArrayList<>();
+		for (SortParameters sortParameters : sortList) {
+			Order order = Order.asc(sortParameters.getSortName());
+			switch (sortParameters.getSortOrder()) {
+				case "asc":
+					order = Order.asc(sortParameters.getSortName());
+					break;
+				case "desc":
+					order = Order.desc(sortParameters.getSortName());
+					break;
+				default:
+					order = Order.asc(sortParameters.getSortName());
+					break;
+			}
+			orders.add(order);
+		}
+		if (orders.size() > 0) {
+			sort = Sort.by(orders);
+		}
+		return sort;
 	}
-
+	
 }

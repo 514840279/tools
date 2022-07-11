@@ -7,6 +7,7 @@ import org.chuxue.application.common.base.BaseResult;
 import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.tabs.service.SysDbmsTabsColsInfoService;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,6 @@ public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTab
 	public BaseResult<?> findAllByTabsUuid(@RequestBody Pagination<SysDbmsTabsColsInfo> vo) {
 		logger.info("数据库表信息查询：{}", vo.toString());
 		BaseResult<?> result = sysDbmsTabsColsInfoService.findAllByTabsUuid(vo);
-
 		return result;
 	}
 
@@ -46,6 +46,13 @@ public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTab
 		logger.info("数据库表字段信息查询：{}", info.toString());
 		String result = sysDbmsTabsColsInfoService.importColums(info);
 		return ResultUtil.success(result);
+	}
+	
+	@RequestMapping(value = "/searchData", method = { RequestMethod.POST })
+	public BaseResult<?> searchData(@RequestBody SysDbmsTabsTableVo vo) {
+		logger.info("数据库表数据查询：{}", vo.toString());
+		BaseResult<?> result = sysDbmsTabsColsInfoService.searchData(vo);
+		return result;
 	}
 	
 }

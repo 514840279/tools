@@ -41,7 +41,6 @@ public class BaseControllerImpl<T extends BaseEntity> implements BaseController<
 		try {
 			Page<T> page = baseService.page(vo);
 			return ResultUtil.success(page);
-//			return ResultUtil.error(-1, "自定义错误");
 		} catch (Exception e) {
 			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
@@ -212,13 +211,34 @@ public class BaseControllerImpl<T extends BaseEntity> implements BaseController<
 	 */
 
 	@Override
-	public BaseResult<Long> count(T info) {
+	public BaseResult<Long> count(@RequestBody T info) {
 		logger.info("<count> param vo:{} ", info.toString());
 		try {
 			Long lengthLong = baseService.count(info);
 			return ResultUtil.success(lengthLong);
 		} catch (Exception e) {
 			logger.error("<count> error:{} ", e.getMessage());
+			return ResultUtil.error(-1, e.getMessage());
+		}
+	}
+
+	/**
+	 * 方法名 ： findAllBySort
+	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数 ： @param vo
+	 * 参 数 ： @return
+	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#findAllBySort(org.chuxue.application.common.base.Pagination)
+	 * 作 者 ： Administrator
+	 */
+	
+	@Override
+	public BaseResult<List<T>> findAllBySort(@RequestBody Pagination<T> vo) {
+		logger.info("<findAllBySort> param vo:{} ", vo.toString());
+		try {
+			List<T> page = baseService.findAll(vo);
+			return ResultUtil.success(page);
+		} catch (Exception e) {
+			logger.error("<findAllBySort> error:{} ", e.getMessage());
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
