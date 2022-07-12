@@ -21,20 +21,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysDbmsTabsColumnInfo")
 public class SysDbmsTabsColumnResultController extends MybatisBaseConrollerImpl<SysDbmsTabsColumnResult> implements BaseController<SysDbmsTabsColumnResult> {
-	
+
 	@Autowired
 	SysDbmsTabsColumnResultService sysDbmsTabsColumnResultService;
-	
+
 	@PostMapping("/findAllByTabUuid")
 	public BaseResult<List<SysDbmsTabsColumnResult>> findAllByTabUuid(@RequestBody ResultPage<SysDbmsTabsColsInfo> vo) {
 		List<SysDbmsTabsColumnResult> list = sysDbmsTabsColumnResultService.findAllByTabUuid(vo);
 		return ResultUtil.success(list);
 	}
-
-	@PostMapping("/searchData")
-	public BaseResult<List<Map<String, Object>>> searchData(@RequestBody SysDbmsTabsTableVo vo) {
-		List<Map<String, Object>> list = sysDbmsTabsColumnResultService.searchData(vo);
-		return ResultUtil.success(list);
-	}
 	
+	@PostMapping("/searchData")
+	public BaseResult<ResultPage<Map<String, Object>>> searchData(@RequestBody SysDbmsTabsTableVo vo) {
+		ResultPage<Map<String, Object>> page = sysDbmsTabsColumnResultService.searchData(vo);
+		return ResultUtil.success(page);
+	}
+
 }

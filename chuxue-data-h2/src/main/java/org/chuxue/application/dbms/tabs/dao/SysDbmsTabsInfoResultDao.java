@@ -18,9 +18,9 @@ import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
  */
 @Mapper
 public interface SysDbmsTabsInfoResultDao {
-
-	public Integer totalAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list);
 	
-	public List<SysDbmsTabsInfoResult> findAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list, @Param("pageNumber") Integer pageNumber, @Param("pageSize") Integer pageSize);
+	Long totalAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list);
 
+	List<SysDbmsTabsInfoResult> findAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list, @Param("pageNumber") Integer pageNumber, @Param("pageSize") Integer pageSize);
+	
 }

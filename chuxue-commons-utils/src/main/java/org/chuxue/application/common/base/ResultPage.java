@@ -8,7 +8,7 @@ public class ResultPage<T> {
 	// 每页数据量大小
 	protected Integer	pageSize	= 10;
 	
-	protected Integer	totalElements;
+	protected Long		totalElements;
 	
 	protected List<T>	content;
 	
@@ -17,11 +17,9 @@ public class ResultPage<T> {
 	protected T			info;
 
 	public ResultPage() {
-		super();
 	}
 
-	public ResultPage(Integer totalElements, List<T> content) {
-		super();
+	public ResultPage(List<T> content, Long totalElements) {
 		this.totalElements = totalElements;
 		this.content = content;
 	}
@@ -68,7 +66,7 @@ public class ResultPage<T> {
 	 *
 	 * @return: Integer
 	 */
-	public Integer getTotalElements() {
+	public Long getTotalElements() {
 		return totalElements;
 	}
 	
@@ -76,7 +74,7 @@ public class ResultPage<T> {
 	 * 方法名 ： setTotalElements
 	 * 功 能 ： 设置变量 totalElements 的值
 	 */
-	public void setTotalElements(Integer totalElements) {
+	public void setTotalElements(Long totalElements) {
 		this.totalElements = totalElements;
 	}
 	

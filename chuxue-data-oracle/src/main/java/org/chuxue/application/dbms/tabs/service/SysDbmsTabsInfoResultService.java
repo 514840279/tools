@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.Pagination;
+import org.chuxue.application.common.base.ResultPage;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsInfoResultDao;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class SysDbmsTabsInfoResultService {
 	 * 作 者 ： Administrator @throws
 	 */
 	@Transactional
-	public Pagination<SysDbmsTabsInfoResult> findAllByJdbcUuid(Pagination<SysDbmsTabsTableInfo> vo) {
+	public ResultPage<SysDbmsTabsInfoResult> findAllByJdbcUuid(Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("微服务访问{}开始。", vo.getInfo().getJdbcUuid());
 		String tableName = vo.getInfo().getTabsName();
 		
@@ -55,12 +56,12 @@ public class SysDbmsTabsInfoResultService {
 			}
 		}
 		List<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultDao.findAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list, vo.getPageNumber(), vo.getPageSize());
-		Integer total = vo.getTotalElements();
+		Long total = vo.getTotalElements();
 		if (total == null || total == 0) {
 			total = sysDbmsTabsInfoResultDao.totalAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list);
 		}
 		
-		return new Pagination<>(page, total);
+		return new ResultPage<>(page, total);
 	}
 	
 }

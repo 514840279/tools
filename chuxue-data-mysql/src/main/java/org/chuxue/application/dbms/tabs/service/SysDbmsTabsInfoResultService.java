@@ -55,12 +55,12 @@ public class SysDbmsTabsInfoResultService {
 			}
 		}
 		List<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultDao.findAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list, vo.getPageNumber(), vo.getPageSize());
-		Integer total = vo.getTotalElements();
+		Long total = vo.getTotalElements();
 		if (total == null || total == 0) {
 			total = sysDbmsTabsInfoResultDao.totalAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list);
 		}
 
-		return new ResultPage<>(total, page);
+		return new ResultPage<>(page, total);
 	}
 
 }

@@ -28,5 +28,112 @@
 	        </foreach>
         </if>
     </select>
+    
+    
+     <select id="selectDataMaps" resultType="java.util.Map">
+     <bind name="key_offset" value="vo.pageSize*(vo.pageNumber -1)"></bind>
+     select * from (
+    	select rownum  as numbers,
+    	<foreach collection="vo.cols" item="column" separator=",">
+    		<if test="column.deleteFlag==null||column.deleteFlag ==0">
+    			${column.colsName}
+    		</if>
+    	</foreach>
+    	from ${vo.info.tabsName}
+    	<if test="vo.searchList!=null and vo.searchList.size()>0">
+    	<where>
+    		<foreach collection="vo.searchList" item="params">
+    		<if test="params.data!=null and params.data !=''">
+    			${params.operator}  ${params.columns}
+    			<choose>
+    				<when test="'eq' == params.symbol">
+    					= #{params.data}
+    				</when>
+    				<when test="'notEq' == params.symbol">
+    					!= #{params.data}
+    				</when>
+    				<when test="'less' == params.symbol">
+    					<![CDATA[	< #{params.data} ]]>
+    				</when>
+    				<when test="'lessAndEq' == params.symbol">
+    					<![CDATA[	<= #{params.data} ]]>
+    				</when>
+    				<when test="'great' == params.symbol">
+    					<![CDATA[	> #{params.data} ]]>
+    				</when>
+    				<when test="'greatAndEq' == params.symbol">
+    					<![CDATA[	>= #{params.data} ]]>
+    				</when>
+    				<when test="'like' == params.symbol">
+    					<![CDATA[	like concat('%', #{params.data},'%') ]]>
+    				</when>
+    				<when test="'isNull' == params.symbol">
+    					is null
+    				</when>
+    				<when test="'isNotNull' == params.symbol">
+    					is not null
+    				</when>
+    				<otherwise>
+    					= #{params.data}
+    				</otherwise>
+    			</choose>
+    			</if>
+    		</foreach>
+    	</where>
+    	</if>
+    	) a 
+    	<![CDATA[
+    	where a.numbers>${key_offset}
+    	and a.numbers <=${vo.pageSize} * ${vo.pageNumber}
+        ]]>
+    </select>
+    
+    
+    <select id="selectDataCount" resultType="java.lang.Long">
+    	select count(1) as c
+    	from ${vo.info.tabsName}
+    	<where>
+    		<![CDATA[rownum <= 100 ]]>
+    	<if test="vo.searchList!=null and vo.searchList.size()>0">
+    		<foreach collection="vo.searchList" item="params">
+    		<if test="params.data!=null and params.data !=''">
+    			${params.operator}  ${params.columns}
+    			<choose>
+    				<when test="'eq' == params.symbol">
+    					= #{params.data}
+    				</when>
+    				<when test="'notEq' == params.symbol">
+    					!= #{params.data}
+    				</when>
+    				<when test="'less' == params.symbol">
+    					<![CDATA[	< #{params.data} ]]>
+    				</when>
+    				<when test="'lessAndEq' == params.symbol">
+    					<![CDATA[	<= #{params.data} ]]>
+    				</when>
+    				<when test="'great' == params.symbol">
+    					<![CDATA[	> #{params.data} ]]>
+    				</when>
+    				<when test="'greatAndEq' == params.symbol">
+    					<![CDATA[	>= #{params.data} ]]>
+    				</when>
+    				<when test="'like' == params.symbol">
+    					<![CDATA[	like concat('%', #{params.data},'%') ]]>
+    				</when>
+    				<when test="'isNull' == params.symbol">
+    					is null
+    				</when>
+    				<when test="'isNotNull' == params.symbol">
+    					is not null
+    				</when>
+    				<otherwise>
+    					= #{params.data}
+    				</otherwise>
+    			</choose>
+    			</if>
+    		</foreach>
+    	</if>
+    	</where>
+    </select>
 
 </mapper>

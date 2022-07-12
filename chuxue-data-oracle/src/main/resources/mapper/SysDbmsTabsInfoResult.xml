@@ -31,7 +31,7 @@
 		and ab.ROW_NUM <= ${pageSize}  ]]>
     </select>
 
-    <select id="totalAllByJdbcUuid"  resultType="java.lang.Integer">
+    <select id="totalAllByJdbcUuid"  resultType="java.lang.Long">
        SELECT 
 	       count(1) as total
        from all_tables a

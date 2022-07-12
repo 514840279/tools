@@ -27,7 +27,7 @@
         <![CDATA[ limit ${key_offset},${pageSize}  ]]>
     </select>
 
-    <select id="totalAllByJdbcUuid"  resultType="java.lang.Integer">
+    <select id="totalAllByJdbcUuid"  resultType="java.lang.Long">
        SELECT 
 	       count(1) as total
        FROM `INFORMATION_SCHEMA`.`TABLES`  a
