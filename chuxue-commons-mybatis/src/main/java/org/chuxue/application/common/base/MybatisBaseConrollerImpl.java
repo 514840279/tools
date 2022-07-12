@@ -1,5 +1,6 @@
 package org.chuxue.application.common.base;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,10 +50,26 @@ public class MybatisBaseConrollerImpl<T> implements BaseController<T> {
 			IPage<T> p = new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(vo.getPageNumber(), vo.getPageSize());
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-			// TODO
+			// 条件
 			if (vo.getSearchList() != null && vo.getSearchList().size() > 0) {
 				for (SearchParameters parameter : vo.getSearchList()) {
-					paramterWrapper(queryWrapper, parameter);
+					// 条件的值不为空的拼接该条件
+					if (StringUtils.isNotBlank(parameter.getData())) {
+						paramterWrapper(queryWrapper, parameter);
+					}
+				}
+			}
+			// 排序
+			if (vo.getSortList() != null && vo.getSortList().size() > 0) {
+				Collections.sort(vo.getSortList(), (o1, o2) -> (o1.getSortIndex() - o2.getSortIndex()));
+				for (SortParameters parameters : vo.getSortList()) {
+					if ("asc".equals(parameters.getSortOrder())) {
+						queryWrapper.orderByAsc(parameters.getSortName());
+					} else if ("desc".equals(parameters.getSortOrder())) {
+						queryWrapper.orderByDesc(parameters.getSortName());
+					} else {
+						queryWrapper.orderByAsc(parameters.getSortName());
+					}
 				}
 			}
 			IPage<T> re = mybatisBaseServiceImpl.page(p, queryWrapper);
@@ -65,7 +82,7 @@ public class MybatisBaseConrollerImpl<T> implements BaseController<T> {
 			logger.error("<findAll> error:{} ", e.getMessage());
 			return ResultUtil.error(e.getMessage());
 		}
-		
+
 	}
 	
 	/**
@@ -361,6 +378,44 @@ public class MybatisBaseConrollerImpl<T> implements BaseController<T> {
 			return ResultUtil.success();
 		} catch (Exception e) {
 			logger.error("<trunc> error:{} ", e.getMessage());
+			return ResultUtil.error(e.getMessage());
+		}
+	}
+
+	/**
+	 * 方法名 ： findAllBySort
+	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数 ： @param vo
+	 * 参 数 ： @return
+	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#findAllBySort(org.chuxue.application.common.base.Pagination)
+	 * 作 者 ： Administrator
+	 */
+	
+	@Override
+	public BaseResult<List<T>> findAllBySort(Pagination<T> vo) {
+		try {
+			// 简单分页查询
+			QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+			// 条件
+			queryWrapper.setEntity(vo.getInfo());
+			// 排序
+			if (vo.getSortList() != null && vo.getSortList().size() > 0) {
+				Collections.sort(vo.getSortList(), (o1, o2) -> (o1.getSortIndex() - o2.getSortIndex()));
+				for (SortParameters parameters : vo.getSortList()) {
+					if ("asc".equals(parameters.getSortOrder())) {
+						queryWrapper.orderByAsc(parameters.getSortName());
+					} else if ("desc".equals(parameters.getSortOrder())) {
+						queryWrapper.orderByDesc(parameters.getSortName());
+					} else {
+						queryWrapper.orderByAsc(parameters.getSortName());
+					}
+				}
+			}
+			List<T> re = mybatisBaseServiceImpl.list(queryWrapper);
+			
+			return ResultUtil.success(re);
+		} catch (Exception e) {
+			logger.error("<findAllBySort> error:{} ", e.getMessage());
 			return ResultUtil.error(e.getMessage());
 		}
 	}

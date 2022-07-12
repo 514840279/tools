@@ -27,9 +27,9 @@
 
     <dependencies>
    		<dependency>
-			<artifactId>chuxue-commons</artifactId>
+			<artifactId>chuxue-commons-jpa</artifactId>
 			<groupId>org.chuxue</groupId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -64,7 +64,6 @@
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -74,10 +73,6 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.poi</groupId> -->
-<!-- 			<artifactId>poi-ooxml-schemas</artifactId> -->
-<!-- 		</dependency> -->
     </dependencies>
     <build>
     	<finalName>${project.name}</finalName>

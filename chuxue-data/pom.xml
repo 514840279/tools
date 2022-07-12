@@ -21,7 +21,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.chuxue</groupId>
-			<artifactId>chuxue-commons</artifactId>
+			<artifactId>chuxue-commons-jpa</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -39,7 +39,6 @@
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
-			<version>1.4.18</version>
 		</dependency>
 		
 		<dependency>
@@ -66,12 +65,10 @@
 		<dependency>
 			<groupId>net.sf.ucanaccess</groupId>
 			<artifactId>ucanaccess</artifactId>
-			<version>4.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hankcs</groupId>
 			<artifactId>hanlp</artifactId>
-			<version>portable-1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
