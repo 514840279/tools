@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ZhcxAdviceService {
 	private static final Logger logger = LoggerFactory.getLogger(ZhcxAdviceService.class);
-
+	
 	/**
 	 * @param sysZhcxCol
 	 * @param jdbcTemplate2
@@ -80,11 +80,11 @@ public class ZhcxAdviceService {
 				sBuilder.append("-- 实际值：\t 索引所属：" + resultmap.get("owner") + "\t索引的表空间：" + resultmap.get("tablespace_name") + "\n");
 				sBuilder.append("drop index " + resultmap.get("owner") + "." + resultmap.get("index_name") + ";\n");
 				sBuilder.append(" create index " + expactUser + "." + indexName + " on " + tableName + " (" + sysZhcxCol.getColsName() + ")  tablespace " + expactIndexSpaces + ";");
-
+				
 			} else {
 				return;
 			}
-		} else if (sysZhcxCol.getUserIndex() != null && !"".equals(sysZhcxCol.getUserIndex())) {
+		} else if (sysZhcxCol.getIndexCode() != null && !"".equals(sysZhcxCol.getIndexCode())) {
 			advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "索引添加", sysZhcxTab.getTabsDesc(), sysZhcxTab.getTabsName(), sysZhcxTab.getJdbcUuid());
 			sBuilder.append("-- 由于配置中userIndex不为空，并且期望的索引信息未找到，建议建索引信息：\n");
 			String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getSort();
@@ -95,9 +95,9 @@ public class ZhcxAdviceService {
 		advice.setMessage(sBuilder.toString());
 		advice.setDeleteFlag(0);
 		sysAdviceMessDao.save(advice);
-
+		
 	}
-
+	
 	/**
 	 * @param sysZhcxCol
 	 * @param sysAdviceMessDao
@@ -145,17 +145,15 @@ public class ZhcxAdviceService {
 				// 配置列展示
 				if (sysZhcxTab.getTabsRows() != null && sysZhcxTab.getTabsRows() > 10000) {
 					BigDecimal numNulls = (BigDecimal) resultmap.get("NUM_NULLS");
-					if (numNulls != null && numNulls.intValue() != 0) {
-						if (numNulls.subtract(new BigDecimal(sysZhcxTab.getTabsRows()).multiply(BigDecimal.valueOf(0.6f))).intValue() > 0 && sysZhcxCol.getColsVisible()) {
-							advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "列配置修改", sysZhcxTab.getTabsDesc(), tableName, sysZhcxTab.getJdbcUuid());
-							StringBuilder sBuilder = new StringBuilder();
-							sBuilder.append("-- 表中的空值超过 60% 建议默认列表不展示");
-							advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "列配置修改", sysZhcxTab.getTabsDesc(), sysZhcxTab.getTabsName(), sysZhcxTab.getJdbcUuid());
-							sBuilder.append("update sys_dbms_tabs_cols_info t set  t.PAGE_LIST = '0',t.update_time = sysdate where t.uuid='" + sysZhcxCol.getUuid() + "'");
-							advice.setMessage(sBuilder.toString() + ";");
-							advice.setDeleteFlag(0);
-							sysAdviceMessDao.save(advice);
-						}
+					if ((numNulls != null && numNulls.intValue() != 0) && (numNulls.subtract(new BigDecimal(sysZhcxTab.getTabsRows()).multiply(BigDecimal.valueOf(0.6f))).intValue() > 0)) {
+						advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "列配置修改", sysZhcxTab.getTabsDesc(), tableName, sysZhcxTab.getJdbcUuid());
+						StringBuilder sBuilder = new StringBuilder();
+						sBuilder.append("-- 表中的空值超过 60% 建议默认列表不展示");
+						advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "列配置修改", sysZhcxTab.getTabsDesc(), sysZhcxTab.getTabsName(), sysZhcxTab.getJdbcUuid());
+						sBuilder.append("update sys_dbms_tabs_cols_info t set  t.PAGE_LIST = '0',t.update_time = sysdate where t.uuid='" + sysZhcxCol.getUuid() + "'");
+						advice.setMessage(sBuilder.toString() + ";");
+						advice.setDeleteFlag(0);
+						sysAdviceMessDao.save(advice);
 					}
 				}
 				// 注释和翻译
@@ -177,20 +175,20 @@ public class ZhcxAdviceService {
 					} else {
 						return;
 					}
-
+					
 					advice.setMessage(sBuilder.toString());
 					advice.setDeleteFlag(0);
 					sysAdviceMessDao.save(advice);
 				}
 			}
-
+			
 			// 列数据统计建议添加索引，平台隐藏，实际长度修改(索引修改或重建，索引添加，)
 			startConfixOracleTableCloumnIndexConfig(sysZhcxTab, multiDatasource, sysAdviceMessDao, jdbcTemplate2, sysZhcxCol);
-
+			
 		}
-
+		
 	}
-
+	
 	/**
 	 * @throws SQLException
 	 * @param jdbcTemplate2
@@ -209,7 +207,7 @@ public class ZhcxAdviceService {
 		// 表配置比较建议修正 (表修改，表配置修改)
 		// 表修改需要人工确认，所以当前不会生成表修改的类型
 		// 表配置修改包括： 修改注释翻译对照的mess和 更新配置表中的数据两块大小
-
+		
 		StringBuffer sBuffer = new StringBuffer();
 		sBuffer.append(" select t.owner,t.table_name,t.num_rows,t.blocks*8*1024 as table_space ,tc.comments  from all_tables t ");
 		sBuffer.append(" inner join all_tab_comments tc on t.owner = tc.owner and t.table_name = tc.table_name ");
@@ -247,7 +245,7 @@ public class ZhcxAdviceService {
 						conn.close();
 					}
 				}
-
+				
 			}
 			// 表注释和翻译
 			if (sysZhcxTab.getTabsDesc() != null && resultmap.get("comments") != null) {
@@ -272,9 +270,9 @@ public class ZhcxAdviceService {
 				sysAdviceMessDao.save(advice);
 			}
 		}
-
+		
 	}
-
+	
 	/**
 	 * @方法名 startConfixMysqlTableConfig
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -291,7 +289,7 @@ public class ZhcxAdviceService {
 		// 表配置比较建议修正 (表修改，表配置修改)
 		// 表修改需要人工确认，所以当前不会生成表修改的类型
 		// 表配置修改包括： 修改注释翻译对照的mess和 更新配置表中的数据两块大小
-
+		
 		StringBuffer sBuffer = new StringBuffer();
 		sBuffer.append(" SELECT t.TABLE_SCHEMA AS OWNER,CONCAT(t.TABLE_SCHEMA,'.',t.TABLE_NAME) AS tabs_name,t.TABLE_ROWS AS  num_rows,t.TABLE_COMMENT AS comments  FROM information_schema.TABLES t ");
 		sBuffer.append(" where CONCAT(t.TABLE_SCHEMA,'.',t.TABLE_NAME) = :tablename");
@@ -310,7 +308,7 @@ public class ZhcxAdviceService {
 				jdbcTemplate2.execute(executeSql);
 				advice.setDeleteFlag(1);
 				sysDbmsAdviMessInfoDao.save(advice);
-
+				
 			}
 			// 表注释和翻译
 			if (sysZhcxTab.getTabsDesc() != null && resultmap.get("comments") != null) {
@@ -335,9 +333,9 @@ public class ZhcxAdviceService {
 				sysDbmsAdviMessInfoDao.save(advice);
 			}
 		}
-
+		
 	}
-
+	
 	/**
 	 * @方法名 startConfixMysqlTableColumnsConfig
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -413,7 +411,7 @@ public class ZhcxAdviceService {
 					} else {
 						return;
 					}
-
+					
 					advice.setMessage(sBuilder.toString());
 					advice.setDeleteFlag(0);
 					sysDbmsAdviMessInfoDao.save(advice);
@@ -421,11 +419,11 @@ public class ZhcxAdviceService {
 				// 列数据统计建议添加索引，平台隐藏，实际长度修改(索引修改或重建，索引添加，)
 				startConfixMysqlTableCloumnIndexConfig(sysZhcxTab, sysZhcxCol, resultlist, sysDbmsAdviMessInfoDao);
 			}
-
+			
 		}
-
+		
 	}
-
+	
 	/**
 	 * @方法名 startConfixMysqlTableCloumnIndexConfig
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -449,7 +447,7 @@ public class ZhcxAdviceService {
 			StringBuilder sBuilder = new StringBuilder();
 			String expactUser = tableName.substring(0, tableName.indexOf("."));
 			String expactIndexSpaces = expactUser + "_INDEX";
-			if (sysZhcxCol.getUserIndex() != null && !"".equals(sysZhcxCol.getUserIndex())) {
+			if (sysZhcxCol.getIndexCode() != null && !"".equals(sysZhcxCol.getIndexCode())) {
 				advice = new SysDbmsAdviMessInfo(UUID.randomUUID().toString(), "索引添加", sysZhcxTab.getTabsDesc(), sysZhcxTab.getTabsName(), sysZhcxTab.getJdbcUuid());
 				sBuilder.append("-- 由于配置中userIndex不为空，并且期望的索引信息未找到，建议建索引信息：\n");
 				String indexName = "IND_" + UUID.randomUUID().toString().replace("-", "").substring(4, 20) + "_" + sysZhcxCol.getSort();
@@ -460,5 +458,5 @@ public class ZhcxAdviceService {
 			}
 		}
 	}
-
+	
 }

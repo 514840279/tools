@@ -110,7 +110,7 @@ public class GenerateSql {
 		// 生成索引命令
 		stringBuilder.append("-- 生成索引命令 \r\n");
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
-			if (sysDbmsTabsColsInfo.getUserIndex() != null && !"".equals(sysDbmsTabsColsInfo.getUserIndex())) {
+			if (sysDbmsTabsColsInfo.getIndexCode() != null && !"".equals(sysDbmsTabsColsInfo.getIndexCode())) {
 				stringBuilder.append("-- " + sysDbmsTabsColsInfo.getColsDesc() + "索引\r\n ");
 				stringBuilder.append("alter table " + tabsInfo.getTabsName() + " add index index_" + StringUtils.genRandomNum(16) + " (" + sysDbmsTabsColsInfo.getColsName() + ") ; \r\n");
 			}
@@ -235,7 +235,7 @@ public class GenerateSql {
 		// 生成索引命令
 		stringBuilder.append("-- 生成索引命令 \r\n");
 		for (SysDbmsTabsColsInfo sysDbmsTabsColsInfo : colsInfos) {
-			if (sysDbmsTabsColsInfo.getUserIndex() != null && !"".equals(sysDbmsTabsColsInfo.getUserIndex())) {
+			if (sysDbmsTabsColsInfo.getIndexCode() != null && !"".equals(sysDbmsTabsColsInfo.getIndexCode())) {
 				stringBuilder.append("-- " + sysDbmsTabsColsInfo.getColsDesc() + "索引\r\n ");
 				stringBuilder.append("create index index_" + StringUtils.genRandomNum(16) + " on " + tableNameString + "  (" + sysDbmsTabsColsInfo.getColsName() + ")  tablespace " + tableNameString.substring(0, tableNameString.indexOf(".")).toUpperCase() + "_INDEX; \r\n");
 			}

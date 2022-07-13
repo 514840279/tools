@@ -105,16 +105,23 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 	 */
 	@SuppressWarnings("rawtypes")
 	public BaseResult searchData(SysDbmsTabsTableVo vo) {
-		SysDbmsTabsJdbcInfo jdbc = new SysDbmsTabsJdbcInfo();
-		jdbc.setUuid(vo.getInfo().getJdbcUuid());
-		Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
-		if (op.isPresent()) {
-			jdbc = op.get();
-			// 请求微服务，获取未加载的表名称信息
-			ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/searchData", vo, BaseResult.class);
-			if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
-				logger.info(result.getBody().toString());
-				return result.getBody();
+		SysDbmsTabsTableInfo tabs = new SysDbmsTabsTableInfo();
+		tabs.setUuid(vo.getInfo().getUuid());
+		Optional<SysDbmsTabsTableInfo> top = sysDbmsTabsTableInfoDao.findOne(Example.of(tabs));
+		if (top.isPresent()) {
+			tabs = top.get();
+			vo.setInfo(tabs);
+			SysDbmsTabsJdbcInfo jdbc = new SysDbmsTabsJdbcInfo();
+			jdbc.setUuid(tabs.getJdbcUuid());
+			Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
+			if (op.isPresent()) {
+				jdbc = op.get();
+				// 请求微服务，获取未加载的表名称信息
+				ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/searchData", vo, BaseResult.class);
+				if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
+					logger.info(result.getBody().toString());
+					return result.getBody();
+				}
 			}
 		}
 		return null;
