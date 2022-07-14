@@ -41,7 +41,7 @@
     	<where>
     		<foreach collection="vo.searchList" item="params">
     		<if test="params.data!=null and params.data !=''">
-    			${params.operator}  ${params.columns}
+    			${params.operator}  ${params.column}
     			<choose>
     				<when test="'eq' == params.symbol">
     					= #{params.data}
@@ -88,7 +88,7 @@
     	<where>
     		<foreach collection="vo.searchList" item="params">
     		<if test="params.data!=null and params.data !=''">
-    			${params.operator}  ${params.columns}
+    			${params.operator}  ${params.column}
     			<choose>
     				<when test="'eq' == params.symbol">
     					= #{params.data}

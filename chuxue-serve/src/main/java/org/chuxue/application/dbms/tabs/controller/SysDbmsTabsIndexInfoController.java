@@ -29,15 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysDbmsTabsIndexInfoController extends BaseControllerImpl<SysDbmsTabsIndexInfo> implements BaseController<SysDbmsTabsIndexInfo> {
 	//
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsIndexInfoController.class);
-	
+
 	@Autowired
 	SysDbmsTabsIndexInfoService	sysDbmsTabsIndexInfoService;
-	
+
 	@RequestMapping(path = "/chartList", method = RequestMethod.POST)
 	public List<SysDbmsTabsIndexInfo> chartList() {
 		logger.info("findAll", SysDbmsTabsIndexInfoController.class);
 		return sysDbmsTabsIndexInfoService.chartList();
-		
+
 	}
 	
 }

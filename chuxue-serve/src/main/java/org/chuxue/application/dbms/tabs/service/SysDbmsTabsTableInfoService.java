@@ -6,7 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsJdbcInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
@@ -17,6 +22,8 @@ import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColsInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsJdbcInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
+import org.chuxue.application.dbms.tabs.vo.SearchIndexParameters;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsIndexInfoVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +62,9 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 	
 	@Autowired
 	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
+
+	@PersistenceContext
+	EntityManager				em;
 	
 	/**
 	 * 方法名： findAllByTableUuid
@@ -137,6 +147,43 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 		// 获取
 
 		return null;
+	}
+
+	/**
+	 * @param vo
+	 * 方法名： findAllTablesByIndex
+	 * 功 能： 通过字段的index查询所有表
+	 * 参 数： @return
+	 * 返 回： List<SysDbmsTabsIndexInfo>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SysDbmsTabsTableInfo> findAllTablesByIndex(SysDbmsTabsIndexInfoVo vo) {
+		List<SearchIndexParameters> aIndexParameters = new ArrayList<>();
+		for (SearchIndexParameters searchIndexParameters : vo.getList()) {
+			if (StringUtils.isNotBlank(searchIndexParameters.getData())) {
+				aIndexParameters.add(searchIndexParameters);
+			}
+		}
+		if (aIndexParameters.size() == 0) {
+			return null;
+		}
+		StringBuilder sbBuilder = new StringBuilder();
+		sbBuilder.append("select DISTINCT t.* from sys_dbms_tabs_table_info t ");
+		for (int i = 0; i < aIndexParameters.size(); i++) {
+			sbBuilder.append("inner join sys_dbms_tabs_cols_info c" + i + " on t.uuid = c" + i + ".tabs_uuid ");
+		}
+		sbBuilder.append("where (t.delete_flag =0 or t.delete_flag is null) ");
+		for (int i = 0; i < aIndexParameters.size(); i++) {
+			SearchIndexParameters parameters = aIndexParameters.get(i);
+			sbBuilder.append("and c" + i + ".index_code = '" + parameters.getValue() + "' and (c" + i + ".delete_flag =0 or c" + i + ".delete_flag is null) ");
+		}
+		sbBuilder.append("order by t.sort  ");
+
+		Query query = em.createNativeQuery(sbBuilder.toString(), SysDbmsTabsTableInfo.class);
+		List<SysDbmsTabsTableInfo> l = query.getResultList();
+		return l;
 	}
 
 }
