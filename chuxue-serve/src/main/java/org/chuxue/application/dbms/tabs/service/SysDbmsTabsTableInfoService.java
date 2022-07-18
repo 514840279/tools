@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsJdbcInfo;
@@ -47,25 +48,25 @@ import org.springframework.web.client.RestTemplate;
 @Service("sysDbmsTabsTableInfoService")
 @Transactional
 public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTableInfo> implements BaseService<SysDbmsTabsTableInfo> {
-	
+
 	//
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfo.class);
-	
+
 	@Autowired
 	private RestTemplate		restTemplate;
-
+	
 	@Autowired
 	SysDbmsTabsJdbcInfoDao		sysDbmsTabsJdbcInfoDao;
-	
+
 	@Autowired
 	SysDbmsTabsTableInfoDao		sysDbmsTabsTableInfoDao;
-	
+
 	@Autowired
 	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
-
+	
 	@PersistenceContext
 	EntityManager				em;
-	
+
 	/**
 	 * 方法名： findAllByTableUuid
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -101,9 +102,9 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 			}
 		}
 		return null;
-		
-	}
 
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String importTable(SysDbmsTabsTableInfo info) {
 		// 获取数据库微服务名称
@@ -112,7 +113,7 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 		Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
 		if (op.isPresent()) {
 			jdbc = op.get();
-
+			
 			SysDbmsTabsColsInfo cols = new SysDbmsTabsColsInfo();
 			cols.setTabsUuid(info.getUuid());
 			cols.setColsName(info.getTabsName());
@@ -124,9 +125,13 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 				logger.info(result.getBody().toString());
 				List<LinkedHashMap<String, Object>> li = (List<LinkedHashMap<String, Object>>) result.getBody().getData();
 				List<SysDbmsTabsColsInfo> list = new ArrayList<>();
+				// 注册sql.date/sql.Timestamp的转换器，即允许BeanUtils.copyProperty时的源目标的sql类型的值允许为空
+				ConvertUtils.register(new org.apache.commons.beanutils.converters.SqlDateConverter(null), java.sql.Date.class);
+				ConvertUtils.register(new org.apache.commons.beanutils.converters.SqlDateConverter(null), java.util.Date.class);
+				ConvertUtils.register(new org.apache.commons.beanutils.converters.SqlTimestampConverter(null), java.sql.Timestamp.class);
 				for (LinkedHashMap map : li) {
 					SysDbmsTabsColsInfo sysDbmsTabsColsInfo = new SysDbmsTabsColsInfo();
-
+					
 					try {
 						BeanUtils.populate(sysDbmsTabsColsInfo, map);
 						list.add(sysDbmsTabsColsInfo);
@@ -142,13 +147,13 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 				sysDbmsTabsTableInfoDao.save(info);
 				return "OK";
 			}
-
+			
 		}
 		// 获取
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * @param vo
 	 * 方法名： findAllTablesByIndex
@@ -180,10 +185,10 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 			sbBuilder.append("and c" + i + ".index_code = '" + parameters.getValue() + "' and (c" + i + ".delete_flag =0 or c" + i + ".delete_flag is null) ");
 		}
 		sbBuilder.append("order by t.sort  ");
-
+		
 		Query query = em.createNativeQuery(sbBuilder.toString(), SysDbmsTabsTableInfo.class);
 		List<SysDbmsTabsTableInfo> l = query.getResultList();
 		return l;
 	}
-
+	
 }

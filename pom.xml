@@ -131,6 +131,7 @@
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
 				<version>${lombok.version}</version>
+				<optional>true</optional>
 			</dependency>
 			<dependency>
 				<groupId>fr.opensagres.xdocreport</groupId>
@@ -201,7 +202,7 @@
 				<artifactId>commons-fileupload</artifactId>
 				<version>1.4</version>
 			</dependency>
-			
+
 		</dependencies>
 	</dependencyManagement>
 

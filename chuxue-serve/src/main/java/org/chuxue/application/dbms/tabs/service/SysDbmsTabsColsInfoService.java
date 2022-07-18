@@ -23,27 +23,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 文件名 ： SysDbmsTabsColsInfoService.java 包 名 ：
- * tk.ainiyue.danyuan.application.dbm.column.service.impl 描 述 ：
- * TODO(用一句话描述该文件做什么) 机能名称： 技能ID ： 作 者 ： wang 时 间 ： 2017年8月3日 下午3:52:36 版 本 ：
- * V1.0
+ * 文件名 ： SysDbmsTabsColsInfoService.java
+ * 包 名 ： tk.ainiyue.danyuan.application.dbm.column.service.impl
+ * 描 述 ： TODO(用一句话描述该文件做什么)
+ * 机能名称：
+ * 技能ID ：
+ * 作 者 ： wang
+ * 时 间 ： 2017年8月3日 下午3:52:36
+ * 版 本 ： V1.0
  */
 @Service("sysDbmsTabsColsInfoService")
 public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsInfo> implements BaseService<SysDbmsTabsColsInfo> {
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsColsInfoService.class);
-
+	
 	@Autowired
 	RestTemplate				restTemplate;
-
+	
 	@Autowired
 	SysDbmsTabsJdbcInfoDao		sysDbmsTabsJdbcInfoDao;
-
+	
 	@Autowired
 	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
-
+	
 	@Autowired
 	SysDbmsTabsTableInfoDao		sysDbmsTabsTableInfoDao;
-
+	
 	@SuppressWarnings({ "rawtypes" })
 	public BaseResult findAllByTabsUuid(Pagination<SysDbmsTabsColsInfo> vo) {
 		SysDbmsTabsColsInfo cols = vo.getInfo();
@@ -57,29 +61,29 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 			Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
 			if (op.isPresent()) {
 				jdbc = op.get();
-				
+
 				SysDbmsTabsColsInfo pcols = new SysDbmsTabsColsInfo();
 				pcols.setTabsUuid(tabs.getUuid());
 				pcols.setColsName(tabs.getTabsName());
 				org.chuxue.application.common.base.ResultPage<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.ResultPage<>();
 				page.setInfo(pcols);
-				
+
 				List<SysDbmsTabsColsInfo> al = sysDbmsTabsColsInfoDao.findAll(Example.of(cols));
 				page.setList(al);
-				
+
 				// 请求微服务，获取未加载的表名称信息
 				ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/findAllByTabUuid", page, BaseResult.class);
-				
+
 				if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
 					logger.info(result.getBody().toString());
 					return result.getBody();
-					
+
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 方法名： importColums
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -93,7 +97,7 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 		sysDbmsTabsColsInfoDao.save(info);
 		return "OK";
 	}
-
+	
 	/**
 	 * 方法名： searchData
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -126,5 +130,5 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 		}
 		return null;
 	}
-	
+
 }
