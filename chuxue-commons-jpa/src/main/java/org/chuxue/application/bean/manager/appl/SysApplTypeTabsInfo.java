@@ -36,14 +36,28 @@ public class SysApplTypeTabsInfo extends BaseEntity implements Serializable {
 	@Column(name = "type_code")
 	private String				typeCode;
 	
+	@Column(name = "checkbox_type")
+	private String				checkboxType;
+	
 	/**
 	 * 构造方法：
-	 * 描 述： 默认构造函数
+	 * 描 述： TODO(这里用一句话描述这个方法的作用)
 	 * 参 数：
-	 * 作 者 ：
+	 * 作 者 ： Administrator
 	 * @throws
 	 */
 	public SysApplTypeTabsInfo() {
+	}
+	
+	/**
+	 * 构造方法：
+	 * 描 述： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param typeCode2
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public SysApplTypeTabsInfo(String typeCode) {
+		this.typeCode = typeCode;
 	}
 	
 }

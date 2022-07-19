@@ -1,4 +1,4 @@
-package org.chuxue.application.appl.service;
+package org.chuxue.application.dbms.appl.service;
 
 import org.chuxue.application.bean.manager.appl.SysApplTypeTabsColumnInfo;
 import org.chuxue.application.common.base.BaseService;

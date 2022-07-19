@@ -1,4 +1,4 @@
-package org.chuxue.application.appl.dao;
+package org.chuxue.application.dbms.appl.dao;
 
 import org.chuxue.application.bean.manager.appl.SysApplTypeTabsInfo;
 import org.chuxue.application.common.base.BaseDao;
