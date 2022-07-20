@@ -45,7 +45,7 @@ public class GenerateSql {
 				continue;
 			}
 			String colsTypeString = sysDbmsTabsColsInfo.getColsType();
-			Integer length = sysDbmsTabsColsInfo.getColsLength() == null ? 255 : sysDbmsTabsColsInfo.getColsLength();
+			Long length = sysDbmsTabsColsInfo.getColsLength() == null ? 255 : sysDbmsTabsColsInfo.getColsLength();
 			if (colsTypeString.contains("int") || colsTypeString.contains("char")) {
 				colsTypeString = colsTypeString + "(" + length.intValue() + ")";
 			} else if (colsTypeString.contains("double") || colsTypeString.contains("decimal") || colsTypeString.contains("float")) {
@@ -173,7 +173,7 @@ public class GenerateSql {
 				continue;
 			}
 			String colsTypeString = sysDbmsTabsColsInfo.getColsType();
-			Integer length = sysDbmsTabsColsInfo.getColsLength() == null ? 255 : sysDbmsTabsColsInfo.getColsLength();
+			Long length = sysDbmsTabsColsInfo.getColsLength() == null ? 255 : sysDbmsTabsColsInfo.getColsLength();
 			if (colsTypeString.contains("int") || colsTypeString.contains("char")) {
 				colsTypeString = colsTypeString + "(" + length.intValue() + ")";
 			} else if (colsTypeString.contains("double") || colsTypeString.contains("decimal") || colsTypeString.contains("float")) {

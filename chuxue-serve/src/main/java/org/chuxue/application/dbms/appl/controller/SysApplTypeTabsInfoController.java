@@ -9,6 +9,7 @@ import org.chuxue.application.common.base.BaseResult;
 import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.appl.service.SysApplTypeTabsInfoService;
+import org.chuxue.application.dbms.appl.vo.SysApplTypeTabsColumnInfoParams;
 import org.chuxue.application.dbms.appl.vo.SysApplTypeTabsInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,10 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysApplTypeTabsInfo")
 public class SysApplTypeTabsInfoController extends BaseControllerImpl<SysApplTypeTabsInfo> implements BaseController<SysApplTypeTabsInfo> {
-
+	
 	@Autowired
 	SysApplTypeTabsInfoService sysApplTypeTabsInfoService;
-
+	
 	@PostMapping("/findAllTablesCheck")
 	public BaseResult<List<SysApplTypeTabsInfoVo>> findAllTablesCheck(@RequestBody SysApplTypeTabsInfoVo info) {
 		try {
@@ -40,11 +41,21 @@ public class SysApplTypeTabsInfoController extends BaseControllerImpl<SysApplTyp
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-
+	
 	@PostMapping("/saveList")
-	public BaseResult<List<SysApplTypeTabsInfoVo>> saveList(@RequestBody Pagination<SysApplTypeTabsInfo> vo) {
+	public BaseResult<String> saveList(@RequestBody Pagination<SysApplTypeTabsInfo> vo) {
 		try {
 			sysApplTypeTabsInfoService.saveList(vo.getList());
+			return ResultUtil.success();
+		} catch (Exception e) {
+			return ResultUtil.error(-1, e.getMessage());
+		}
+	}
+	
+	@PostMapping("/saveColumns")
+	public BaseResult<String> saveColumns(@RequestBody SysApplTypeTabsColumnInfoParams param) {
+		try {
+			sysApplTypeTabsInfoService.saveColumns(param);
 			return ResultUtil.success();
 		} catch (Exception e) {
 			return ResultUtil.error(-1, e.getMessage());

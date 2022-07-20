@@ -24,6 +24,13 @@ public class ResultPage<T> {
 		this.content = content;
 	}
 	
+	public ResultPage(List<T> content, Long totalElements, Integer pageNumber, Integer pageSize) {
+		this.totalElements = totalElements;
+		this.content = content;
+		this.pageNumber = pageNumber;
+		this.pageSize = pageSize;
+	}
+	
 	/**
 	 * 方法名 ： getPageNumber
 	 * 功 能 ： 返回变量 pageNumber 的值

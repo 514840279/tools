@@ -9,12 +9,15 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.chuxue.application.bean.manager.appl.SysApplTypeTabsColumnInfo;
 import org.chuxue.application.bean.manager.appl.SysApplTypeTabsInfo;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
+import org.chuxue.application.dbms.appl.vo.SysApplTypeTabsColumnInfoParams;
 import org.chuxue.application.dbms.appl.vo.SysApplTypeTabsInfoVo;
 import org.hibernate.query.internal.NativeQueryImpl;
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,7 +32,10 @@ import org.springframework.stereotype.Service;
 public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsInfo> implements BaseService<SysApplTypeTabsInfo> {
 	
 	@PersistenceContext
-	EntityManager em;
+	EntityManager						em;
+
+	@Autowired
+	SysApplTypeTabsColumnInfoService	sysApplTypeTabsColumnInfoService;
 	
 	/**
 	 * 方法名： findAllTablesCheck
@@ -50,13 +56,16 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 		if (info != null && info.getTypeCode() != null) {
 			sbBuilder.append(" and t2.type_code = '" + info.getTypeCode() + "'  ");
 		}
+		
+		sbBuilder.append("where t1.type_code in (  ");
+		sbBuilder.append("select  d.type_code from sys_appl_data_type_info d where d.appl_code ='" + info.getApplCode() + "' ");
+		sbBuilder.append(")  ");
 		if (info != null) {
-			sbBuilder.append("where 1=1  ");
 			if (info.getTabsName() != null) {
-				sbBuilder.append(" and t1.tabs_name like '%" + info.getTypeCode() + "%'  ");
+				sbBuilder.append(" and t1.tabs_name like '%" + info.getTabsName() + "%'  ");
 			}
-			if (info.getTabsName() != null) {
-				sbBuilder.append(" and t1.tabs_desc like '%" + info.getTypeCode() + "%'  ");
+			if (info.getTabsDesc() != null) {
+				sbBuilder.append(" and t1.tabs_desc like '%" + info.getTabsDesc() + "%'  ");
 			}
 		}
 		sbBuilder.append("order by t2.sort  ");
@@ -93,6 +102,40 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 			}
 		}
 		
+	}
+	
+	/**
+	 * 方法名： saveColumns
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param param
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	@Transactional
+	public void saveColumns(SysApplTypeTabsColumnInfoParams param) {
+		SysApplTypeTabsInfo info = param.getInfo();
+		SysApplTypeTabsInfo delinfo = new SysApplTypeTabsInfo();
+		delinfo.setTypeCode(info.getTypeCode());
+		delinfo = findOne(delinfo);
+		if (delinfo != null) {
+			delete(delinfo);
+		}
+		
+		List<SysApplTypeTabsColumnInfo> list = param.getList();
+		if (list != null && list.size() > 0) {
+			SysApplTypeTabsColumnInfo c1 = new SysApplTypeTabsColumnInfo();
+			c1.setTabsUuid(info.getTabsUuid());
+			c1.setTypeCode(info.getTypeCode());
+			List<SysApplTypeTabsColumnInfo> del = sysApplTypeTabsColumnInfoService.findAll(c1);
+			sysApplTypeTabsColumnInfoService.deleteAll(del);
+			
+		}
+		for (SysApplTypeTabsColumnInfo sysApplTypeTabsColumnInfo : list) {
+			sysApplTypeTabsColumnInfoService.save(sysApplTypeTabsColumnInfo);
+		}
+		save(info);
+
 	}
 
 }

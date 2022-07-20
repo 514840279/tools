@@ -142,7 +142,7 @@ public class GenerateEntity {
 			String propertiesName = makeProperties(colsName);
 			String colsDesc = sysDbmsTabsColsInfo.getColsDesc();
 			String colsType = sysDbmsTabsColsInfo.getColsType().toLowerCase();
-			Integer length = sysDbmsTabsColsInfo.getColsLength();
+			Long length = sysDbmsTabsColsInfo.getColsLength();
 			String nullable = nullableFormatter(sysDbmsTabsColsInfo.getNullable());
 
 			Integer dataprecision = sysDbmsTabsColsInfo.getDataPrecision();
@@ -251,7 +251,7 @@ public class GenerateEntity {
 	 * 返 回： void
 	 * 作 者 ： wang @throws
 	 */
-	private static void spellProperties(StringBuilder stringBuilderProperties, String propertiesName, String propertiesType, String colsDesc, String colsType, String colsName, Integer length, String nullable, Integer dataprecision, Integer scale) {
+	private static void spellProperties(StringBuilder stringBuilderProperties, String propertiesName, String propertiesType, String colsDesc, String colsType, String colsName, Long length, String nullable, Integer dataprecision, Integer scale) {
 		stringBuilderProperties.append("\r\n");
 		stringBuilderProperties.append("	// " + colsDesc + "\r\n");
 		if (colsType != null) {
@@ -430,7 +430,7 @@ public class GenerateEntity {
 			String propertiesName = makeProperties(colsName);
 			String colsDesc = sysDbmsTabsColsInfo.getColsDesc();
 			String colsType = sysDbmsTabsColsInfo.getColsType().toLowerCase();
-			Integer length = sysDbmsTabsColsInfo.getColsLength();
+			Long length = sysDbmsTabsColsInfo.getColsLength();
 			String nullable = nullableFormatter(sysDbmsTabsColsInfo.getNullable());
 
 			Integer dataprecision = sysDbmsTabsColsInfo.getDataPrecision();
@@ -485,7 +485,7 @@ public class GenerateEntity {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	private static void spellMybatisProperties(StringBuilder stringBuilderProperties, String propertiesName, String propertiesType, String colsDesc, String colsType, String colsName, Integer length, String nullable, Integer dataprecision, Integer scale) {
+	private static void spellMybatisProperties(StringBuilder stringBuilderProperties, String propertiesName, String propertiesType, String colsDesc, String colsType, String colsName, Long length, String nullable, Integer dataprecision, Integer scale) {
 		stringBuilderProperties.append("\r\n");
 		stringBuilderProperties.append("	// " + colsDesc + "\r\n");
 		if (colsType != null) {

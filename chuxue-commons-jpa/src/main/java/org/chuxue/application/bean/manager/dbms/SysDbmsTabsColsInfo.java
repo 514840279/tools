@@ -38,7 +38,7 @@ public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
 
 	// 字段长度
 	@Column(name = "cols_length", precision = 10)
-	private Integer				colsLength;
+	private Long				colsLength;
 
 	// 数据不为空的百分比
 	@Column(name = "data_precision", precision = 10)
@@ -128,7 +128,7 @@ public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public SysDbmsTabsColsInfo(String uuid, String tabsUuid, String colsName, String colsDesc, String colsType, Integer colsLength, Integer pageList, String colsAlign, String colsValign, Integer colsWidth, Boolean colsSwitchable, String userIcon, String discription, Date createTime, String createUser, Date updateTime, String updateUser, Integer deleteFlag) {
+	public SysDbmsTabsColsInfo(String uuid, String tabsUuid, String colsName, String colsDesc, String colsType, Long colsLength, Integer pageList, String colsAlign, String colsValign, Integer colsWidth, Boolean colsSwitchable, String userIcon, String discription, Date createTime, String createUser, Date updateTime, String updateUser, Integer deleteFlag) {
 		this.uuid = uuid;
 		this.tabsUuid = tabsUuid;
 		this.colsName = colsName;
@@ -167,7 +167,7 @@ public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public SysDbmsTabsColsInfo(String uuid, String tabsUuid, String colsName, String colsDesc, String colsType, Integer colsLength, Integer pageList, String colsAlign, String colsValign, Integer colsWidth, Boolean colsSwitchable, Integer deleteFlag) {
+	public SysDbmsTabsColsInfo(String uuid, String tabsUuid, String colsName, String colsDesc, String colsType, Long colsLength, Integer pageList, String colsAlign, String colsValign, Integer colsWidth, Boolean colsSwitchable, Integer deleteFlag) {
 		this.uuid = uuid;
 		this.tabsUuid = tabsUuid;
 		this.colsName = colsName;
@@ -241,7 +241,7 @@ public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
 	 *
 	 * @return: String
 	 */
-	public Integer getColsLength() {
+	public Long getColsLength() {
 		return colsLength;
 	}
 
@@ -249,7 +249,7 @@ public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
 	 * 方法名 ： setColsLength
 	 * 功 能 ： 设置变量 colsLength 字段长度 的值
 	 */
-	public void setColsLength(Integer colsLength) {
+	public void setColsLength(Long colsLength) {
 		this.colsLength = colsLength;
 	}
 
