@@ -27,26 +27,29 @@ import lombok.Setter;
 @NamedQuery(name = "SysApplTypeTabsColumnInfo.findAll", query = "SELECT s FROM SysApplTypeTabsColumnInfo s")
 public class SysApplTypeTabsColumnInfo extends BaseEntity implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-
+	
 	// 字段展示管理类
 	@Column(name = "cols_type")
 	protected String			colsType;
-
+	
 	// 字段id
 	@Column(name = "cols_uuid")
 	protected String			colsUuid;
-
+	
 	// 表id
 	@Column(name = "tabs_uuid")
 	protected String			tabsUuid;
-
+	
 	// 类型代码
 	@Column(name = "type_code")
 	protected String			typeCode;
-	
+
 	@Column(name = "cols_type_color")
 	protected String			colsTypeColor;
 
+	@Column(name = "search_cloumn")
+	protected String			searchCloumn;
+	
 	/**
 	 * 构造方法：
 	 * 描 述： 默认构造函数
@@ -56,5 +59,5 @@ public class SysApplTypeTabsColumnInfo extends BaseEntity implements Serializabl
 	 */
 	public SysApplTypeTabsColumnInfo() {
 	}
-
+	
 }

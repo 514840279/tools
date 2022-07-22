@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysApplTypeTabsColumnInfo")
 public class SysApplTypeTabsColumnInfoController extends BaseControllerImpl<SysApplTypeTabsColumnInfo> implements BaseController<SysApplTypeTabsColumnInfo> {
-
+	
 	@Autowired
 	SysApplTypeTabsColumnInfoService sysApplTypeTabsColumnInfoService;
-	
+
 	@PostMapping("/findAllTablesCheck")
 	public BaseResult<List<SysApplTypeTabsColumnInfoVo>> findAllTablesCheck(@RequestBody SysApplTypeTabsColumnInfoVo info) {
 		try {
@@ -39,4 +39,5 @@ public class SysApplTypeTabsColumnInfoController extends BaseControllerImpl<SysA
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
+	
 }

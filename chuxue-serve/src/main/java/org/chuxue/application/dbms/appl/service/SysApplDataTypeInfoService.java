@@ -85,9 +85,7 @@ public class SysApplDataTypeInfoService extends BaseServiceImpl<SysApplDataTypeI
 			if (rel != null && rel.size() > 0) {
 				deleteAll(rel);
 			}
-			for (SysApplDataTypeInfo sysApplTypeTabsInfo : list) {
-				save(sysApplTypeTabsInfo);
-			}
+			saveAll(list);
 		}
 		
 	}

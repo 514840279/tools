@@ -1,6 +1,7 @@
 package org.chuxue.application.dbms.appl.vo;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.chuxue.application.bean.manager.appl.SysApplTypeTabsColumnInfo;
 
@@ -29,15 +30,16 @@ public class SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo {
 	 * @throws
 	 */
 	public SysApplTypeTabsColumnInfoVo(Map<String, Object> map) {
-		this.uuid = map.get("uuid") != null ? map.get("uuid").toString() : null;
+		this.uuid = map.get("uuid") != null ? map.get("uuid").toString() : UUID.randomUUID().toString();
 		this.typeCode = map.get("type_code") != null ? map.get("type_code").toString() : null;
 		this.tabsUuid = map.get("tabs_uuid") != null ? map.get("tabs_uuid").toString() : null;
 		this.colsUuid = map.get("cols_uuid") != null ? map.get("cols_uuid").toString() : null;
 		this.colsName = map.get("cols_name") != null ? map.get("cols_name").toString() : null;
 		this.colsDesc = map.get("cols_desc") != null ? map.get("cols_desc").toString() : null;
 		this.colsType = map.get("cols_type") != null ? map.get("cols_type").toString() : null;
+		this.searchCloumn = map.get("search_cloumn") != null ? map.get("search_cloumn").toString() : null;
 		this.colsTypeColor = map.get("cols_type_color") != null ? map.get("cols_type_color").toString() : null;
-		this.deleteFlag = map.get("delete_flag") != null ? (Integer) map.get("delete_flag") : null;
+		this.deleteFlag = map.get("delete_flag") != null ? (Integer) map.get("delete_flag") : 0;
 		this.sort = map.get("sort") != null ? (Integer) map.get("sort") : null;
 
 	}

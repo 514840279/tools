@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysApplDataTypeInfo")
 public class SysApplDataTypeInfoController extends BaseControllerImpl<SysApplDataTypeInfo> implements BaseController<SysApplDataTypeInfo> {
-	
+
 	@Autowired
 	SysApplDataTypeInfoService sysApplDataTypeInfoService;
-	
+
 	@PostMapping("/findAllTablesCheck")
 	public BaseResult<List<SysApplDataTypeInfoVo>> findAllTablesCheck(@RequestBody SysApplDataTypeInfoVo info) {
 		try {
@@ -40,7 +40,7 @@ public class SysApplDataTypeInfoController extends BaseControllerImpl<SysApplDat
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-
+	
 	@PostMapping("/saveList")
 	public BaseResult<String> saveList(@RequestBody Pagination<SysApplDataTypeInfo> vo) {
 		try {

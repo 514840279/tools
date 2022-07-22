@@ -30,13 +30,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsInfo> implements BaseService<SysApplTypeTabsInfo> {
-	
+
 	@PersistenceContext
 	EntityManager						em;
-
+	
 	@Autowired
 	SysApplTypeTabsColumnInfoService	sysApplTypeTabsColumnInfoService;
-	
+
 	/**
 	 * 方法名： findAllTablesCheck
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -48,7 +48,7 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 	 */
 	@SuppressWarnings("unchecked")
 	public List<SysApplTypeTabsInfoVo> findAllTablesCheck(SysApplTypeTabsInfoVo info) {
-
+		
 		StringBuilder sbBuilder = new StringBuilder();
 		sbBuilder.append("select t2.uuid,t1.uuid as tabs_uuid,t2.type_code,t1.tabs_name,t1.tabs_desc,t2.checkbox_type ");
 		sbBuilder.append("from sys_dbms_tabs_table_info t1 ");
@@ -56,7 +56,7 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 		if (info != null && info.getTypeCode() != null) {
 			sbBuilder.append(" and t2.type_code = '" + info.getTypeCode() + "'  ");
 		}
-		
+
 		sbBuilder.append("where t1.type_code in (  ");
 		sbBuilder.append("select  d.type_code from sys_appl_data_type_info d where d.appl_code ='" + info.getApplCode() + "' ");
 		sbBuilder.append(")  ");
@@ -68,8 +68,8 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 				sbBuilder.append(" and t1.tabs_desc like '%" + info.getTabsDesc() + "%'  ");
 			}
 		}
-		sbBuilder.append("order by t2.sort  ");
-
+		sbBuilder.append("order by t2.checkbox_type desc, t2.sort  ");
+		
 		Query query = em.createNativeQuery(sbBuilder.toString());
 		query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		List<Map<String, Object>> l = query.getResultList();
@@ -80,7 +80,7 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 		}
 		return result;
 	}
-
+	
 	/**
 	 * 方法名： saveList
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -101,9 +101,9 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 				save(sysApplTypeTabsInfo);
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * 方法名： saveColumns
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -121,21 +121,11 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 		if (delinfo != null) {
 			delete(delinfo);
 		}
-		
+
 		List<SysApplTypeTabsColumnInfo> list = param.getList();
-		if (list != null && list.size() > 0) {
-			SysApplTypeTabsColumnInfo c1 = new SysApplTypeTabsColumnInfo();
-			c1.setTabsUuid(info.getTabsUuid());
-			c1.setTypeCode(info.getTypeCode());
-			List<SysApplTypeTabsColumnInfo> del = sysApplTypeTabsColumnInfoService.findAll(c1);
-			sysApplTypeTabsColumnInfoService.deleteAll(del);
-			
-		}
-		for (SysApplTypeTabsColumnInfo sysApplTypeTabsColumnInfo : list) {
-			sysApplTypeTabsColumnInfoService.save(sysApplTypeTabsColumnInfo);
-		}
+		sysApplTypeTabsColumnInfoService.saveAll(list);
 		save(info);
-
+		
 	}
-
+	
 }

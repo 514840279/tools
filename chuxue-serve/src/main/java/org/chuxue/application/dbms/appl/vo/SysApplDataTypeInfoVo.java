@@ -1,6 +1,7 @@
 package org.chuxue.application.dbms.appl.vo;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.chuxue.application.bean.manager.appl.SysApplDataTypeInfo;
 
@@ -29,7 +30,7 @@ public class SysApplDataTypeInfoVo extends SysApplDataTypeInfo {
 	 * @throws
 	 */
 	public SysApplDataTypeInfoVo(Map<String, Object> map) {
-		this.uuid = map.get("uuid") != null ? map.get("uuid").toString() : null;
+		this.uuid = map.get("uuid") != null ? map.get("uuid").toString() : UUID.randomUUID().toString();
 		this.typeName = map.get("type_name") != null ? map.get("type_name").toString() : null;
 		this.typeCode = map.get("type_code") != null ? map.get("type_code").toString() : null;
 		this.applCode = map.get("appl_code") != null ? map.get("appl_code").toString() : null;
