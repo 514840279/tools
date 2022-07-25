@@ -3,6 +3,7 @@ package org.chuxue.application.dbms.appl.controller;
 import java.util.List;
 
 import org.chuxue.application.bean.manager.appl.SysApplTypeTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseController;
 import org.chuxue.application.common.base.BaseControllerImpl;
 import org.chuxue.application.common.base.BaseResult;
@@ -28,10 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysApplTypeTabsInfo")
 public class SysApplTypeTabsInfoController extends BaseControllerImpl<SysApplTypeTabsInfo> implements BaseController<SysApplTypeTabsInfo> {
-	
+
 	@Autowired
 	SysApplTypeTabsInfoService sysApplTypeTabsInfoService;
-	
+
 	@PostMapping("/findAllTablesCheck")
 	public BaseResult<List<SysApplTypeTabsInfoVo>> findAllTablesCheck(@RequestBody SysApplTypeTabsInfoVo info) {
 		try {
@@ -41,7 +42,7 @@ public class SysApplTypeTabsInfoController extends BaseControllerImpl<SysApplTyp
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	@PostMapping("/saveList")
 	public BaseResult<String> saveList(@RequestBody Pagination<SysApplTypeTabsInfo> vo) {
 		try {
@@ -51,7 +52,7 @@ public class SysApplTypeTabsInfoController extends BaseControllerImpl<SysApplTyp
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	@PostMapping("/saveColumns")
 	public BaseResult<String> saveColumns(@RequestBody SysApplTypeTabsColumnInfoParams param) {
 		try {
@@ -61,4 +62,15 @@ public class SysApplTypeTabsInfoController extends BaseControllerImpl<SysApplTyp
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
+
+	@PostMapping("/findSingleTable")
+	public BaseResult<SysDbmsTabsTableInfo> findSingleTable(@RequestBody SysApplTypeTabsInfoVo vo) {
+		try {
+			SysDbmsTabsTableInfo table = sysApplTypeTabsInfoService.findSingleTable(vo);
+			return ResultUtil.success(table);
+		} catch (Exception e) {
+			return ResultUtil.error(-1, e.getMessage());
+		}
+	}
+
 }

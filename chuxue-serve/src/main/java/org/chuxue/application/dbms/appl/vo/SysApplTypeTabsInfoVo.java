@@ -37,6 +37,10 @@ public class SysApplTypeTabsInfoVo {
 
 	private String	checkboxType;
 	
+	private String	tabsRowsType;
+	
+	private Integer	sort;
+	
 	/**
 	 * 构造方法：
 	 * 描 述： TODO(这里用一句话描述这个方法的作用)
@@ -60,7 +64,9 @@ public class SysApplTypeTabsInfoVo {
 		this.typeCode = map.get("type_code") != null ? map.get("type_code").toString() : null;
 		this.tabsName = map.get("tabs_name") != null ? map.get("tabs_name").toString() : null;
 		this.tabsDesc = map.get("tabs_desc") != null ? map.get("tabs_desc").toString() : null;
+		this.sort = map.get("sort") != null ? (Integer) map.get("sort") : null;
 		this.checkboxType = map.get("checkbox_type") != null ? map.get("checkbox_type").toString() : null;
+		this.tabsRowsType = map.get("tabs_rows_type") != null ? map.get("tabs_rows_type").toString() : null;
 	}
 	
 }

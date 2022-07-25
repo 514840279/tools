@@ -66,4 +66,37 @@ public class SysApplTypeTabsColumnInfoService extends BaseServiceImpl<SysApplTyp
 		return result;
 	}
 
+	/**
+	 * 方法名： findAllTables
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： List<SysApplTypeTabsColumnInfoVo>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SysApplTypeTabsColumnInfoVo> findAllTables(SysApplTypeTabsColumnInfoVo info) {
+		StringBuilder sbBuilder = new StringBuilder();
+		sbBuilder.append("select c2.uuid,c2.type_code,c1.tabs_uuid,c1.uuid as cols_uuid,c1.cols_name,c1.cols_desc,c2.cols_type,c2.cols_type_color,c2.delete_flag,c2.sort,c2.search_cloumn ");
+		sbBuilder.append("from sys_dbms_tabs_cols_info c1 ");
+		sbBuilder.append("inner join sys_appl_type_tabs_column_info c2 on c1.uuid = c2.cols_uuid and c1.tabs_uuid = c2.tabs_uuid  ");
+		
+		sbBuilder.append("where c2.delete_flag = 0   ");
+		if ((info != null) && (info.getTabsUuid() != null)) {
+			sbBuilder.append(" and  c2.tabs_uuid = '" + info.getTabsUuid() + "'  ");
+		}
+		sbBuilder.append("order by c1.sort,if(c2.sort is null,999,c2.sort) asc  ");
+
+		Query query = em.createNativeQuery(sbBuilder.toString());
+		query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		List<Map<String, Object>> l = query.getResultList();
+		List<SysApplTypeTabsColumnInfoVo> result = new ArrayList<>();
+		for (Map<String, Object> map : l) {
+			SysApplTypeTabsColumnInfoVo vo = new SysApplTypeTabsColumnInfoVo(map);
+			result.add(vo);
+		}
+		return result;
+	}
+
 }

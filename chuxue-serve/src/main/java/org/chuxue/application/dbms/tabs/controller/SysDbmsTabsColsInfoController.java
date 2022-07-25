@@ -30,29 +30,56 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sysDbmsTabsColsInfo")
 public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTabsColsInfo> implements BaseController<SysDbmsTabsColsInfo> {
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfoController.class);
-
+	
 	@Autowired
 	SysDbmsTabsColsInfoService	sysDbmsTabsColsInfoService;
-	
+
+	/**
+	 * 方法名： findAllByTabsUuid
+	 * 功 能： 数据库表信息查询
+	 * 参 数： @param vo
+	 * 参 数： @return
+	 * 返 回： BaseResult<?>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
 	@RequestMapping(value = "/findAllByTabsUuid", method = { RequestMethod.POST })
 	public BaseResult<?> findAllByTabsUuid(@RequestBody Pagination<SysDbmsTabsColsInfo> vo) {
 		logger.info("数据库表信息查询：{}", vo.toString());
 		BaseResult<?> result = sysDbmsTabsColsInfoService.findAllByTabsUuid(vo);
 		return result;
 	}
-
+	
+	/**
+	 * 方法名： importColums
+	 * 功 能： 数据库表字段信息导入
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： BaseResult<String>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
 	@RequestMapping(value = "/importColums", method = { RequestMethod.POST })
 	public BaseResult<String> importColums(@RequestBody SysDbmsTabsColsInfo info) {
-		logger.info("数据库表字段信息查询：{}", info.toString());
+		logger.info("数据库表字段信息导入：{}", info.toString());
 		String result = sysDbmsTabsColsInfoService.importColums(info);
 		return ResultUtil.success(result);
 	}
-	
+
+	/**
+	 * 方法名： searchData
+	 * 功 能： 数据库表数据查询
+	 * 参 数： @param vo
+	 * 参 数： @return
+	 * 返 回： BaseResult<?>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
 	@RequestMapping(value = "/searchData", method = { RequestMethod.POST })
 	public BaseResult<?> searchData(@RequestBody SysDbmsTabsTableVo vo) {
 		logger.info("数据库表数据查询：{}", vo.toString());
 		BaseResult<?> result = sysDbmsTabsColsInfoService.searchData(vo);
 		return result;
 	}
-	
+
 }

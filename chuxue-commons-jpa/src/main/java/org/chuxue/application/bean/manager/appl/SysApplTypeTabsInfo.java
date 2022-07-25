@@ -27,18 +27,22 @@ import lombok.Setter;
 @NamedQuery(name = "SysApplTypeTabsInfo.findAll", query = "SELECT s FROM SysApplTypeTabsInfo s")
 public class SysApplTypeTabsInfo extends BaseEntity implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-	
+
 	// 表id
 	@Column(name = "tabs_uuid")
 	private String				tabsUuid;
-	
+
 	// 类型代码
 	@Column(name = "type_code")
 	private String				typeCode;
-	
+
+	// 类型代码
+	@Column(name = "tabs_rows_type")
+	private String				tabsRowsType;
+
 	@Column(name = "checkbox_type")
 	private String				checkboxType;
-	
+
 	/**
 	 * 构造方法：
 	 * 描 述： TODO(这里用一句话描述这个方法的作用)
@@ -48,7 +52,7 @@ public class SysApplTypeTabsInfo extends BaseEntity implements Serializable {
 	 */
 	public SysApplTypeTabsInfo() {
 	}
-	
+
 	/**
 	 * 构造方法：
 	 * 描 述： TODO(这里用一句话描述这个方法的作用)
@@ -59,5 +63,5 @@ public class SysApplTypeTabsInfo extends BaseEntity implements Serializable {
 	public SysApplTypeTabsInfo(String typeCode) {
 		this.typeCode = typeCode;
 	}
-	
+
 }

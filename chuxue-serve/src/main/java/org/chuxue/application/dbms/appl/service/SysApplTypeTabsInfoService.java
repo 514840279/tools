@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 
 import org.chuxue.application.bean.manager.appl.SysApplTypeTabsColumnInfo;
 import org.chuxue.application.bean.manager.appl.SysApplTypeTabsInfo;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.dbms.appl.vo.SysApplTypeTabsColumnInfoParams;
@@ -50,7 +51,7 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 	public List<SysApplTypeTabsInfoVo> findAllTablesCheck(SysApplTypeTabsInfoVo info) {
 		
 		StringBuilder sbBuilder = new StringBuilder();
-		sbBuilder.append("select t2.uuid,t1.uuid as tabs_uuid,t2.type_code,t1.tabs_name,t1.tabs_desc,t2.checkbox_type ");
+		sbBuilder.append("select t2.uuid,t1.uuid as tabs_uuid,t2.type_code, t2.sort,t1.tabs_name,t1.tabs_desc,t2.checkbox_type,if(t2.tabs_rows_type is null,'multi-line',t2.tabs_rows_type)  as tabs_rows_type ");
 		sbBuilder.append("from sys_dbms_tabs_table_info t1 ");
 		sbBuilder.append("left join sys_appl_type_tabs_info t2 on t1.uuid = t2.tabs_uuid ");
 		if (info != null && info.getTypeCode() != null) {
@@ -68,7 +69,7 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 				sbBuilder.append(" and t1.tabs_desc like '%" + info.getTabsDesc() + "%'  ");
 			}
 		}
-		sbBuilder.append("order by t2.checkbox_type desc, t2.sort  ");
+		sbBuilder.append("order by t2.checkbox_type desc,t2.tabs_rows_type desc, t2.sort,t1.tabs_name  ");
 		
 		Query query = em.createNativeQuery(sbBuilder.toString());
 		query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
@@ -97,9 +98,7 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 			if (rel != null && rel.size() > 0) {
 				deleteAll(rel);
 			}
-			for (SysApplTypeTabsInfo sysApplTypeTabsInfo : list) {
-				save(sysApplTypeTabsInfo);
-			}
+			saveAll(list);
 		}
 
 	}
@@ -126,6 +125,32 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 		sysApplTypeTabsColumnInfoService.saveAll(list);
 		save(info);
 		
+	}
+	
+	/**
+	 * 方法名： findSingleTable
+	 * 功 能： 查询
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： SysDbmsTabsTableInfo
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public SysDbmsTabsTableInfo findSingleTable(SysApplTypeTabsInfoVo vo) {
+		StringBuilder sbBuilder = new StringBuilder();
+		sbBuilder.append("select t1.* from sys_dbms_tabs_table_info t1 ");
+		sbBuilder.append("inner join sys_appl_data_type_info t2 on t1.type_code = t2.type_code  ");
+		sbBuilder.append("inner join sys_appl_info t3 on t2.appl_code = t3.appl_code ");
+		sbBuilder.append("inner join sys_appl_type_info t4  on t3.appl_code = t4.appl_code  and t4.checkbox_type ='redio' ");
+		sbBuilder.append("inner join sys_appl_type_tabs_info t5 on t4.type_code = t5.type_code and t5.checkbox_type ='redio' and t5.tabs_uuid = t1.uuid ");
+
+		if ((vo != null) && (vo.getApplCode() != null)) {
+			sbBuilder.append("where t2.appl_code ='" + vo.getApplCode() + "'  ");
+		}
+		Query query = em.createNativeQuery(sbBuilder.toString(), SysDbmsTabsTableInfo.class);
+		SysDbmsTabsTableInfo result = (SysDbmsTabsTableInfo) query.getSingleResult();
+		
+		return result;
 	}
 	
 }
