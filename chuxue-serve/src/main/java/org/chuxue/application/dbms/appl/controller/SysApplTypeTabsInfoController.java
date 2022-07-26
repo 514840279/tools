@@ -73,4 +73,14 @@ public class SysApplTypeTabsInfoController extends BaseControllerImpl<SysApplTyp
 		}
 	}
 
+	@PostMapping("/findMultityTable")
+	public BaseResult<List<SysApplTypeTabsInfoVo>> findMultityTable(@RequestBody SysApplTypeTabsInfoVo vo) {
+		try {
+			List<SysApplTypeTabsInfoVo> table = sysApplTypeTabsInfoService.findMultityTable(vo);
+			return ResultUtil.success(table);
+		} catch (Exception e) {
+			return ResultUtil.error(-1, e.getMessage());
+		}
+	}
+
 }

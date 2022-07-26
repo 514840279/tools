@@ -9,7 +9,6 @@ import org.chuxue.application.common.base.BaseResult;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.appl.service.SysApplTypeTabsColumnInfoService;
 import org.chuxue.application.dbms.appl.vo.SysApplTypeTabsColumnInfoVo;
-import org.chuxue.application.dbms.tabs.service.SysDbmsTabsColsInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,10 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysApplTypeTabsColumnInfoController extends BaseControllerImpl<SysApplTypeTabsColumnInfo> implements BaseController<SysApplTypeTabsColumnInfo> {
 	
 	@Autowired
-	SysApplTypeTabsColumnInfoService	sysApplTypeTabsColumnInfoService;
-	
-	@Autowired
-	SysDbmsTabsColsInfoService			sysDbmsTabsColsInfoService;
+	SysApplTypeTabsColumnInfoService sysApplTypeTabsColumnInfoService;
 
 	/**
 	 * 方法名： findAllTablesCheck
@@ -62,14 +58,10 @@ public class SysApplTypeTabsColumnInfoController extends BaseControllerImpl<SysA
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	@PostMapping("/findAllTables")
-	public BaseResult<List<SysApplTypeTabsColumnInfoVo>> findAllTables(@RequestBody SysApplTypeTabsColumnInfoVo info) {
+	@PostMapping("/findAllColumns")
+	public BaseResult<List<SysApplTypeTabsColumnInfoVo>> findAllColumns(@RequestBody SysApplTypeTabsColumnInfoVo info) {
 		try {
-//			Map<String, List<?>> result = new HashMap<>();
-			List<SysApplTypeTabsColumnInfoVo> list = sysApplTypeTabsColumnInfoService.findAllTables(info);
-//			List<SysDbmsTabsColsInfo> columns = sysDbmsTabsColsInfoService.findAll(new SysDbmsTabsColsInfo(info.getTabsUuid()));
-//			result.put("applColumns", list);
-//			result.put("columns", columns);
+			List<SysApplTypeTabsColumnInfoVo> list = sysApplTypeTabsColumnInfoService.findAllColumns(info);
 			return ResultUtil.success(list);
 		} catch (Exception e) {
 			return ResultUtil.error(-1, e.getMessage());

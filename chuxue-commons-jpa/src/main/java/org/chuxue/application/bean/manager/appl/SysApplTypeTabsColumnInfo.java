@@ -49,6 +49,21 @@ public class SysApplTypeTabsColumnInfo extends BaseEntity implements Serializabl
 	
 	@Column(name = "search_cloumn")
 	protected String			searchCloumn;
+	
+	@Column(name = "is_union_id")
+	protected Boolean			isUnionId;
+	
+	@Column(name = "is_relation")
+	protected Boolean			isRelation;
+
+	@Column(name = "`show`")
+	protected Boolean			show;
+
+	@Column(name = "span")
+	protected Integer			span;
+	
+	@Column(name = "icon")
+	protected String			icon;
 
 	/**
 	 * 构造方法：

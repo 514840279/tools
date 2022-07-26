@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo {
-	
+
 	/**
 	 * 构造方法：
 	 * 描 述： TODO(这里用一句话描述这个方法的作用)
@@ -39,19 +39,33 @@ public class SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo {
 		this.colsType = map.get("cols_type") != null ? map.get("cols_type").toString() : null;
 		this.searchCloumn = map.get("search_cloumn") != null ? map.get("search_cloumn").toString() : null;
 		this.colsTypeColor = map.get("cols_type_color") != null ? map.get("cols_type_color").toString() : null;
-		this.deleteFlag = map.get("delete_flag") != null ? (Integer) map.get("delete_flag") : 0;
-		this.sort = map.get("sort") != null ? (Integer) map.get("sort") : null;
-
+		this.deleteFlag = map.get("delete_flag") != null ? Integer.parseInt(map.get("delete_flag").toString()) : 0;
+		this.isUnionId = map.get("is_union_id") != null ? (Boolean) map.get("is_union_id") : false;
+		this.isRelation = map.get("is_relation") != null ? (Boolean) map.get("is_relation") : false;
+		this.show = map.get("show") != null ? (Boolean) map.get("show") : true;
+		this.span = map.get("span") != null ? Integer.parseInt(map.get("span").toString()) : null;
+		this.icon = map.get("icon") != null ? map.get("icon").toString() : null;
+		this.sort = map.get("sort") != null ? Integer.parseInt(map.get("sort").toString()) : null;
+		this.indexCode = map.get("index_code") != null ? map.get("index_code").toString() : null;
+		this.colsSwitchable = map.get("cols_switchable") != null ? Boolean.parseBoolean(map.get("cols_switchable").toString()) : null;
+		this.colsWidth = map.get("cols_width") != null ? Integer.parseInt(map.get("cols_width").toString()) : null;
+		this.colsAlign = map.get("cols_align") != null ? map.get("cols_align").toString() : null;
+		
 	}
-	
+
 	/**
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
 	 */
 	private static final long	serialVersionUID	= 1L;
-	
+
 	private String				colsName;
 	private String				colsDesc;
-	
+	private String				checkboxType;
+	private String				indexCode;
+	private Boolean				colsSwitchable;
+	private Integer				colsWidth;
+	private String				colsAlign;
+
 	/**
 	 * 构造方法：
 	 * 描 述： TODO(这里用一句话描述这个方法的作用)
@@ -61,5 +75,5 @@ public class SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo {
 	 */
 	public SysApplTypeTabsColumnInfoVo() {
 	}
-	
+
 }
