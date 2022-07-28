@@ -87,11 +87,10 @@ public class GenerateController {
 		stringBuilder.append("\r\n");
 		stringBuilder.append("import org.chuxue.application.common.base.BaseController;\r\n");
 		stringBuilder.append("import org.chuxue.application.common.base.MybatisBaseConrollerImpl;\r\n");
-		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
-		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".service." + sysDbmsGenerateCodeInfo.getClassName() + "Service;\r\n");
-		
 		stringBuilder.append("import org.springframework.web.bind.annotation.RequestMapping;\r\n");
 		stringBuilder.append("import org.springframework.web.bind.annotation.RestController;\r\n");
+		stringBuilder.append("\r\n");
+		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("/**\r\n");
 		stringBuilder.append(" * @文件名 " + sysDbmsGenerateCodeInfo.getClassName() + "Controller.java\r\n");
