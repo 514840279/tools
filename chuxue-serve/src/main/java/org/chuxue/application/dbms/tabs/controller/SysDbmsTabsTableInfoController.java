@@ -10,6 +10,7 @@ import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.tabs.service.SysDbmsTabsTableInfoService;
 import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsIndexInfoVo;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableInfoVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +41,27 @@ public class SysDbmsTabsTableInfoController extends BaseControllerImpl<SysDbmsTa
 	
 	@RequestMapping(value = "/findAllByJdbcUuid", method = { RequestMethod.POST })
 	public BaseResult<Page<SysDbmsTabsTableInfo>> findAllByJdbcUuid(@RequestBody Pagination<SysDbmsTabsTableInfo> vo) {
-		logger.info("数据库表信息查询：{}", vo.toString());
-		BaseResult<Page<SysDbmsTabsTableInfo>> page = sysDbmsTabsTableInfoService.findAllByJdbcUuid(vo);
-		return page;
+		logger.info("<findAllByJdbcUuid>数据库表信息查询：{}", vo.toString());
+		try {
+			BaseResult<Page<SysDbmsTabsTableInfo>> page = sysDbmsTabsTableInfoService.findAllByJdbcUuid(vo);
+			return page;
+		} catch (Exception e) {
+			logger.error("<findAllByJdbcUuid> error:{} ", e.getMessage());
+			return ResultUtil.error(-1, e.getMessage());
+		}
 	}
 
 	@RequestMapping(value = "/importTable", method = { RequestMethod.POST })
-	public BaseResult<String> importTable(@RequestBody SysDbmsTabsTableInfo info) {
-		logger.info("数据库表信息查询：{}", info.toString());
-		String result = sysDbmsTabsTableInfoService.importTable(info);
-		return ResultUtil.success(result);
+	public BaseResult<String> importTable(@RequestBody SysDbmsTabsTableInfoVo info) {
+		logger.info("<importTable>数据库表信息查询：{}", info.toString());
+		try {
+			String result = sysDbmsTabsTableInfoService.importTable(info);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("<importTable> error:{} ", e.getMessage());
+			return ResultUtil.error(-1, e.getMessage());
+		}
+
 	}
 	
 	@RequestMapping(path = "/findAllTablesByIndex", method = RequestMethod.POST)

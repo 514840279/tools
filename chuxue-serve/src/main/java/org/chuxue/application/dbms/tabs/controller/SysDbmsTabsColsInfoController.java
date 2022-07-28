@@ -7,6 +7,7 @@ import org.chuxue.application.common.base.BaseResult;
 import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.tabs.service.SysDbmsTabsColsInfoService;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsColsInfoVo;
 import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sysDbmsTabsColsInfo")
 public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTabsColsInfo> implements BaseController<SysDbmsTabsColsInfo> {
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfoController.class);
-	
+
 	@Autowired
 	SysDbmsTabsColsInfoService	sysDbmsTabsColsInfoService;
-
+	
 	/**
 	 * 方法名： findAllByTabsUuid
 	 * 功 能： 数据库表信息查询
@@ -49,7 +50,7 @@ public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTab
 		BaseResult<?> result = sysDbmsTabsColsInfoService.findAllByTabsUuid(vo);
 		return result;
 	}
-	
+
 	/**
 	 * 方法名： importColums
 	 * 功 能： 数据库表字段信息导入
@@ -60,12 +61,12 @@ public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTab
 	 * @throws
 	 */
 	@RequestMapping(value = "/importColums", method = { RequestMethod.POST })
-	public BaseResult<String> importColums(@RequestBody SysDbmsTabsColsInfo info) {
+	public BaseResult<String> importColums(@RequestBody SysDbmsTabsColsInfoVo info) {
 		logger.info("数据库表字段信息导入：{}", info.toString());
 		String result = sysDbmsTabsColsInfoService.importColums(info);
 		return ResultUtil.success(result);
 	}
-
+	
 	/**
 	 * 方法名： searchData
 	 * 功 能： 数据库表数据查询
@@ -81,5 +82,5 @@ public class SysDbmsTabsColsInfoController extends BaseControllerImpl<SysDbmsTab
 		BaseResult<?> result = sysDbmsTabsColsInfoService.searchData(vo);
 		return result;
 	}
-
+	
 }

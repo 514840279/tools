@@ -25,6 +25,7 @@ import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsJdbcInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
 import org.chuxue.application.dbms.tabs.vo.SearchIndexParameters;
 import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsIndexInfoVo;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableInfoVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,25 +49,25 @@ import org.springframework.web.client.RestTemplate;
 @Service("sysDbmsTabsTableInfoService")
 @Transactional
 public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTableInfo> implements BaseService<SysDbmsTabsTableInfo> {
-
+	
 	//
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsTableInfo.class);
-
+	
 	@Autowired
 	private RestTemplate		restTemplate;
-	
+
 	@Autowired
 	SysDbmsTabsJdbcInfoDao		sysDbmsTabsJdbcInfoDao;
-
+	
 	@Autowired
 	SysDbmsTabsTableInfoDao		sysDbmsTabsTableInfoDao;
-
+	
 	@Autowired
 	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
-	
+
 	@PersistenceContext
 	EntityManager				em;
-
+	
 	/**
 	 * 方法名： findAllByTableUuid
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -102,21 +103,21 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 			}
 		}
 		return null;
-
+		
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String importTable(SysDbmsTabsTableInfo info) {
+	public String importTable(SysDbmsTabsTableInfoVo vo) throws IllegalAccessException, InvocationTargetException {
 		// 获取数据库微服务名称
 		SysDbmsTabsJdbcInfo jdbc = new SysDbmsTabsJdbcInfo();
-		jdbc.setUuid(info.getJdbcUuid());
+		jdbc.setUuid(vo.getJdbcUuid());
 		Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
 		if (op.isPresent()) {
 			jdbc = op.get();
-			
+
 			SysDbmsTabsColsInfo cols = new SysDbmsTabsColsInfo();
-			cols.setTabsUuid(info.getUuid());
-			cols.setColsName(info.getTabsName());
+			cols.setTabsUuid(vo.getUuid());
+			cols.setColsName(vo.getTabsName());
 			org.chuxue.application.common.base.ResultPage<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.ResultPage<>();
 			page.setInfo(cols);
 			// 请求微服务，获取未加载的表名称信息
@@ -131,29 +132,31 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 				ConvertUtils.register(new org.apache.commons.beanutils.converters.SqlTimestampConverter(null), java.sql.Timestamp.class);
 				for (LinkedHashMap map : li) {
 					SysDbmsTabsColsInfo sysDbmsTabsColsInfo = new SysDbmsTabsColsInfo();
-					
+
 					try {
 						BeanUtils.populate(sysDbmsTabsColsInfo, map);
 						list.add(sysDbmsTabsColsInfo);
 					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error(e.getMessage());
 					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error(e.getMessage());
 					}
 				}
 				sysDbmsTabsColsInfoDao.saveAll(list);
+				SysDbmsTabsTableInfo info = new SysDbmsTabsTableInfo();
+				// 注意 apache 的BeanUtils.copyProperties 是反方向的
+				// springframework 是正方向
+				BeanUtils.copyProperties(info, vo);
 				sysDbmsTabsTableInfoDao.save(info);
 				return "OK";
 			}
-			
+
 		}
 		// 获取
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * @param vo
 	 * 方法名： findAllTablesByIndex
@@ -185,10 +188,10 @@ public class SysDbmsTabsTableInfoService extends BaseServiceImpl<SysDbmsTabsTabl
 			sbBuilder.append("and c" + i + ".index_code = '" + parameters.getValue() + "' and (c" + i + ".delete_flag =0 or c" + i + ".delete_flag is null) ");
 		}
 		sbBuilder.append("order by t.sort  ");
-		
+
 		Query query = em.createNativeQuery(sbBuilder.toString(), SysDbmsTabsTableInfo.class);
 		List<SysDbmsTabsTableInfo> l = query.getResultList();
 		return l;
 	}
-	
+
 }

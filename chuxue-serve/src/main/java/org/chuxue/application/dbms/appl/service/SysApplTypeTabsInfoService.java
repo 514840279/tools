@@ -49,37 +49,37 @@ public class SysApplTypeTabsInfoService extends BaseServiceImpl<SysApplTypeTabsI
 	 */
 	@SuppressWarnings("unchecked")
 	public List<SysApplTypeTabsInfoVo> findAllTablesCheck(SysApplTypeTabsInfoVo info) {
-
-		StringBuilder sbBuilder = new StringBuilder();
-		sbBuilder.append("select t2.uuid,t1.uuid as tabs_uuid,t2.type_code, t2.sort,t1.tabs_name,t1.tabs_desc,t2.checkbox_type,if(t2.tabs_rows_type is null,'multi-line',t2.tabs_rows_type)  as tabs_rows_type ");
-		sbBuilder.append("from sys_dbms_tabs_table_info t1 ");
-		sbBuilder.append("left join sys_appl_type_tabs_info t2 on t1.uuid = t2.tabs_uuid ");
-		if (info != null && info.getTypeCode() != null) {
-			sbBuilder.append(" and t2.type_code = '" + info.getTypeCode() + "'  ");
-		}
-		
-		sbBuilder.append("where t1.type_code in (  ");
-		sbBuilder.append("select  d.type_code from sys_appl_data_type_info d where d.appl_code ='" + info.getApplCode() + "' ");
-		sbBuilder.append(")  ");
 		if (info != null) {
+			StringBuilder sbBuilder = new StringBuilder();
+			sbBuilder.append("select t2.uuid,t1.uuid as tabs_uuid,t2.type_code, t2.sort,t1.tabs_name,t1.tabs_desc,t2.checkbox_type,if(t2.tabs_rows_type is null,'multi-line',t2.tabs_rows_type)  as tabs_rows_type ");
+			sbBuilder.append("from sys_dbms_tabs_table_info t1 ");
+			sbBuilder.append("left join sys_appl_type_tabs_info t2 on t1.uuid = t2.tabs_uuid ");
+			if (info.getTypeCode() != null) {
+				sbBuilder.append(" and t2.type_code = '" + info.getTypeCode() + "'  ");
+			}
+
+			sbBuilder.append("where t1.type_code in (  ");
+			sbBuilder.append("select  d.type_code from sys_appl_data_type_info d where d.appl_code ='" + info.getApplCode() + "' ");
+			sbBuilder.append(")  ");
 			if (info.getTabsName() != null) {
 				sbBuilder.append(" and t1.tabs_name like '%" + info.getTabsName() + "%'  ");
 			}
 			if (info.getTabsDesc() != null) {
 				sbBuilder.append(" and t1.tabs_desc like '%" + info.getTabsDesc() + "%'  ");
 			}
-		}
-		sbBuilder.append("order by t2.checkbox_type desc,t2.tabs_rows_type desc, t2.sort,t1.tabs_name  ");
+			sbBuilder.append("order by t2.checkbox_type desc,t2.tabs_rows_type desc, t2.sort,t1.tabs_name  ");
 
-		Query query = em.createNativeQuery(sbBuilder.toString());
-		query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-		List<Map<String, Object>> l = query.getResultList();
-		List<SysApplTypeTabsInfoVo> result = new ArrayList<>();
-		for (Map<String, Object> map : l) {
-			SysApplTypeTabsInfoVo vo = new SysApplTypeTabsInfoVo(map);
-			result.add(vo);
+			Query query = em.createNativeQuery(sbBuilder.toString());
+			query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+			List<Map<String, Object>> l = query.getResultList();
+			List<SysApplTypeTabsInfoVo> result = new ArrayList<>();
+			for (Map<String, Object> map : l) {
+				SysApplTypeTabsInfoVo vo = new SysApplTypeTabsInfoVo(map);
+				result.add(vo);
+			}
+			return result;
 		}
-		return result;
+		return null;
 	}
 
 	/**

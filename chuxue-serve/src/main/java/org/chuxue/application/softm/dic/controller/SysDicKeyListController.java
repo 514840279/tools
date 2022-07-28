@@ -15,6 +15,7 @@ import org.chuxue.application.softm.dic.vo.SysDicKeyListVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,11 +38,10 @@ public class SysDicKeyListController extends BaseControllerImpl<SysDicKeyList> i
 	@Autowired
 	SysDicKeyListService		sysDicKeyListService;
 
-	@RequestMapping("/tree")
-	public BaseResult<List<SysDicKeyListVo>> tree(@RequestBody SysDicKeyList info) {
+	@PostMapping("/tree")
+	public BaseResult<List<SysDicKeyListVo>> tree(@RequestBody SysDicKeyListVo info) {
 		try {
 			List<SysDicKeyListVo> list = sysDicKeyListService.tree(info);
-
 			return ResultUtil.success(list);
 		} catch (Exception e) {
 			logger.error(e.getMessage());

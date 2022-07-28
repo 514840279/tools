@@ -15,8 +15,6 @@ import org.chuxue.application.dbms.echarts.service.SysDbmsChartDimensionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,24 +32,14 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequestMapping("/sysDbmsChartDimension")
 public class SysDbmsChartDimensionController extends BaseControllerImpl<SysDbmsChartDimension> implements BaseController<SysDbmsChartDimension> {
-	
+
 	private static final Logger			logger	= LoggerFactory.getLogger(SysDbmsChartDimensionController.class);
-	
+
 	@Autowired
 	SysDbmsChartDimensionService		sysDbmsChartDimensionService;
-	
+
 	@Autowired
 	SysDbmsChartDimensionDataService	sysDbmsChartDimensionDataService;
-	
-	@GetMapping("/detail/{uuid}")
-	public ModelAndView name(@PathVariable("uuid") String uuid) {
-		logger.info("detail", SysDbmsChartDimensionController.class);
-		ModelAndView modelAndView = new ModelAndView("dbms/echarts/sysdbmschartdimensiondetail");
-		SysDbmsChartDimension info = new SysDbmsChartDimension();
-		info.setUuid(uuid);
-		modelAndView.addObject("sysDbmsChartDimension", sysDbmsChartDimensionService.findOne(info));
-		return modelAndView;
-	}
 	
 	/**
 	 * 方法名 ： findAllDime
@@ -65,7 +53,7 @@ public class SysDbmsChartDimensionController extends BaseControllerImpl<SysDbmsC
 		logger.info("findAllDime", SysDbmsChartDimensionController.class);
 		if (request.getParameter("uuid") == null || "".equals(request.getParameter("uuid"))) {
 			List<SysDbmsChartDimension> list = sysDbmsChartDimensionService.findAllDime();
-			
+
 			if (list.size() == 0) {
 				ModelAndView view = new ModelAndView("echarts/chart");
 				return view;
@@ -88,7 +76,7 @@ public class SysDbmsChartDimensionController extends BaseControllerImpl<SysDbmsC
 			}
 		}
 	}
-	
+
 	@RequestMapping(path = "/showAllDime", method = RequestMethod.GET)
 	public ModelAndView showAllDime(HttpServletRequest request) {
 		logger.info("findAllDime", SysDbmsChartDimensionController.class);
@@ -99,7 +87,7 @@ public class SysDbmsChartDimensionController extends BaseControllerImpl<SysDbmsC
 		view.addObject("sysPlantChartDimensionList", list);
 		return view;
 	}
-	
+
 	@RequestMapping(path = "/updBefor", method = RequestMethod.GET)
 	public ModelAndView updBefor(HttpServletRequest request) {
 		logger.info("updBefor", SysDbmsChartDimensionController.class);
@@ -108,19 +96,19 @@ public class SysDbmsChartDimensionController extends BaseControllerImpl<SysDbmsC
 		task.setUuid(request.getParameter("uuid"));
 		task = sysDbmsChartDimensionService.findOne(task);
 		view.addObject("sysPlantChartDimension", task);
-		
+
 		if (task == null) {
 			view.addObject("sysPlantChartDimensionDataList", null);
 		} else {
 			SysDbmsChartDimensionData data = new SysDbmsChartDimensionData();
 			data.setDimeUuid(task.getUuid());
 			List<SysDbmsChartDimensionData> list = sysDbmsChartDimensionDataService.findAll(data);
-			
+
 			view.addObject("sysPlantChartDimensionDataList", list);
 		}
 		return view;
 	}
-	
+
 	@RequestMapping(path = "/addBefor", method = RequestMethod.GET)
 	public ModelAndView addBefor(HttpServletRequest request) {
 		logger.info("addBefor", SysDbmsChartDimensionController.class);
@@ -138,7 +126,7 @@ public class SysDbmsChartDimensionController extends BaseControllerImpl<SysDbmsC
 			return view;
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： delete
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)

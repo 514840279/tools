@@ -40,9 +40,8 @@ public class FileController<T> {
 
 	@Autowired
 	LoadData					loadData;
-	
 
-	@RequestMapping(path = "/uploadFile")
+	@PostMapping(path = "/uploadFile")
 	public BaseResult<List<String>> uploadFile(HttpServletRequest request) throws UnsupportedEncodingException {
 		List<String> listFileName;
 		listFileName = new ArrayList<>();

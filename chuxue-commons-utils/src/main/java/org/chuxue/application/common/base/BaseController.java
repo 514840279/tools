@@ -3,7 +3,9 @@ package org.chuxue.application.common.base;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * 文件名 ： BaseController.java
@@ -17,34 +19,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 public interface BaseController<T> {
 
-	@RequestMapping("/page")
-	BaseResult<Page<T>> page(Pagination<T> vo);
+	@RequestMapping(value = "/page", method = RequestMethod.POST)
+	BaseResult<Page<T>> page(@RequestBody Pagination<T> vo);
 
-	@RequestMapping("/findAll")
-	BaseResult<List<T>> findAll(T info);
+	@RequestMapping(value = "/findAll", method = RequestMethod.POST)
+	BaseResult<List<T>> findAll(@RequestBody T info);
 
-	@RequestMapping("/findAllBySort")
-	BaseResult<List<T>> findAllBySort(Pagination<T> vo);
+	@RequestMapping(value = "/findAllBySort", method = RequestMethod.POST)
+	BaseResult<List<T>> findAllBySort(@RequestBody Pagination<T> vo);
 
-	@RequestMapping("/findOne")
-	BaseResult<T> findOne(T info);
+	@RequestMapping(value = "/findOne", method = RequestMethod.POST)
+	BaseResult<T> findOne(@RequestBody T info);
 
-	@RequestMapping("/save")
-	BaseResult<T> save(T info);
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	BaseResult<T> save(@RequestBody T info);
 
-	@RequestMapping("/saveAll")
-	BaseResult<T> saveAll(Pagination<T> vo);
+	@RequestMapping(value = "/saveAll", method = RequestMethod.POST)
+	BaseResult<T> saveAll(@RequestBody Pagination<T> vo);
 
-	@RequestMapping("/deleteAll")
-	BaseResult<T> deleteAll(Pagination<T> vo);
+	@RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
+	BaseResult<T> deleteAll(@RequestBody Pagination<T> vo);
 
-	@RequestMapping("/delete")
-	BaseResult<T> delete(T info);
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	BaseResult<T> delete(@RequestBody T info);
 
-	@RequestMapping("/count")
-	BaseResult<Long> count(T info);
+	@RequestMapping(value = "/count", method = RequestMethod.POST)
+	BaseResult<Long> count(@RequestBody T info);
 
-	@RequestMapping("/trunc")
+	@RequestMapping(value = "/trunc", method = RequestMethod.POST)
 	BaseResult<T> trunc();
 
 }

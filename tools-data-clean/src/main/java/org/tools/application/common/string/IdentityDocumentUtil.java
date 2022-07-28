@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
@@ -16,6 +19,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 public class IdentityDocumentUtil {
+	private static Logger				logger				= LoggerFactory.getLogger(IdentityDocumentUtil.class);
 
 	/** 中国公民身份证号码最小长度。 */
 	private static final int			CHINA_ID_MIN_LENGTH	= 15;
@@ -36,11 +40,11 @@ public class IdentityDocumentUtil {
 //	};
 	/** 最低年限 */
 	private static final int			MIN					= 1930;
-	private static Map<String, String>	cityCodes			= new HashMap<String, String>();
+	private static Map<String, String>	cityCodes			= new HashMap<>();
 	/** 台湾身份首字母对应数字 */
-	private static Map<String, Integer>	twFirstCode			= new HashMap<String, Integer>();
+	private static Map<String, Integer>	twFirstCode			= new HashMap<>();
 	/** 香港身份首字母对应数字 */
-	private static Map<String, Integer>	hkFirstCode			= new HashMap<String, Integer>();
+	private static Map<String, Integer>	hkFirstCode			= new HashMap<>();
 	static {
 		cityCodes.put("11", "北京");
 		cityCodes.put("12", "天津");
@@ -127,10 +131,8 @@ public class IdentityDocumentUtil {
 			return true;
 		}
 		String[] cardval = validateIdCard10(card);
-		if (cardval != null) {
-			if (cardval[2].equals("true")) {
-				return true;
-			}
+		if ((cardval != null) && cardval[2].equals("true")) {
+			return true;
 		}
 		return false;
 	}
@@ -142,12 +144,19 @@ public class IdentityDocumentUtil {
 	 *            身份编号
 	 * @return 年龄
 	 */
-	public static int getAgeByIdCard(String idCard) {
-		int iAge = 0;
+	public static Integer getAgeByIdCard(String idCard) {
+		if (idCard == null) {
+			return null;
+		}
+		int iAge;
 		if (idCard.length() == CHINA_ID_MIN_LENGTH) {
 			idCard = conver15CardTo18(idCard);
+			if (idCard == null) {
+				return null;
+			}
 		}
 		String year = idCard.substring(6, 10);
+		
 		Calendar cal = Calendar.getInstance();
 		int iCurrYear = cal.get(Calendar.YEAR);
 		iAge = iCurrYear - Integer.valueOf(year);
@@ -162,11 +171,17 @@ public class IdentityDocumentUtil {
 	 * @return 生日(yyyyMMdd)
 	 */
 	public static String getBirthByIdCard(String idCard) {
+		if (idCard == null) {
+			return null;
+		}
 		Integer len = idCard.length();
 		if (len < CHINA_ID_MIN_LENGTH) {
 			return null;
 		} else if (len == CHINA_ID_MIN_LENGTH) {
 			idCard = conver15CardTo18(idCard);
+			if (idCard == null) {
+				return null;
+			}
 		}
 		return idCard.substring(6, 14);
 	}
@@ -179,11 +194,17 @@ public class IdentityDocumentUtil {
 	 * @return 生日(yyyy)
 	 */
 	public static Short getYearByIdCard(String idCard) {
+		if (idCard == null) {
+			return null;
+		}
 		Integer len = idCard.length();
 		if (len < CHINA_ID_MIN_LENGTH) {
 			return null;
 		} else if (len == CHINA_ID_MIN_LENGTH) {
 			idCard = conver15CardTo18(idCard);
+			if (idCard == null) {
+				return null;
+			}
 		}
 		return Short.valueOf(idCard.substring(6, 10));
 	}
@@ -196,11 +217,17 @@ public class IdentityDocumentUtil {
 	 * @return 生日(MM)
 	 */
 	public static Short getMonthByIdCard(String idCard) {
+		if (idCard == null) {
+			return null;
+		}
 		Integer len = idCard.length();
 		if (len < CHINA_ID_MIN_LENGTH) {
 			return null;
 		} else if (len == CHINA_ID_MIN_LENGTH) {
 			idCard = conver15CardTo18(idCard);
+			if (idCard == null) {
+				return null;
+			}
 		}
 		return Short.valueOf(idCard.substring(10, 12));
 	}
@@ -213,11 +240,17 @@ public class IdentityDocumentUtil {
 	 * @return 生日(dd)
 	 */
 	public static Short getDateByIdCard(String idCard) {
+		if (idCard == null) {
+			return null;
+		}
 		Integer len = idCard.length();
 		if (len < CHINA_ID_MIN_LENGTH) {
 			return null;
 		} else if (len == CHINA_ID_MIN_LENGTH) {
 			idCard = conver15CardTo18(idCard);
+			if (idCard == null) {
+				return null;
+			}
 		}
 		return Short.valueOf(idCard.substring(12, 14));
 	}
@@ -230,9 +263,15 @@ public class IdentityDocumentUtil {
 	 * @return 性别(M-男，F-女，N-未知)
 	 */
 	public static String getGenderByIdCard(String idCard) {
+		if (idCard == null) {
+			return null;
+		}
 		String sGender = "N";
 		if (idCard.length() == CHINA_ID_MIN_LENGTH) {
 			idCard = conver15CardTo18(idCard);
+			if (idCard == null) {
+				return null;
+			}
 		}
 		String sCardNum = idCard.substring(16, 17);
 		if (Integer.parseInt(sCardNum) % 2 != 0) {
@@ -252,7 +291,7 @@ public class IdentityDocumentUtil {
 	 */
 	public static String getProvinceByIdCard(String idCard) {
 		int len = idCard.length();
-		String sProvince = null;
+		String sProvince;
 		String sProvinNum = "";
 		if (len == CHINA_ID_MIN_LENGTH || len == CHINA_ID_MAX_LENGTH) {
 			sProvinNum = idCard.substring(0, 2);
@@ -281,11 +320,12 @@ public class IdentityDocumentUtil {
 			try {
 				birthDate = new SimpleDateFormat("yyMMdd").parse(birthday);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			Calendar cal = Calendar.getInstance();
-			if (birthDate != null)
+			if (birthDate != null) {
 				cal.setTime(birthDate);
+			}
 			// 获取出生年(完全表现形式,如：2010)
 			String sYear = String.valueOf(cal.get(Calendar.YEAR));
 			idCard18 = idCard.substring(0, 6) + sYear + idCard.substring(8);
@@ -329,10 +369,8 @@ public class IdentityDocumentUtil {
 					int iSum17 = getPowerSum(iCard);
 					// 获取校验位
 					String val = getCheckCode18(iSum17);
-					if (val.length() > 0) {
-						if (val.equalsIgnoreCase(code18)) {
-							bTrue = true;
-						}
+					if ((val.length() > 0) && val.equalsIgnoreCase(code18)) {
+						bTrue = true;
 					}
 				}
 			}
@@ -361,11 +399,12 @@ public class IdentityDocumentUtil {
 			try {
 				birthDate = new SimpleDateFormat("yy").parse(birthCode.substring(0, 2));
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			Calendar cal = Calendar.getInstance();
-			if (birthDate != null)
+			if (birthDate != null) {
 				cal.setTime(birthDate);
+			}
 			if (!valiDate(cal.get(Calendar.YEAR), Integer.valueOf(birthCode.substring(2, 4)), Integer.valueOf(birthCode.substring(4, 6)))) {
 				return false;
 			}
@@ -489,7 +528,7 @@ public class IdentityDocumentUtil {
 				iArr[i] = Integer.parseInt(String.valueOf(ca[i]));
 			}
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return iArr;
 	}

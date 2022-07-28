@@ -1,6 +1,5 @@
 package org.chuxue.application.bean.manager.dbms;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -21,72 +20,71 @@ import org.chuxue.application.common.base.BaseEntity;
 @Entity
 @Table(name = "sys_dbms_tabs_cols_info")
 @NamedQuery(name = "SysDbmsTabsColsInfo.findAll", query = "SELECT s FROM SysDbmsTabsColsInfo s")
-public class SysDbmsTabsColsInfo extends BaseEntity implements Serializable {
-	private static final long	serialVersionUID	= 1L;
+public class SysDbmsTabsColsInfo extends BaseEntity {
 
 	// 表id
 	@Column(name = "tabs_uuid")
-	private String				tabsUuid;
+	private String	tabsUuid;
 
 	// 字段含义
 	@Column(name = "cols_desc")
-	private String				colsDesc;
+	private String	colsDesc;
 
 	// 字段名
 	@Column(name = "cols_name")
-	private String				colsName;
+	private String	colsName;
 
 	// 字段长度
 	@Column(name = "cols_length", precision = 10)
-	private Long				colsLength;
+	private Long	colsLength;
 
 	// 数据不为空的百分比
 	@Column(name = "data_precision", precision = 10)
-	private Integer				dataPrecision;
+	private Integer	dataPrecision;
 	
 	// 用户查询列配置
 	@Column(name = "index_code")
-	private String				indexCode;
+	private String	indexCode;
 	
 	// 数据类型（varchar,number,text） 相比字段类型更加规整
 	@Column(name = "data_type")
-	private String				dataType;
+	private String	dataType;
 	
 	// 字段类型（varchar,number,text）
 	@Column(name = "cols_type")
-	private String				colsType;
+	private String	colsType;
 
 	//
 	@Column(name = "nullable")
-	private String				nullable;
+	private String	nullable;
 
 	// 数据的小数
 	@Column(name = "data_scale", precision = 10)
-	private Integer				dataScale;
+	private Integer	dataScale;
 
 	// 默认为true显示该列，设为false则禁用列项目的选项卡。
 	@Column(name = "cols_switchable")
-	private Boolean				colsSwitchable;
+	private Boolean	colsSwitchable;
 
 	// 对齐方式
 	@Column(name = "cols_valign")
-	private String				colsValign;
+	private String	colsValign;
 
 	// 用户查询显示图标
 	@Column(name = "user_icon")
-	private String				userIcon;
+	private String	userIcon;
 
 	// 每列的宽度
 	@Column(name = "cols_width")
-	private Integer				colsWidth;
+	private Integer	colsWidth;
 
 	//
 	@Column(name = "cols_default")
-	private String				colsDefault;
+	private String	colsDefault;
 
 	// 对齐方式
 	@Column(name = "cols_align")
-	private String				colsAlign;
+	private String	colsAlign;
 
 	/**
 	 * 构造方法：

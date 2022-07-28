@@ -13,9 +13,11 @@ import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColsInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsJdbcInfoDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsTableInfoDao;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsColsInfoVo;
 import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
@@ -35,19 +37,19 @@ import org.springframework.web.client.RestTemplate;
 @Service("sysDbmsTabsColsInfoService")
 public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsInfo> implements BaseService<SysDbmsTabsColsInfo> {
 	private static final Logger	logger	= LoggerFactory.getLogger(SysDbmsTabsColsInfoService.class);
-	
+
 	@Autowired
 	RestTemplate				restTemplate;
-	
+
 	@Autowired
 	SysDbmsTabsJdbcInfoDao		sysDbmsTabsJdbcInfoDao;
-	
+
 	@Autowired
 	SysDbmsTabsColsInfoDao		sysDbmsTabsColsInfoDao;
-	
+
 	@Autowired
 	SysDbmsTabsTableInfoDao		sysDbmsTabsTableInfoDao;
-	
+
 	@SuppressWarnings({ "rawtypes" })
 	public BaseResult findAllByTabsUuid(Pagination<SysDbmsTabsColsInfo> vo) {
 		SysDbmsTabsColsInfo cols = vo.getInfo();
@@ -61,29 +63,29 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 			Optional<SysDbmsTabsJdbcInfo> op = sysDbmsTabsJdbcInfoDao.findOne(Example.of(jdbc));
 			if (op.isPresent()) {
 				jdbc = op.get();
-
+				
 				SysDbmsTabsColsInfo pcols = new SysDbmsTabsColsInfo();
 				pcols.setTabsUuid(tabs.getUuid());
 				pcols.setColsName(tabs.getTabsName());
 				org.chuxue.application.common.base.ResultPage<SysDbmsTabsColsInfo> page = new org.chuxue.application.common.base.ResultPage<>();
 				page.setInfo(pcols);
-
+				
 				List<SysDbmsTabsColsInfo> al = sysDbmsTabsColsInfoDao.findAll(Example.of(cols));
 				page.setList(al);
-
+				
 				// 请求微服务，获取未加载的表名称信息
 				ResponseEntity<BaseResult> result = restTemplate.postForEntity("http://" + jdbc.getAppName() + "/data/sysDbmsTabsColumnInfo/findAllByTabUuid", page, BaseResult.class);
-
+				
 				if (result.getStatusCode().value() == 200 && result.getBody().getCode() == 200) {
 					logger.info(result.getBody().toString());
 					return result.getBody();
-
+					
 				}
 			}
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 方法名： importColums
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -93,11 +95,13 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public String importColums(SysDbmsTabsColsInfo info) {
+	public String importColums(SysDbmsTabsColsInfoVo vo) {
+		SysDbmsTabsColsInfo info = new SysDbmsTabsColsInfo();
+		BeanUtils.copyProperties(vo, info);
 		sysDbmsTabsColsInfoDao.save(info);
 		return "OK";
 	}
-	
+
 	/**
 	 * 方法名： searchData
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -130,5 +134,5 @@ public class SysDbmsTabsColsInfoService extends BaseServiceImpl<SysDbmsTabsColsI
 		}
 		return null;
 	}
-
+	
 }

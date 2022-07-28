@@ -1,7 +1,5 @@
 package org.chuxue.application.bean.manager.dbms;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
@@ -20,32 +18,31 @@ import org.chuxue.application.common.base.BaseEntity;
 @Entity
 @Table(name = "sys_dbms_tabs_table_info")
 @NamedQuery(name = "SysDbmsTabsTableInfo.findAll", query = "SELECT s FROM SysDbmsTabsTableInfo s")
-public class SysDbmsTabsTableInfo extends BaseEntity implements Serializable {
-	private static final long	serialVersionUID	= 1L;
+public class SysDbmsTabsTableInfo extends BaseEntity {
 
 	// 数据库表空间大小
 	@Column(name = "tabs_space")
-	private String				tabsSpace;
+	private String	tabsSpace;
 
 	// 数据库表名
 	@Column(name = "tabs_name")
-	private String				tabsName;
+	private String	tabsName;
 
 	// 表的含义
 	@Column(name = "tabs_desc")
-	private String				tabsDesc;
+	private String	tabsDesc;
 
 	// 数据库表数据量
 	@Column(name = "tabs_rows", precision = 10)
-	private Integer				tabsRows;
+	private Integer	tabsRows;
 
 	// 数据库表类型code
 	@Column(name = "type_code")
-	private String				typeCode;
+	private String	typeCode;
 
 	// 数据库表id
 	@Column(name = "jdbc_uuid")
-	private String				jdbcUuid;
+	private String	jdbcUuid;
 
 	/**
 	 * 构造方法：

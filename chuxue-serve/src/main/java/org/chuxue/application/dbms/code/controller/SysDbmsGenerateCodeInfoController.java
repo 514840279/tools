@@ -20,6 +20,7 @@ import org.chuxue.application.dbms.code.service.SysDbmsGenerateCodeInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,14 +37,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysDbmsGenerateCodeInfo")
 public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbmsGenerateCodeInfo> implements BaseController<SysDbmsGenerateCodeInfo> {
-
+	
 	private static final Logger		logger		= LoggerFactory.getLogger(SysDbmsGenerateCodeInfoController.class);
 	private static final String		OUTPUTFILE	= "outputfile";
-
+	
 	@Autowired
 	SysDbmsGenerateCodeInfoService	sysDbmsGenerateCodeInfoService;
-
-	@RequestMapping("/generate")
+	
+	@PostMapping("/generate")
 	public BaseResult<String> generate(@RequestBody Pagination<SysDbmsGenerateCodeInfo> vo) {
 		try {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -54,7 +55,7 @@ public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbm
 			return ResultUtil.error(-1, e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/downloadCode", method = RequestMethod.POST)
 	public void downloadCode(HttpServletResponse response, @RequestBody String path) throws IOException {
 		// 根据参数进行导出xml 并打包返回zip文件路径
@@ -75,7 +76,7 @@ public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbm
 			while ((len = in.read(buff)) > 0) {
 				out.write(buff, 0, len);
 			}
-
+			
 			// 关闭文件流
 			in.close();
 			// 关闭输出流
@@ -99,7 +100,7 @@ public class SysDbmsGenerateCodeInfoController extends BaseControllerImpl<SysDbm
 				}
 			}
 		}
-
+		
 	}
-
+	
 }

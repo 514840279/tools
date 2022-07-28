@@ -12,13 +12,10 @@ import org.chuxue.application.softm.roles.vo.SysRolesVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 文件名 ： SysRolesController.java
@@ -35,11 +32,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class SysRolesController extends BaseControllerImpl<SysRolesInfo> implements BaseController<SysRolesInfo> {
 	//
 	private static final Logger	logger	= LoggerFactory.getLogger(SysRolesController.class);
-
+	
 	//
 	@Autowired
 	private SysRolesInfoService	sysRolesInfoService;
-
+	
 	/**
 	 * 方法名： findAll
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -54,17 +51,7 @@ public class SysRolesController extends BaseControllerImpl<SysRolesInfo> impleme
 		logger.info("sysRolesList", SysRolesController.class);
 		return ResultUtil.success(sysRolesInfoService.findAll());
 	}
-
-	@GetMapping("/detail/{uuid}")
-	public ModelAndView name(@PathVariable("uuid") String uuid) {
-		logger.info("detail", SysRolesController.class);
-		ModelAndView modelAndView = new ModelAndView("softm/roles/sysrolesinfodetail");
-		SysRolesInfo info = new SysRolesInfo();
-		info.setUuid(uuid);
-		modelAndView.addObject("sysRolesInfo", sysRolesInfoService.findOne(info));
-		return modelAndView;
-	}
-
+	
 	@RequestMapping(path = "/findAllRoleBySearchText", method = RequestMethod.POST)
 	public List<SysRolesInfo> findAllRoleBySearchText(@RequestBody SysRolesVo info) {
 		logger.info("findAllBySearchText", SysRolesController.class);

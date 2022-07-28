@@ -7,11 +7,8 @@ import org.chuxue.application.softm.organization.service.SysOrganizationInfoServ
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 文件名 ： SysOrganizationController.java
@@ -27,19 +24,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/sysOrganization")
 public class SysOrganizationController extends BaseControllerImpl<SysOrganizationInfo> implements BaseController<SysOrganizationInfo> {
 	//
-	private static final Logger			logger	= LoggerFactory.getLogger(SysOrganizationController.class);
-
+	private static final Logger logger = LoggerFactory.getLogger(SysOrganizationController.class);
+	
 	//
 	@Autowired
-	private SysOrganizationInfoService	sysOrganizationInfoService;
-
-	@GetMapping("/detail/{uuid}")
-	public ModelAndView name(@PathVariable("uuid") String uuid) {
-		logger.info("detail", SysOrganizationController.class);
-		ModelAndView modelAndView = new ModelAndView("softm/organization/sysorganizationinfodetail");
-		SysOrganizationInfo info = new SysOrganizationInfo();
-		info.setUuid(uuid);
-		modelAndView.addObject("sysOrganizationInfo", sysOrganizationInfoService.findOne(info));
-		return modelAndView;
-	}
+	private SysOrganizationInfoService sysOrganizationInfoService;
+	
 }

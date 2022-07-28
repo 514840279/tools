@@ -3,6 +3,7 @@
  */
 package org.chuxue.application.softm.dic.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.chuxue.application.common.base.BaseService;
 import org.chuxue.application.common.base.BaseServiceImpl;
 import org.chuxue.application.softm.dic.dao.SysDicKeyListDao;
 import org.chuxue.application.softm.dic.vo.SysDicKeyListVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -30,11 +32,13 @@ import com.alibaba.nacos.common.utils.StringUtils;
  */
 @Service
 public class SysDicKeyListService extends BaseServiceImpl<SysDicKeyList> implements BaseService<SysDicKeyList> {
-	
+
 	@Autowired
 	private SysDicKeyListDao sysDicKeyListDao;
-	
+
 	/**
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
 	 * 方法名： tree
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
 	 * 参 数： @param info
@@ -43,15 +47,17 @@ public class SysDicKeyListService extends BaseServiceImpl<SysDicKeyList> impleme
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public List<SysDicKeyListVo> tree(SysDicKeyList info) {
+	public List<SysDicKeyListVo> tree(SysDicKeyListVo vo) throws IllegalAccessException, InvocationTargetException {
+		SysDicKeyList info = new SysDicKeyList();
+		BeanUtils.copyProperties(vo, info);
 		List<SysDicKeyList> list = sysDicKeyListDao.findAll(Example.of(info));
 		List<SysDicKeyListVo> re = new ArrayList<>();
-
-		re = resultList(list, re);
 		
+		re = resultList(list, re);
+
 		return re;
 	}
-	
+
 	/**
 	 * @return
 	 * 方法名： resultList
@@ -72,10 +78,10 @@ public class SysDicKeyListService extends BaseServiceImpl<SysDicKeyList> impleme
 			}
 		}
 		toSortVo(re);
-
+		
 		return re;
 	}
-
+	
 	/**
 	 * @param list
 	 * 方法名： toVo
@@ -101,7 +107,7 @@ public class SysDicKeyListService extends BaseServiceImpl<SysDicKeyList> impleme
 		}
 		return vo;
 	}
-	
+
 	/**
 	 * 方法名： toSortVo
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -113,5 +119,5 @@ public class SysDicKeyListService extends BaseServiceImpl<SysDicKeyList> impleme
 	private void toSortVo(List<SysDicKeyListVo> re) {
 		Collections.sort(re, (o1, o2) -> o2.getSort().compareTo(o1.getSort()));
 	}
-	
+
 }

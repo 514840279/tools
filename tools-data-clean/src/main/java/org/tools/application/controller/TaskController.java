@@ -3,6 +3,7 @@ package org.tools.application.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,13 +23,13 @@ import org.tools.application.service.TaskService;
 @RestController
 @RequestMapping("/task")
 public class TaskController {
-	
+
 	private Logger	log	= LoggerFactory.getLogger(TaskController.class);
-	
+
 	@Autowired
 	TaskService		taskService;
-	
-	@RequestMapping("/addTask")
+
+	@PostMapping("/addTask")
 	public BaseResult<SysTaskInfo> addTask(@RequestBody SysTaskInfo info) {
 		log.info("addTask:{}", info.toString());
 		try {
@@ -38,10 +39,10 @@ public class TaskController {
 			log.error(e.getMessage());
 			return ResultUtil.error(e.getMessage());
 		}
-		
+
 	}
-	
-	@RequestMapping("/updateTask")
+
+	@PostMapping("/updateTask")
 	public BaseResult<SysTaskInfo> updateTask(@RequestBody SysTaskInfo info) {
 		log.info("updateTask:{}", info.toString());
 		try {
@@ -51,7 +52,7 @@ public class TaskController {
 			log.error(e.getMessage());
 			return ResultUtil.error(e.getMessage());
 		}
-		
-	}
 
+	}
+	
 }
