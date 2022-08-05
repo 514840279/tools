@@ -30,12 +30,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  */
 
 public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements BaseController<T> {
-	
-	private static final Logger		logger	= LoggerFactory.getLogger(MybatisBaseConrollerImpl.class);
 
+	private static final Logger		logger	= LoggerFactory.getLogger(MybatisBaseConrollerImpl.class);
+	
 	@Autowired
 	MybatisBaseServiceImpl<E, T>	mybatisBaseServiceImpl;
-	
+
 	/**
 	 * 方法名 ： page
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -44,7 +44,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#page(org.chuxue.application.common.base.Pagination)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public BaseResult<Page<T>> page(@RequestBody Pagination<T> vo) {
@@ -55,7 +55,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>();
 			// 泛型实际类型
 			Class<T> classz = (Class<T>) vo.info.getClass();
-			
+
 			// 条件
 			if (vo.getSearchList() != null && vo.getSearchList().size() > 0) {
 				for (SearchParameters parameter : vo.getSearchList()) {
@@ -70,7 +70,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 							} catch (NoSuchFieldException e) {
 								field = classz.getDeclaredField(parameter.getColumn());
 							}
-							
+
 							TableField tableField = field.getAnnotation(TableField.class);
 							if (tableField != null) {
 								filedName = tableField.value();
@@ -94,28 +94,42 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			if (vo.getSortList() != null && vo.getSortList().size() > 0) {
 				Collections.sort(vo.getSortList(), (o1, o2) -> (o1.getSortIndex() - o2.getSortIndex()));
 				for (SortParameters parameters : vo.getSortList()) {
+					String filedName = null;
+					Field field = null;
+					try {
+						field = classz.getSuperclass().getDeclaredField(parameters.getSortName());
+					} catch (NoSuchFieldException e) {
+						field = classz.getDeclaredField(parameters.getSortName());
+					}
+					TableField tableField = field.getAnnotation(TableField.class);
+					if (tableField != null) {
+						filedName = tableField.value();
+					} else if (filedName == null) {
+						// 默认驼峰转换字段
+						filedName = dbColumn(parameters.getSortName());
+					}
 					if ("asc".equals(parameters.getSortOrder())) {
-						queryWrapper.orderByAsc(parameters.getSortName());
+						queryWrapper.orderByAsc(filedName);
 					} else if ("desc".equals(parameters.getSortOrder())) {
-						queryWrapper.orderByDesc(parameters.getSortName());
+						queryWrapper.orderByDesc(filedName);
 					} else {
-						queryWrapper.orderByAsc(parameters.getSortName());
+						queryWrapper.orderByAsc(filedName);
 					}
 				}
 			}
 			IPage<T> re = mybatisBaseServiceImpl.page(p, queryWrapper);
-			
+
 			Pageable able = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize());
 			PageImpl<T> result = new PageImpl<>(re.getRecords(), able, re.getTotal());
-			
+
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(e.getMessage());
 		}
-		
-	}
 
+	}
+	
 	/**
 	 * @param classz
 	 * 方法名： paramterWrapper
@@ -130,7 +144,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 		if (StringUtils.isBlank(parameter.getColumn()) || StringUtils.isBlank(parameter.getData()) || StringUtils.isBlank(parameter.getSymbol())) {
 			return;
 		}
-		
+
 		switch (parameter.getOperator()) {
 			case "and":
 				queryWrapper.and(wrapper -> paramterOperateWrapper(wrapper, parameter));
@@ -147,9 +161,9 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 				queryWrapper.and(wrapper -> paramterWrapper(wrapper, parameter2));
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * @throws SecurityException
 	 * @throws NoSuchFieldException
@@ -164,7 +178,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * @throws
 	 */
 	private QueryWrapper<T> paramterOperateWrapper(QueryWrapper<T> queryWrapper, SearchParameters parameter) {
-		
+
 		switch (parameter.getSymbol()) {
 			case "eq":
 				// eq("=", "相等"),
@@ -181,7 +195,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			case "lessAndEq":
 				// lessAndEq("<=", "小于等于"),
 				queryWrapper.and(wrapper -> wrapper.eq(parameter.getColumn(), parameter.getData()).or().le(parameter.getColumn(), parameter.getData()));
-				
+
 				break;
 			case "great":
 				// great(">", "大于"),
@@ -221,9 +235,9 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 		}
 		return queryWrapper;
 	}
-	
+
 	private final static String UNDERLINE = "_";
-	
+
 	/**
 	 * 方法名： dbColumn
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -246,7 +260,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 		}
 		return "`" + sb.toString().toUpperCase() + "`";
 	}
-	
+
 	/**
 	 * 方法名 ： findAll
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -255,14 +269,14 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#findAll(org.chuxue.application.common.base.BaseEntity)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<List<T>> findAll(@RequestBody T info) {
 		logger.info("<findAll> param info:{} ", info.toString());
 		try {
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>(info);
-			
+
 			List<T> re = mybatisBaseServiceImpl.list(queryWrapper);
 			return ResultUtil.success(re);
 		} catch (Exception e) {
@@ -270,7 +284,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： findOne
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -279,14 +293,14 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#findOne(org.chuxue.application.common.base.BaseEntity)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<T> findOne(@RequestBody T info) {
 		logger.info("<findAll> param info:{} ", info.toString());
 		try {
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>(info);
-			
+
 			T re = mybatisBaseServiceImpl.getOne(queryWrapper);
 			return ResultUtil.success(re);
 		} catch (Exception e) {
@@ -294,7 +308,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： save
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -303,7 +317,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#save(org.chuxue.application.common.base.BaseEntity)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<T> save(@RequestBody T info) {
 		logger.info("<save> param info:{} ", info.toString());
@@ -320,7 +334,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： saveAll
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -329,7 +343,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#saveAll(org.chuxue.application.common.base.Pagination)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<T> saveAll(@RequestBody Pagination<T> vo) {
 		logger.info("<saveAll> param vo:{} ", vo.toString());
@@ -346,7 +360,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： deleteAll
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -355,7 +369,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#deleteAll(org.chuxue.application.common.base.Pagination)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<T> deleteAll(@RequestBody Pagination<T> vo) {
 		logger.info("<deleteAll> param vo:{} ", vo.toString());
@@ -372,7 +386,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： delete
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -381,7 +395,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#delete(org.chuxue.application.common.base.BaseEntity)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<T> delete(@RequestBody T info) {
 		logger.info("<delete> param info:{} ", info.toString());
@@ -398,7 +412,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： count
 	 * 功 能 ： 按条件统计
@@ -407,14 +421,14 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#count(org.chuxue.application.common.base.BaseEntity)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<Long> count(@RequestBody T info) {
 		logger.info("<count> param info:{} ", info.toString());
 		try {
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>(info);
-			
+
 			Long l = mybatisBaseServiceImpl.count(queryWrapper);
 			return ResultUtil.success(l);
 		} catch (Exception e) {
@@ -422,7 +436,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： trunc
 	 * 功 能 ： 截断，mybatis中没有只能用remove替代，
@@ -430,7 +444,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#trunc()
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<T> trunc() {
 		logger.info("<trunc>  ");
@@ -442,7 +456,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 方法名 ： findAllBySort
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -451,7 +465,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	 * 参 考 ： @see org.chuxue.application.common.base.BaseController#findAllBySort(org.chuxue.application.common.base.Pagination)
 	 * 作 者 ： Administrator
 	 */
-	
+
 	@Override
 	public BaseResult<List<T>> findAllBySort(Pagination<T> vo) {
 		try {
@@ -473,12 +487,12 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 				}
 			}
 			List<T> re = mybatisBaseServiceImpl.list(queryWrapper);
-			
+
 			return ResultUtil.success(re);
 		} catch (Exception e) {
 			logger.error("<findAllBySort> error:{} ", e.getMessage());
 			return ResultUtil.error(e.getMessage());
 		}
 	}
-	
+
 }
