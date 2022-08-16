@@ -22,31 +22,27 @@ import org.chuxue.application.common.base.BaseEntity;
 @NamedQuery(name = "SysDbmsAdviMessInfo.findAll", query = "SELECT s FROM SysDbmsAdviMessInfo s")
 public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-
+	
 	//
 	@Column(name = "message")
 	private String				message;
-
+	
 	//
-	@Column(name = "table_desc")
-	private String				tableDesc;
-
-	//
-	@Column(name = "table_name")
-	private String				tableName;
-
+	@Column(name = "tabs_uuid")
+	private String				tabsUuid;
+	
 	//
 	@Column(name = "type")
 	private String				type;
-
+	
 	//
 	@Column(name = "jdbc_uuid")
 	private String				jdbcUuid;
-
+	
 	//
 	@Column(name = "execute_sql")
 	private String				executeSql;
-
+	
 	/**
 	 * 构造方法：
 	 * 描 述： 默认构造函数
@@ -56,7 +52,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	 */
 	public SysDbmsAdviMessInfo() {
 	}
-	
+
 	/**
 	 * 构造方法：
 	 * 描 述： TODO(这里用一句话描述这个方法的作用)
@@ -68,14 +64,13 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public SysDbmsAdviMessInfo(String uuid, String type, String tableDesc, String tableName, String jdbcUuid) {
+	public SysDbmsAdviMessInfo(String uuid, String type, String tabsUuid, String jdbcUuid) {
 		this.uuid = uuid;
 		this.type = type;
-		this.tableDesc = tableDesc;
-		this.tableName = tableName;
+		this.tabsUuid = tabsUuid;
 		this.jdbcUuid = jdbcUuid;
 	}
-	
+
 	/**
 	 * 方法名 ： getMessage
 	 * 功 能 ： 返回变量 message 的值
@@ -85,7 +80,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public String getMessage() {
 		return message;
 	}
-
+	
 	/**
 	 * 方法名 ： setMessage
 	 * 功 能 ： 设置变量 message 的值
@@ -93,41 +88,23 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
+	
 	/**
-	 * 方法名 ： getTableDesc
-	 * 功 能 ： 返回变量 tableDesc 的值
+	 * 方法名 ： getTabsUuid
+	 * 功 能 ： 返回变量 tabsUuid 的值
 	 *
 	 * @return: String
 	 */
-	public String getTableDesc() {
-		return tableDesc;
+	public String getTabsUuid() {
+		return tabsUuid;
 	}
 
 	/**
-	 * 方法名 ： setTableDesc
-	 * 功 能 ： 设置变量 tableDesc 的值
+	 * 方法名 ： setTabsUuid
+	 * 功 能 ： 设置变量 tabsUuid 的值
 	 */
-	public void setTableDesc(String tableDesc) {
-		this.tableDesc = tableDesc;
-	}
-
-	/**
-	 * 方法名 ： getTableName
-	 * 功 能 ： 返回变量 tableName 的值
-	 *
-	 * @return: String
-	 */
-	public String getTableName() {
-		return tableName;
-	}
-
-	/**
-	 * 方法名 ： setTableName
-	 * 功 能 ： 设置变量 tableName 的值
-	 */
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
+	public void setTabsUuid(String tabsUuid) {
+		this.tabsUuid = tabsUuid;
 	}
 
 	/**
@@ -139,7 +116,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public String getType() {
 		return type;
 	}
-
+	
 	/**
 	 * 方法名 ： setType
 	 * 功 能 ： 设置变量 type 的值
@@ -147,7 +124,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-
+	
 	/**
 	 * 方法名 ： getJdbcUuid
 	 * 功 能 ： 返回变量 jdbcUuid 的值
@@ -157,7 +134,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public String getJdbcUuid() {
 		return jdbcUuid;
 	}
-
+	
 	/**
 	 * 方法名 ： setJdbcUuid
 	 * 功 能 ： 设置变量 jdbcUuid 的值
@@ -165,7 +142,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public void setJdbcUuid(String jdbcUuid) {
 		this.jdbcUuid = jdbcUuid;
 	}
-
+	
 	/**
 	 * 方法名 ： getExecuteSql
 	 * 功 能 ： 返回变量 executeSql 的值
@@ -175,7 +152,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public String getExecuteSql() {
 		return executeSql;
 	}
-
+	
 	/**
 	 * 方法名 ： setExecuteSql
 	 * 功 能 ： 设置变量 executeSql 的值
@@ -183,7 +160,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	public void setExecuteSql(String executeSql) {
 		this.executeSql = executeSql;
 	}
-	
+
 	/**
 	 * 方法名 ： toString
 	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
@@ -191,7 +168,7 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	 * 参 考 ： @see java.lang.Object#toString()
 	 * 作 者 ： Administrator
 	 */
-
+	
 	@Override
 	public String toString() {
 		return "SysAdviceMess [uuid=" + uuid + ", createTime=" + createTime + ", deleteFlag=" + deleteFlag + ", type=" + type + ", message=" + message + ", executeSql=" + executeSql + "]";

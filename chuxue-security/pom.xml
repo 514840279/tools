@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.chuxue</groupId>
 		<artifactId>tools</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0</version>
 	</parent>
 	<artifactId>chuxue-security</artifactId>
 	<name>chuxue-security</name>
@@ -19,6 +19,16 @@
 		<skipTests>true</skipTests>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.chuxue</groupId>
+			<artifactId>chuxue-commons-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		 <dependency>
+			<groupId>org.chuxue</groupId>
+			<artifactId>chuxue-commons-mybatis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- actuator 指标监控 非必须 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -51,5 +61,34 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>
+		<!--服务注册/发现中心依赖 -->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+		</dependency>
+
+		<!--服务的配置中心依赖 -->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+		</dependency>
+		<!--客户端负载均衡loadbalancer-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+		
 	</dependencies>
 </project>

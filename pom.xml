@@ -11,21 +11,23 @@
     	<module>chuxue-commons-utils</module>
 		<module>chuxue-commons-jpa</module>
     	<module>chuxue-commons-mybatis</module>
-		<!-- 8001 -->
+		<!-- 18001 -->
 		<module>chuxue-gateway</module>
-		<!-- 8002 -->
+		<!-- 18002 -->
 		<module>chuxue-serve</module>
-		<!-- 8003 -->
+		<!-- 18003 -->
 		<module>chuxue-data</module>
-		<!-- 8004 -->
+		<!-- 18004 -->
 		<module>chuxue-data-h2</module>
-		<!-- 8005 -->
+		<!-- 18005 -->
 		<module>chuxue-data-mysql</module>
-		<!-- 8006 -->
+		<!-- 18006 -->
 		<module>chuxue-data-oracle</module>
-		<!-- 9001 -->
+		<!-- 18010 -->
+		<module>chuxue-security</module>
+		<!-- 19001 -->
 		<module>tools-data-clean</module>
-		<!-- 9002 -->
+		<!-- 19002 -->
 		<module>tools-rollcall</module>
   </modules>
 	<properties>

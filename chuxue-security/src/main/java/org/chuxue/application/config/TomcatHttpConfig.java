@@ -1,4 +1,4 @@
-package org.chuxue.application;
+package org.chuxue.application.config;
 //package org.danyuan.application;
 //
 //import org.apache.catalina.Context;
