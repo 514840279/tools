@@ -11,23 +11,23 @@ import com.alibaba.fastjson.JSON;
  * @版本 V1.0
  */
 public class ResultUtil {
-	
+
 	public static <T> BaseResult<T> success(T data) {
 		return commonResult(200, "请求成功", data);
 	}
-
+	
 	public static <T> BaseResult<T> success() {
 		return commonResult(200, "请求成功", null);
 	}
-	
+
 	public static <T> BaseResult<T> error(String errorMsg) {
 		return error(-1, errorMsg);
 	}
-	
+
 	public static <T> BaseResult<T> error(Integer code, String errorMsg) {
 		return commonResult(code, errorMsg, null);
 	}
-	
+
 	private static <T> BaseResult<T> commonResult(Integer code, String errMsg, T data) {
 		BaseResult<T> result = new BaseResult<>();
 		result.setCode(code);
@@ -35,8 +35,14 @@ public class ResultUtil {
 		result.setData(data);
 		return result;
 	}
-	
+
+	// 自定义全局错误
 	public static String failed(int code, String msg) {
 		return JSON.toJSONString(commonResult(code, msg, null));
+	}
+	
+	// 自定义错误信息
+	public static BaseResult<?> fail(ResultCode userNotLogin) {
+		return error(userNotLogin.getCode(), userNotLogin.getMessage());
 	}
 }
