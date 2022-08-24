@@ -1,6 +1,8 @@
 package org.chuxue.application.config;
 
+import org.chuxue.application.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private MyUserDetailsService			userDetailsService;
+	private SysUserService					sysUserService;
 
 	@Autowired
 	CustomizeAuthenticationSuccessHandler	authenticationSuccessHandler;
@@ -28,16 +30,17 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		//
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(sysUserService).passwordEncoder(bCryptPasswordEncoder());
 
 	}
 	
 	public static void main(String[] args) {
-		PasswordEncoder d = passwordEncoder();
+		PasswordEncoder d = bCryptPasswordEncoder();
 		System.out.println(d.encode("123456"));
 	}
 
-	private static PasswordEncoder passwordEncoder() {
+	@Bean
+	private static BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
@@ -62,6 +65,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		        deleteCookies("JSESSIONID")// 登出之后删除cookie
 		;
 		// CSRF跨域
-		http.cors().and().csrf().disable();
+		http.cors().and().csrf().disable().cors();
 	}
 }

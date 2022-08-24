@@ -35,10 +35,10 @@ spring:
 
   profiles:
     active:
-#    - localhost
-    - user
-    - mysql8
     - hikari
+    - mybatis
+#    - user
+    - mysql
     - nacos
 #    - security
     

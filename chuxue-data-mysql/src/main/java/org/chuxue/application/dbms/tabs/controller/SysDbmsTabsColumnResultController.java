@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.common.base.BaseController;
 import org.chuxue.application.common.base.BaseResult;
-import org.chuxue.application.common.base.MybatisBaseConrollerImpl;
 import org.chuxue.application.common.base.ResultPage;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsColumnResult;
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sysDbmsTabsColumnInfo")
-public class SysDbmsTabsColumnResultController extends MybatisBaseConrollerImpl<SysDbmsTabsColumnResult> implements BaseController<SysDbmsTabsColumnResult> {
+public class SysDbmsTabsColumnResultController {
 
 	@Autowired
 	SysDbmsTabsColumnResultService sysDbmsTabsColumnResultService;

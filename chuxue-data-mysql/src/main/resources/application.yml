@@ -6,6 +6,8 @@ server:
 spring:
   application:    name: chuxue-data-mysql
   banner:    charset: utf-8
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active:
     - nacos

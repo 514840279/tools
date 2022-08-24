@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
-import org.chuxue.application.common.base.MybatisBaseServiceImpl;
 import org.chuxue.application.common.base.ResultPage;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColumnResultDao;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsColumnResult;
@@ -14,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("sysDbmsTabsColumnResultService")
-public class SysDbmsTabsColumnResultService extends MybatisBaseServiceImpl<SysDbmsTabsColumnResult> {
-
+public class SysDbmsTabsColumnResultService {
+	
 	@Autowired
 	SysDbmsTabsColumnResultDao sysDbmsTabsColumnResultDao;
-	
+
 	public List<SysDbmsTabsColumnResult> findAllByTabUuid(ResultPage<SysDbmsTabsColsInfo> vo) {
 		SysDbmsTabsColsInfo info = vo.getInfo();
 		List<String> list = null;
@@ -33,7 +32,7 @@ public class SysDbmsTabsColumnResultService extends MybatisBaseServiceImpl<SysDb
 		List<SysDbmsTabsColumnResult> result = sysDbmsTabsColumnResultDao.findAllByTabUuid(info.getTabsUuid(), info.getColsName(), list);
 		return result;
 	}
-
+	
 	/**
 	 * 方法名： searchData
 	 * 功 能： 查表数据
@@ -54,5 +53,5 @@ public class SysDbmsTabsColumnResultService extends MybatisBaseServiceImpl<SysDb
 		ResultPage<Map<String, Object>> page = new ResultPage<>(list, count);
 		return page;
 	}
-
+	
 }

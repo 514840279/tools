@@ -6,6 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.chuxue.application.common.base.BaseResult;
+import org.chuxue.application.common.base.ResultCode;
+import org.chuxue.application.common.base.ResultUtil;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -29,28 +32,28 @@ public class CustomizeAuthenticationFailureHandler implements AuthenticationFail
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
 		// 返回json数据
-		JsonResult<Boolean> result = null;
+		BaseResult<?> result = ResultUtil.success();
 		if (e instanceof AccountExpiredException) {
 			// 账号过期
-			result = ResultTool.fail(ResultCode.USER_ACCOUNT_EXPIRED);
+			result = ResultUtil.fail(ResultCode.USER_ACCOUNT_EXPIRED);
 		} else if (e instanceof BadCredentialsException) {
 			// 密码错误
-			result = ResultTool.fail(ResultCode.USER_CREDENTIALS_ERROR);
+			result = ResultUtil.fail(ResultCode.USER_CREDENTIALS_ERROR);
 		} else if (e instanceof CredentialsExpiredException) {
 			// 密码过期
-			result = ResultTool.fail(ResultCode.USER_CREDENTIALS_EXPIRED);
+			result = ResultUtil.fail(ResultCode.USER_CREDENTIALS_EXPIRED);
 		} else if (e instanceof DisabledException) {
 			// 账号不可用
-			result = ResultTool.fail(ResultCode.USER_ACCOUNT_DISABLE);
+			result = ResultUtil.fail(ResultCode.USER_ACCOUNT_DISABLE);
 		} else if (e instanceof LockedException) {
 			// 账号锁定
-			result = ResultTool.fail(ResultCode.USER_ACCOUNT_LOCKED);
+			result = ResultUtil.fail(ResultCode.USER_ACCOUNT_LOCKED);
 		} else if (e instanceof InternalAuthenticationServiceException) {
 			// 用户不存在
-			result = ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST);
+			result = ResultUtil.fail(ResultCode.USER_ACCOUNT_NOT_EXIST);
 		} else {
 			// 其他错误
-			result = ResultTool.fail(ResultCode.COMMON_FAIL);
+			result = ResultUtil.fail(ResultCode.COMMON_FAIL);
 		}
 		// 处理编码方式，防止中文乱码的情况
 		httpServletResponse.setContentType("text/json;charset=utf-8");

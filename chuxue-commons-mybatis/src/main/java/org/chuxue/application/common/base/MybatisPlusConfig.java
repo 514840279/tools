@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 
 @Configuration
 public class MybatisPlusConfig {
+
 	@Bean
 	public MybatisPlusInterceptor mybatisPlusInterceptor() {
 		try {

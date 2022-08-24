@@ -1,4 +1,4 @@
-package org.chuxue.application.config;
+package org.chuxue.application.po;
 
 import java.util.Collection;
 import java.util.List;

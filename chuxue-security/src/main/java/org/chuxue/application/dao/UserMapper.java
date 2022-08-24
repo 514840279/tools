@@ -1,7 +1,8 @@
-package org.chuxue.application.config;
+package org.chuxue.application.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.chuxue.application.po.User;
 
 @Mapper
 public interface UserMapper {

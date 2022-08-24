@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -35,7 +36,7 @@ public class MybatisBaseEntity {
 	protected String	discription;
 
 	// 插入时间
-	@TableField(value = "create_time")
+	@TableField(value = "create_time", fill = FieldFill.INSERT)
 	@DateTimeFormat(style = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date		createTime;
@@ -46,10 +47,11 @@ public class MybatisBaseEntity {
 	protected String	createUser;
 
 	// 更新时间
-	@TableField(value = "update_time") // 这里应用数据库更行策略 ON UPDATE CURRENT_TIMESTAMP 所以无需jpa插座
+	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE) // 这里应用数据库更行策略 ON UPDATE CURRENT_TIMESTAMP 所以无需jpa插座
 	@DateTimeFormat(style = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date		updateTime;
+	// 字段添加填充内容
 
 	// 更新人
 	@LastModifiedBy

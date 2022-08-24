@@ -6,6 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.chuxue.application.common.base.BaseResult;
+import org.chuxue.application.common.base.ResultCode;
+import org.chuxue.application.common.base.ResultUtil;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -22,7 +25,7 @@ public class CustomizeAuthenticationEntryPoint implements AuthenticationEntryPoi
 	
 	@Override
 	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-		JsonResult<?> result = ResultTool.fail(ResultCode.USER_NOT_LOGIN);
+		BaseResult<?> result = ResultUtil.fail(ResultCode.USER_NOT_LOGIN);
 		httpServletResponse.setContentType("text/json;charset=utf-8");
 		httpServletResponse.getWriter().write(JSON.toJSONString(result));
 	}

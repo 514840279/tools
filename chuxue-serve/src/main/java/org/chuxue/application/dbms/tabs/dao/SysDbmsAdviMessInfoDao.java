@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.chuxue.application.bean.manager.dbms.SysDbmsAdviMessInfo;
 import org.chuxue.application.common.base.BaseDao;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("sysDbmsAdviMessInfoDao")
 public interface SysDbmsAdviMessInfoDao extends BaseDao<SysDbmsAdviMessInfo> {
-
+	
 	/**
 	 * 方法名： findByDeleteFlag
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -30,7 +29,7 @@ public interface SysDbmsAdviMessInfoDao extends BaseDao<SysDbmsAdviMessInfo> {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	@Query("select t from SysDbmsAdviMessInfo t where t.deleteFlag=:deleteFlag order by t.type desc,t.jdbcUuid desc,t.tableName")
+//	@Query("SELECT t FROM SysDbmsAdviMessInfo t WHERE t.deleteFlag=:deleteFlag ORDER BY t.type desc,t.jdbcUuid desc,t.tableName")
 	List<SysDbmsAdviMessInfo> findByDeleteFlag(@Param("deleteFlag") Integer deleteFlag);
-
+	
 }
