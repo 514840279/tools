@@ -1,8 +1,5 @@
 package org.chuxue.application.common.base;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -15,8 +12,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * 时 间 ： 2022年7月5日 上午9:53:47
  * 版 本 ： V1.0
  */
-@Mapper
-@NoRepositoryBean
 public interface MybatisBaseDao<T> extends BaseMapper<T> {
-	
+
 }

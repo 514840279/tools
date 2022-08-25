@@ -25,47 +25,46 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @NoRepositoryBean
 public class MybatisBaseEntity {
-
+	
 	// 主键
-	@TableId
-	@TableField(value = "uuid")
+	@TableId(value = "uuid")
 	protected String	uuid;
-
+	
 	// 资源功能描述
 	@TableField(value = "discription")
 	protected String	discription;
-
+	
 	// 插入时间
 	@TableField(value = "create_time", fill = FieldFill.INSERT)
 	@DateTimeFormat(style = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date		createTime;
-
+	
 	// 插入人
 	@CreatedBy
 	@TableField(value = "create_user")
 	protected String	createUser;
-
+	
 	// 更新时间
 	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE) // 这里应用数据库更行策略 ON UPDATE CURRENT_TIMESTAMP 所以无需jpa插座
 	@DateTimeFormat(style = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date		updateTime;
 	// 字段添加填充内容
-
+	
 	// 更新人
 	@LastModifiedBy
 	@TableField(value = "update_user")
 	protected String	updateUser;
-
+	
 	// 数据开启删除状态
 	@TableField(value = "delete_flag")
 	protected Integer	deleteFlag;
-
+	
 	// 数据开启删除状态
 	@TableField(value = "sort")
 	protected Integer	sort;
-
+	
 	/**
 	 * 方法名 ： getUuid
 	 * 功 能 ： 返回变量 uuid 的值
@@ -75,7 +74,7 @@ public class MybatisBaseEntity {
 	public String getUuid() {
 		return uuid;
 	}
-
+	
 	/**
 	 * 方法名 ： setUuid
 	 * 功 能 ： 设置变量 uuid 的值
@@ -83,7 +82,7 @@ public class MybatisBaseEntity {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-
+	
 	/**
 	 * 方法名 ： getDiscription
 	 * 功 能 ： 返回变量 discription 的值
@@ -93,7 +92,7 @@ public class MybatisBaseEntity {
 	public String getDiscription() {
 		return discription;
 	}
-
+	
 	/**
 	 * 方法名 ： setDiscription
 	 * 功 能 ： 设置变量 discription 的值
@@ -101,7 +100,7 @@ public class MybatisBaseEntity {
 	public void setDiscription(String discription) {
 		this.discription = discription;
 	}
-
+	
 	/**
 	 * 方法名 ： getCreateTime
 	 * 功 能 ： 返回变量 createTime 的值
@@ -111,7 +110,7 @@ public class MybatisBaseEntity {
 	public Date getCreateTime() {
 		return createTime;
 	}
-
+	
 	/**
 	 * 方法名 ： setCreateTime
 	 * 功 能 ： 设置变量 createTime 的值
@@ -119,7 +118,7 @@ public class MybatisBaseEntity {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-
+	
 	/**
 	 * 方法名 ： getCreateUser
 	 * 功 能 ： 返回变量 createUser 的值
@@ -129,7 +128,7 @@ public class MybatisBaseEntity {
 	public String getCreateUser() {
 		return createUser;
 	}
-
+	
 	/**
 	 * 方法名 ： setCreateUser
 	 * 功 能 ： 设置变量 createUser 的值
@@ -137,7 +136,7 @@ public class MybatisBaseEntity {
 	public void setCreateUser(String createUser) {
 		this.createUser = createUser;
 	}
-
+	
 	/**
 	 * 方法名 ： getUpdateTime
 	 * 功 能 ： 返回变量 updateTime 的值
@@ -147,7 +146,7 @@ public class MybatisBaseEntity {
 	public Date getUpdateTime() {
 		return updateTime;
 	}
-
+	
 	/**
 	 * 方法名 ： setUpdateTime
 	 * 功 能 ： 设置变量 updateTime 的值
@@ -155,7 +154,7 @@ public class MybatisBaseEntity {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-
+	
 	/**
 	 * 方法名 ： getUpdateUser
 	 * 功 能 ： 返回变量 updateUser 的值
@@ -165,7 +164,7 @@ public class MybatisBaseEntity {
 	public String getUpdateUser() {
 		return updateUser;
 	}
-
+	
 	/**
 	 * 方法名 ： setUpdateUser
 	 * 功 能 ： 设置变量 updateUser 的值
@@ -173,7 +172,7 @@ public class MybatisBaseEntity {
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
 	}
-
+	
 	/**
 	 * 方法名 ： getDeleteFlag
 	 * 功 能 ： 返回变量 deleteFlag 的值
@@ -183,7 +182,7 @@ public class MybatisBaseEntity {
 	public Integer getDeleteFlag() {
 		return deleteFlag;
 	}
-
+	
 	/**
 	 * 方法名 ： setDeleteFlag
 	 * 功 能 ： 设置变量 deleteFlag 的值
@@ -191,20 +190,20 @@ public class MybatisBaseEntity {
 	public void setDeleteFlag(Integer deleteFlag) {
 		this.deleteFlag = deleteFlag;
 	}
-
+	
 	public MybatisBaseEntity() {
 	}
-
+	
 	public MybatisBaseEntity(String uuid) {
 		this.uuid = uuid;
 	}
-
+	
 	public Integer getSort() {
 		return sort;
 	}
-
+	
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
-
+	
 }

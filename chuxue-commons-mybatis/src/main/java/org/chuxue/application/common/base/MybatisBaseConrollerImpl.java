@@ -29,12 +29,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * 版 本 ： V1.0
  */
 
-public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements BaseController<T> {
+public class MybatisBaseConrollerImpl<S extends MybatisBaseServiceImpl<M, T>, M extends MybatisBaseDao<T>, T> implements BaseController<T> {
 	
-	private static final Logger		logger	= LoggerFactory.getLogger(MybatisBaseConrollerImpl.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(MybatisBaseConrollerImpl.class);
 
 	@Autowired
-	MybatisBaseServiceImpl<E, T>	mybatisBaseServiceImpl;
+	S							serviceImpl;
 	
 	/**
 	 * 方法名 ： page
@@ -54,7 +54,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>();
 			// 泛型实际类型
-			Class<T> classz = (Class<T>) vo.info.getClass();
+			Class<T> classz = (Class<T>) vo.getInfo().getClass();
 			
 			// 条件
 			if (vo.getSearchList() != null && vo.getSearchList().size() > 0) {
@@ -117,9 +117,9 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 					}
 				}
 			}
-			long total = mybatisBaseServiceImpl.count();
+			long total = serviceImpl.count();
 			com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> p = new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(vo.getPageNumber(), vo.getPageSize(), total);
-			IPage<T> re = mybatisBaseServiceImpl.page(p, queryWrapper);
+			IPage<T> re = serviceImpl.page(p, queryWrapper);
 			
 			Pageable able = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize());
 			PageImpl<T> result = new PageImpl<>(re.getRecords(), able, re.getTotal());
@@ -279,7 +279,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>(info);
 			
-			List<T> re = mybatisBaseServiceImpl.list(queryWrapper);
+			List<T> re = serviceImpl.list(queryWrapper);
 			return ResultUtil.success(re);
 		} catch (Exception e) {
 			logger.error("<findAll> error:{} ", e.getMessage());
@@ -303,7 +303,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>(info);
 			
-			T re = mybatisBaseServiceImpl.getOne(queryWrapper);
+			T re = serviceImpl.getOne(queryWrapper);
 			return ResultUtil.success(re);
 		} catch (Exception e) {
 			logger.error("<findAll> error:{} ", e.getMessage());
@@ -324,7 +324,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	public BaseResult<T> save(@RequestBody T info) {
 		logger.info("<save> param info:{} ", info.toString());
 		try {
-			boolean f = mybatisBaseServiceImpl.saveOrUpdate(info);
+			boolean f = serviceImpl.saveOrUpdate(info);
 			if (f) {
 				return ResultUtil.success();
 			} else {
@@ -350,7 +350,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	public BaseResult<T> saveAll(@RequestBody Pagination<T> vo) {
 		logger.info("<saveAll> param vo:{} ", vo.toString());
 		try {
-			boolean f = mybatisBaseServiceImpl.saveOrUpdateBatch(vo.getList());
+			boolean f = serviceImpl.saveOrUpdateBatch(vo.getList());
 			if (f) {
 				return ResultUtil.success();
 			} else {
@@ -376,7 +376,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	public BaseResult<T> deleteAll(@RequestBody Pagination<T> vo) {
 		logger.info("<deleteAll> param vo:{} ", vo.toString());
 		try {
-			boolean f = mybatisBaseServiceImpl.removeBatchByIds(vo.getList());
+			boolean f = serviceImpl.removeBatchByIds(vo.getList());
 			if (f) {
 				return ResultUtil.success();
 			} else {
@@ -402,7 +402,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	public BaseResult<T> delete(@RequestBody T info) {
 		logger.info("<delete> param info:{} ", info.toString());
 		try {
-			boolean f = mybatisBaseServiceImpl.removeById(info);
+			boolean f = serviceImpl.removeById(info);
 			if (f) {
 				return ResultUtil.success();
 			} else {
@@ -431,7 +431,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>(info);
 			
-			Long l = mybatisBaseServiceImpl.count(queryWrapper);
+			Long l = serviceImpl.count(queryWrapper);
 			return ResultUtil.success(l);
 		} catch (Exception e) {
 			logger.error("<count> error:{} ", e.getMessage());
@@ -451,7 +451,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 	public BaseResult<T> trunc() {
 		logger.info("<trunc>  ");
 		try {
-			mybatisBaseServiceImpl.remove(null);
+			serviceImpl.remove(null);
 			return ResultUtil.success();
 		} catch (Exception e) {
 			logger.error("<trunc> error:{} ", e.getMessage());
@@ -488,7 +488,7 @@ public class MybatisBaseConrollerImpl<E extends MybatisBaseDao<T>, T> implements
 					}
 				}
 			}
-			List<T> re = mybatisBaseServiceImpl.list(queryWrapper);
+			List<T> re = serviceImpl.list(queryWrapper);
 			
 			return ResultUtil.success(re);
 		} catch (Exception e) {
