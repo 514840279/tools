@@ -29,6 +29,8 @@
 		<module>tools-data-clean</module>
 		<!-- 19002 -->
 		<module>tools-rollcall</module>
+		<!-- 19003 -->
+		<module>tools-jijin</module>
   </modules>
 	<properties>
 		<java.version>1.8</java.version>

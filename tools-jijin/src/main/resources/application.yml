@@ -1,0 +1,15 @@
+server:
+  port: 18004
+  servlet:    context-path: /data
+  
+
+spring:
+  application:    name: chuxue-data-h2
+  banner:    charset: utf-8
+  profiles:
+    active:
+    - nacos
+    - data-h2
+    - hikari
+    - mybatis
+    
