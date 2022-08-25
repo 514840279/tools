@@ -20,7 +20,7 @@ import org.chuxue.application.common.utils.files.TxtFilesWriter;
  * 版 本 ： V1.0
  */
 public class GenerateService {
-	
+
 	/**
 	 * 方法名 getGenerateService
 	 * 功能 service层代码生成
@@ -39,7 +39,7 @@ public class GenerateService {
 		stringBuilder.append("import org.chuxue.application.common.base.BaseException;\r\n");
 		stringBuilder.append("import org.chuxue.application.common.base.BaseService;\r\n");
 		stringBuilder.append("import org.chuxue.application.common.base.BaseServiceImpl;\r\n");
-
+		
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import org.springframework.beans.factory.annotation.Autowired;\r\n");
 		stringBuilder.append("import org.springframework.stereotype.Service;\r\n");
@@ -58,12 +58,12 @@ public class GenerateService {
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}\r\n");
 		stringBuilder.append("");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Service.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
 	}
-
+	
 	/**
 	 * 方法名： getGenerateMybatisService
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -80,7 +80,8 @@ public class GenerateService {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("package " + sysDbmsGenerateCodeInfo.getClassPath() + ".service;\r\n");
 		stringBuilder.append("\r\n");
-
+		
+		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".dao." + sysDbmsGenerateCodeInfo.getClassName() + "Dao;\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("import org.springframework.stereotype.Service;\r\n");
 		stringBuilder.append("\r\n");
@@ -96,15 +97,15 @@ public class GenerateService {
 		stringBuilder.append(" * @版本 V1.0\r\n");
 		stringBuilder.append(" */\r\n");
 		stringBuilder.append("@Service\r\n");
-		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + "Service extends MybatisBaseServiceImpl<" + sysDbmsGenerateCodeInfo.getClassName() + ">  {\r\n");
+		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + "Service extends MybatisBaseServiceImpl<" + sysDbmsGenerateCodeInfo.getClassName() + "Dao," + sysDbmsGenerateCodeInfo.getClassName() + ">  {\r\n");
 		stringBuilder.append("\r\n");
-		
+
 		stringBuilder.append("}\r\n");
 		stringBuilder.append("");
-
+		
 		// 文件写入
 		String fineName = pathString + "/" + sysDbmsGenerateCodeInfo.getClassName() + "Service.java";
 		TxtFilesWriter.writeToFile(stringBuilder.toString(), fineName);
-		
+
 	}
 }

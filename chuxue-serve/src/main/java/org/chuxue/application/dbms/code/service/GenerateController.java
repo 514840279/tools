@@ -90,6 +90,7 @@ public class GenerateController {
 		stringBuilder.append("import org.springframework.web.bind.annotation.RequestMapping;\r\n");
 		stringBuilder.append("import org.springframework.web.bind.annotation.RestController;\r\n");
 		stringBuilder.append("\r\n");
+		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".dao." + sysDbmsGenerateCodeInfo.getClassName() + "Dao;\r\n");
 		stringBuilder.append("import " + sysDbmsGenerateCodeInfo.getClassPath() + ".po." + sysDbmsGenerateCodeInfo.getClassName() + ";\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("/**\r\n");
@@ -104,7 +105,7 @@ public class GenerateController {
 		stringBuilder.append("@RestController\r\n");
 		String subServiceNameString = sysDbmsGenerateCodeInfo.getClassName().substring(0, 1).toLowerCase() + sysDbmsGenerateCodeInfo.getClassName().substring(1);
 		stringBuilder.append("@RequestMapping(\"/" + subServiceNameString + "\")\r\n");
-		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + "Controller extends MybatisBaseConrollerImpl<" + sysDbmsGenerateCodeInfo.getClassName() + "> implements BaseController<" + sysDbmsGenerateCodeInfo.getClassName() + "> {\r\n");
+		stringBuilder.append("public class " + sysDbmsGenerateCodeInfo.getClassName() + "Controller extends MybatisBaseConrollerImpl<" + sysDbmsGenerateCodeInfo.getClassName() + "Dao," + sysDbmsGenerateCodeInfo.getClassName() + "> implements BaseController<" + sysDbmsGenerateCodeInfo.getClassName() + "> {\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("\r\n");
 		stringBuilder.append("}");
