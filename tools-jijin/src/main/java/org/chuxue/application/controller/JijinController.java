@@ -32,6 +32,12 @@ public class JijinController extends MybatisBaseConrollerImpl<JijinService, Jiji
 	@Autowired
 	JijinService jijinService;
 	
+	@RequestMapping("create")
+	public BaseResult<String> create(@RequestBody JijinVo info) {
+		jijinService.create(info);
+		return ResultUtil.success();
+	}
+	
 	@RequestMapping("search")
 	public BaseResult<List<JijinVo>> search(@RequestBody Jijin info) {
 		List<JijinVo> list = jijinService.search(info);
@@ -40,14 +46,20 @@ public class JijinController extends MybatisBaseConrollerImpl<JijinService, Jiji
 	
 	@RequestMapping("mairu")
 	public BaseResult<List<JijinVo>> mairu(@RequestBody Flow info) {
-		List<JijinVo> list = jijinService.goumai(info);
-		return ResultUtil.success(list);
+		jijinService.goumai(info);
+		return ResultUtil.success();
 	}
 	
 	@RequestMapping("maichu")
 	public BaseResult<List<JijinVo>> maichu(@RequestBody Flow info) {
-		List<JijinVo> list = jijinService.maichu(info);
-		return ResultUtil.success(list);
+		jijinService.maichu(info);
+		return ResultUtil.success();
+	}
+	
+	@RequestMapping("deleteJi")
+	public BaseResult<String> delete(@RequestBody JijinVo info) {
+		jijinService.delete(info);
+		return ResultUtil.success();
 	}
 	
 }

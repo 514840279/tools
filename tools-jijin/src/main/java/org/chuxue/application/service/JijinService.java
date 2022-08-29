@@ -9,6 +9,7 @@ import org.chuxue.application.po.Jijin;
 import org.chuxue.application.vo.JijinVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 文件名 ： JijinService.java
@@ -22,10 +23,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JijinService extends MybatisBaseServiceImpl<JijinDao, Jijin> {
-
+	
 	@Autowired
 	JijinDao jijinDao;
-
+	
 	/**
 	 * 方法名： search
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -37,10 +38,10 @@ public class JijinService extends MybatisBaseServiceImpl<JijinDao, Jijin> {
 	 */
 	public List<JijinVo> search(Jijin info) {
 		List<JijinVo> list = jijinDao.search(info);
-		
+
 		return list;
 	}
-	
+
 	/**
 	 * 方法名： goumai
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -50,13 +51,11 @@ public class JijinService extends MybatisBaseServiceImpl<JijinDao, Jijin> {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public List<JijinVo> goumai(Flow info) {
+	public void goumai(Flow info) {
 		jijinDao.goumai(info);
-		List<JijinVo> list = search(null);
-
-		return list;
+		
 	}
-
+	
 	/**
 	 * 方法名： maichu
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -66,10 +65,41 @@ public class JijinService extends MybatisBaseServiceImpl<JijinDao, Jijin> {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public List<JijinVo> maichu(Flow info) {
+	public void maichu(Flow info) {
 		jijinDao.maichu(info);
-		List<JijinVo> list = search(null);
-		return list;
 	}
-
+	
+	/**
+	 * 方法名： create
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： List<JijinVo>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	@Transactional
+	public void create(JijinVo vo) {
+		Jijin ji = new Jijin(vo);
+		jijinDao.save(ji);
+		Flow f = new Flow(vo, ji);
+		jijinDao.goumai(f);
+	}
+	
+	/**
+	 * 方法名： delete
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： List<JijinVo>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	@Transactional
+	public void delete(JijinVo info) {
+		// 简单分页查询
+		jijinDao.deleteFlow(info.getUuid());
+		jijinDao.deleteJijin(info.getUuid());
+	}
+	
 }

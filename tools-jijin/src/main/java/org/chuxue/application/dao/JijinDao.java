@@ -53,4 +53,34 @@ public interface JijinDao extends MybatisBaseDao<Jijin> {
 	 */
 	void maichu(@Param("info") Flow info);
 
+	/**
+	 * 方法名： save
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param ji
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	void save(@Param("info") Jijin ji);
+
+	/**
+	 * 方法名： deleteFlow
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param uuid
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	void deleteFlow(@Param("uuid") String uuid);
+	
+	/**
+	 * 方法名： deleteJijin
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param uuid
+	 * 返 回： void
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	void deleteJijin(@Param("uuid") String uuid);
+	
 }

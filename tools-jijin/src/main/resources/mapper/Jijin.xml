@@ -14,12 +14,18 @@
         left join flow f on j.uuid = f.ji_uuid and f.delete_flag =0 and f.create_time< now()
         ]]>
         where j.delete_flag=0
+        <if test="info.uuid!=null and info.uuid!='' ">
+        	and j.uuid = #{info.uuid}
+        </if>
+        <if test="info.name!=null and info.name!='' ">
+        	and j.name = #{info.name}
+        </if>
         group by j.uuid,j.`name`,j.money,j.`code`
     </select>
 
 	<insert id="goumai" parameterType="org.chuxue.application.po.Flow">
 		insert into flow(uuid,ji_uuid,zhifu_money,danweijingzhi,shouxufei,mairu_fene,create_time,delete_flag)
-		values (UUID(),#{info.jiUuid},${info.zhifuMoney},${info.danweijingzhi},${info.shouxufei},ROUND(${info.zhifuMoney}/${info.danweijingzhi},2)-${info.shouxufei},now(),0)
+		values (UUID(),#{info.jiUuid},${info.zhifuMoney},${info.danweijingzhi},${info.shouxufei},ROUND((${info.zhifuMoney}-${info.shouxufei})/${info.danweijingzhi},2),now(),0)
 	</insert>
 
 
@@ -27,5 +33,19 @@
 		insert into flow(uuid,ji_uuid,shuhui_money,danweijingzhi,shouxufei,maichu_fene,create_time,delete_flag)
 		values (UUID(),#{info.jiUuid},ROUND(${info.maichuFene}*${info.danweijingzhi}-${info.shouxufei},2),${info.danweijingzhi},${info.shouxufei},${info.maichuFene},now(),0)
 	</insert>
+	
+	<insert id="save">
+		insert  into jijin(uuid,create_time,delete_flag,sort,name,money)
+		values(#{info.uuid},now(),0,0,#{info.name},${info.money})
+	</insert>
+	
+	<delete id="deleteFlow">
+		delete from flow where ji_uuid = #{uuid}
+	</delete>
+	
+		
+	<delete id="deleteJijin">
+		delete from jijin where uuid = #{uuid}
+	</delete>
 
 </mapper>

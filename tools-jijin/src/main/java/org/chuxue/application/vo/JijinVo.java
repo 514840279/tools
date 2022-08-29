@@ -1,9 +1,5 @@
 package org.chuxue.application.vo;
 
-import java.util.List;
-
-import org.chuxue.application.po.Flow;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +16,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class JijinVo {
+	
+	// 基金uuids
+	private String	uuid;
 	// 基金名称
 	private String	name;
 	// 基金代码
@@ -37,6 +36,6 @@ public class JijinVo {
 	private Double	yingshou;
 	// 标准利润
 	private Double	lirun;
+	private Double	shouxufei;
 
-	List<Flow>		flowList;
 }
