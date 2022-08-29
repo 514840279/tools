@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.chuxue.application.dao.JijinDao">
+   
+    <select id="search"  resultType="org.chuxue.application.vo.JijinVo">
+
+       select j.uuid,j.`name`,j.money,j.`code`,SUM(IFNULL(f.zhifu_money,0))-sum(IFNULL(f.shuhui_money,0)) as countMoney
+        , SUM(IFNULL(f.mairu_fene,0))-sum(IFNULL(f.maichu_fene,0)) as countFene
+        ,round(abs(-SUM(IFNULL(f.zhifu_money,0))+sum(IFNULL(f.shuhui_money,0)))/(SUM(IFNULL(f.mairu_fene,0))-sum(IFNULL(f.maichu_fene,0))),4) as pinjunjingzhi
+        ,round(sum(IFNULL(f.shuhui_money,0))-SUM(IFNULL(f.zhifu_money,0))  ,2) as yingshou
+        <![CDATA[ 
+        , CASE  when sum(IFNULL(f.shuhui_money,0))>SUM(IFNULL(f.zhifu_money,0)) THEN  round(sum(IFNULL(f.shuhui_money,0))-SUM(IFNULL(f.zhifu_money,0))  ,2) else round(sum(IFNULL(f.shuhui_money,0))+j.money-SUM(IFNULL(f.zhifu_money,0))  ,2) end as lirun
+        from jijin j
+        left join flow f on j.uuid = f.ji_uuid and f.delete_flag =0 and f.create_time< now()
+        ]]>
+        where j.delete_flag=0
+        group by j.uuid,j.`name`,j.money,j.`code`
+    </select>
+
+	<insert id="goumai" parameterType="org.chuxue.application.po.Flow">
+		insert into flow(uuid,ji_uuid,zhifu_money,danweijingzhi,shouxufei,mairu_fene,create_time,delete_flag)
+		values (UUID(),#{info.jiUuid},${info.zhifuMoney},${info.danweijingzhi},${info.shouxufei},ROUND(${info.zhifuMoney}/${info.danweijingzhi},2)-${info.shouxufei},now(),0)
+	</insert>
+
+
+	<insert id="maichu" parameterType="org.chuxue.application.po.Flow">
+		insert into flow(uuid,ji_uuid,shuhui_money,danweijingzhi,shouxufei,maichu_fene,create_time,delete_flag)
+		values (UUID(),#{info.jiUuid},ROUND(${info.maichuFene}*${info.danweijingzhi}-${info.shouxufei},2),${info.danweijingzhi},${info.shouxufei},${info.maichuFene},now(),0)
+	</insert>
+
+</mapper>

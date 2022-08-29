@@ -21,6 +21,9 @@ public interface BaseController<T> {
 
 	@RequestMapping(value = "/page", method = RequestMethod.POST)
 	BaseResult<Page<T>> page(@RequestBody Pagination<T> vo);
+	
+	@RequestMapping(value = "/pageByInfo", method = RequestMethod.POST)
+	BaseResult<Page<T>> pageByInfo(@RequestBody Pagination<T> vo);
 
 	@RequestMapping(value = "/findAll", method = RequestMethod.POST)
 	BaseResult<List<T>> findAll(@RequestBody T info);

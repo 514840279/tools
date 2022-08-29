@@ -2,6 +2,7 @@ package org.chuxue.application.common.base;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +30,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * 版 本 ： V1.0
  */
 
-public class MybatisBaseConrollerImpl<S extends MybatisBaseServiceImpl<M, T>, M extends MybatisBaseDao<T>, T> implements BaseController<T> {
+public class MybatisBaseConrollerImpl<S extends MybatisBaseServiceImpl<M, T>, M extends MybatisBaseDao<T>, T extends MybatisBaseEntity> implements BaseController<T> {
 	
 	private static final Logger	logger	= LoggerFactory.getLogger(MybatisBaseConrollerImpl.class);
 
@@ -50,7 +51,7 @@ public class MybatisBaseConrollerImpl<S extends MybatisBaseServiceImpl<M, T>, M 
 	public BaseResult<Page<T>> page(@RequestBody Pagination<T> vo) {
 		logger.info("<page> param vo:{} ", vo.toString());
 		try {
-
+			
 			// 简单分页查询
 			QueryWrapper<T> queryWrapper = new QueryWrapper<>();
 			// 泛型实际类型
@@ -324,6 +325,7 @@ public class MybatisBaseConrollerImpl<S extends MybatisBaseServiceImpl<M, T>, M 
 	public BaseResult<T> save(@RequestBody T info) {
 		logger.info("<save> param info:{} ", info.toString());
 		try {
+			info.setCreateTime(new Date());
 			boolean f = serviceImpl.saveOrUpdate(info);
 			if (f) {
 				return ResultUtil.success();
@@ -493,6 +495,66 @@ public class MybatisBaseConrollerImpl<S extends MybatisBaseServiceImpl<M, T>, M 
 			return ResultUtil.success(re);
 		} catch (Exception e) {
 			logger.error("<findAllBySort> error:{} ", e.getMessage());
+			return ResultUtil.error(e.getMessage());
+		}
+	}
+	
+	@Override
+	public BaseResult<Page<T>> pageByInfo(Pagination<T> vo) {
+		logger.info("<page> param vo:{} ", vo.toString());
+		try {
+			
+			// 简单分页查询
+			QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+			// 泛型实际类型
+			@SuppressWarnings("unchecked")
+			Class<T> classz = (Class<T>) vo.getInfo().getClass();
+			
+			// 条件
+			if (vo.getInfo() != null) {
+				Field[] fields = classz.getSuperclass().getDeclaredFields();
+				for (Field field : fields) {
+					
+				}
+				
+			}
+			// 排序
+			if (vo.getSortList() != null && vo.getSortList().size() > 0) {
+				Collections.sort(vo.getSortList(), (o1, o2) -> (o1.getSortIndex() - o2.getSortIndex()));
+				for (SortParameters parameters : vo.getSortList()) {
+					String filedName = null;
+					Field field = null;
+					try {
+						field = classz.getSuperclass().getDeclaredField(parameters.getSortName());
+					} catch (NoSuchFieldException e) {
+						field = classz.getDeclaredField(parameters.getSortName());
+					}
+					TableField tableField = field.getAnnotation(TableField.class);
+					if (tableField != null) {
+						filedName = tableField.value();
+					} else if (filedName == null) {
+						// 默认驼峰转换字段
+						filedName = dbColumn(parameters.getSortName());
+					}
+					if ("asc".equals(parameters.getSortOrder())) {
+						queryWrapper.orderByAsc(filedName);
+					} else if ("desc".equals(parameters.getSortOrder())) {
+						queryWrapper.orderByDesc(filedName);
+					} else {
+						queryWrapper.orderByAsc(filedName);
+					}
+				}
+			}
+			long total = serviceImpl.count();
+			com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> p = new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(vo.getPageNumber(), vo.getPageSize(), total);
+			IPage<T> re = serviceImpl.page(p, queryWrapper);
+			
+			Pageable able = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize());
+			PageImpl<T> result = new PageImpl<>(re.getRecords(), able, re.getTotal());
+			
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("<page> error:{} ", e.getMessage());
 			return ResultUtil.error(e.getMessage());
 		}
 	}
