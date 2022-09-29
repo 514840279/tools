@@ -50,5 +50,17 @@
         </if>
     </select>
 
-
+	<select id="findOneByTabsName" parameterType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo" resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult">
+		select 
+			rownum  as row_num
+			,lower(sys_guid()) AS UUID
+			,'"'||a.owner||'"."'||a.table_name||'"' as tabs_Name 
+			,c.COMMENTs as tabs_desc
+			,a.tablespace_name as tabs_space
+			,a.num_rows as tabs_rows
+			,#{info.jdbcUuid} as jdbc_uuid
+			 from all_tables a
+			left join all_tab_comments c on a.owner = c.owner and a.table_name = c.table_name
+		where '"'||a.owner||'"."'||a.table_name||'"'= #{info.tabsName}
+	</select>
 </mapper>

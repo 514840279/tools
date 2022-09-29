@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 
 /**
  * 文件名 ： SysTableDao.java
  * 包 名 ： tk.ainiyue.danyuan.application.dbm.table.dao
- * 描 述 ： TODO(用一句话描述该文件做什么)
+ * 描 述 ： 表信息查询
  * 机能名称：
  * 技能ID ：
  * 作 者 ： wang
@@ -22,5 +23,7 @@ public interface SysDbmsTabsInfoResultDao {
 	Long totalAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list);
 
 	List<SysDbmsTabsInfoResult> findAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list, @Param("pageNumber") Integer pageNumber, @Param("pageSize") Integer pageSize);
+
+	SysDbmsTabsInfoResult findOneByTabsName(@Param("info") SysDbmsTabsTableInfo info);
 	
 }

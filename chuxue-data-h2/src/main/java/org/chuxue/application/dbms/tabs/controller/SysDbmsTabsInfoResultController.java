@@ -7,6 +7,7 @@ import org.chuxue.application.common.base.ResultPage;
 import org.chuxue.application.common.base.ResultUtil;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 import org.chuxue.application.dbms.tabs.service.SysDbmsTabsInfoResultService;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysDbmsTabsTableInfo")
 public class SysDbmsTabsInfoResultController {
-
+	
 	private static final Logger		logger	= LoggerFactory.getLogger(SysDbmsTabsInfoResultController.class);
-
+	
 	@Autowired
 	SysDbmsTabsInfoResultService	sysDbmsTabsInfoResultService;
-
+	
 	@RequestMapping(value = "/findAllByJdbcUuid", method = { RequestMethod.POST })
 	public BaseResult<ResultPage<SysDbmsTabsInfoResult>> findAllByJdbcUuid(@RequestBody Pagination<SysDbmsTabsTableInfo> vo) {
 		logger.info("数据库表信息查询：{}", vo.toString());
 		ResultPage<SysDbmsTabsInfoResult> page = sysDbmsTabsInfoResultService.findAllByJdbcUuid(vo);
 		return ResultUtil.success(page);
 	}
-
+	
+	@RequestMapping(value = "/findOneByTabsName", method = { RequestMethod.POST })
+	public BaseResult<SysDbmsTabsTableVo> findOneByTabsName(@RequestBody SysDbmsTabsTableInfo info) {
+		logger.info("数据库表信息查询：{}", info.toString());
+		SysDbmsTabsTableVo re = sysDbmsTabsInfoResultService.findOneByTabsName(info);
+		return ResultUtil.success(re);
+	}
 }

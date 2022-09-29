@@ -46,4 +46,11 @@
     </select>
 
 
+	<select id="findOneByTabsName" parameterType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo" resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult">
+		SELECT t.TABLE_SCHEMA AS OWNER,concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') AS tabs_name,t.TABLE_ROWS AS  tabsRows,t.TABLE_COMMENT AS tabsDesc  
+		FROM information_schema.TABLES t
+		where concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') = #{info.tabsName}
+	
+	</select>
+
 </mapper>

@@ -41,5 +41,12 @@
         </if>
     </select>
 
-
+	<select id="findOneByTabsName" parameterType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo" resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult">
+		 select 
+	        table_name as tabs_name 
+	       ,ROW_COUNT_ESTIMATE as tabs_rows   
+       from information_schema.tables  
+		where table_name = #{info.tabsName}
+	
+	</select>
 </mapper>

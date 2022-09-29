@@ -13,27 +13,27 @@ import org.springframework.data.domain.Page;
  * 版 本 ： V1.0
  */
 public interface BaseService<T extends BaseEntity> {
-
-	T findOne(T entity);
-
-	T findById(String id);
-
-	List<T> findAll(T entity);
-
-	List<T> findAll(Pagination<T> vo);
-
-	Page<T> page(Pagination<T> vo);
-
-	T save(T entity);
-
-	void saveAll(List<T> entities);
-
-	void delete(T entity);
-
-	void deleteAll(List<T> entities);
-
-	void trunc();
 	
+	T findOne(T entity);
+	
+	T findById(String id);
+	
+	List<T> findAll(T entity);
+	
+	List<T> findAll(Pagination<T> vo);
+	
+	Page<T> page(Pagination<T> vo);
+	
+	T save(T entity);
+	
+	void saveAll(List<T> entities);
+	
+	void delete(T entity);
+	
+	void deleteAll(List<T> entities);
+	
+	void trunc();
+
 	/**
 	 * @方法名 count
 	 * @功能 TODO(这里用一句话描述这个方法的作用)
@@ -44,4 +44,15 @@ public interface BaseService<T extends BaseEntity> {
 	 * @throws
 	 */
 	Long count(T info);
+	
+	/**
+	 * 方法名： pageByInfo
+	 * 功 能： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数： @param vo
+	 * 参 数： @return
+	 * 返 回： Page<T>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	Page<T> pageByInfo(Pagination<T> vo);
 }

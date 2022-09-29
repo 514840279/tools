@@ -32,12 +32,12 @@ import org.springframework.data.repository.NoRepositoryBean;
  */
 @NoRepositoryBean
 public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
-
+	
 	private static final Logger	logger	= LoggerFactory.getLogger(BaseServiceImpl.class);
-
+	
 	@Autowired
 	BaseDao<T>					baseDao;
-
+	
 	/**
 	 * 方法名 ： findOne
 	 * 功 能 ： 安条件查询一条
@@ -46,7 +46,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#findOne(java.lang.Object)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public T findOne(T entity) {
 		if (entity == null) {
@@ -59,7 +59,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 方法名 ： findById
 	 * 功 能 ： 按id查询一条
@@ -68,7 +68,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#findById(java.lang.String)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public T findById(String id) {
 		if (id == null || "".equals(id)) {
@@ -80,7 +80,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 方法名 ： findAll
 	 * 功 能 ： 按条件查询全部数据
@@ -89,7 +89,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#findAll(java.lang.Object)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public List<T> findAll(T entity) {
 		if (entity == null) {
@@ -99,9 +99,9 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 			List<T> list = baseDao.findAll(example);
 			return list;
 		}
-
+		
 	}
-
+	
 	/**
 	 * 方法名 ： save
 	 * 功 能 ： 保存数据
@@ -109,7 +109,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#save(java.lang.Object)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public T save(T entity) {
 		if (entity == null) {
@@ -137,7 +137,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 					throw new BaseException(-1, e.getMessage());
 				}
 			}
-
+			
 			if ("deleteFlag".equals(field.getName())) {
 				try {
 					if (field.get(entity) == null) {
@@ -174,10 +174,10 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 						throw new BaseException(-1, e.getMessage());
 					}
 				}
-
+				
 			}
 		}
-
+		
 		if (fluxDeleteFlag) {
 			fields = entity.getClass().getDeclaredFields();
 			for (Field field : fields) {
@@ -196,12 +196,12 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 						throw new BaseException(-1, e.getMessage());
 					}
 				}
-
+				
 			}
 		}
 		return baseDao.save(entity);
 	}
-
+	
 	/**
 	 * 方法名 ： saveAll
 	 * 功 能 ： 更改多个数据
@@ -209,12 +209,12 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#saveAll(java.util.List)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public void saveAll(List<T> entities) {
 		baseDao.saveAll(entities);
 	}
-
+	
 	/**
 	 * 方法名 ： delete
 	 * 功 能 ： 删除数据
@@ -222,12 +222,12 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#delete(java.lang.Object)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public void delete(T entity) {
 		baseDao.delete(entity);
 	}
-
+	
 	/**
 	 * 方法名 ： deleteAll
 	 * 功 能 ： 删除多个数据
@@ -235,12 +235,12 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#deleteAll(java.util.List)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public void deleteAll(List<T> entities) {
 		baseDao.deleteAll(entities);
 	}
-
+	
 	/**
 	 * 方法名 ： trunc
 	 * 功 能 ： 清空表数据
@@ -248,12 +248,12 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#trunc()
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public void trunc() {
 		baseDao.deleteAllInBatch();
 	}
-
+	
 	/**
 	 * 方法名 ： findAll
 	 * 功 能 ： 按条件查询多个信息
@@ -262,7 +262,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#findAll(org.danyuan.application.common.base.Pagination)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public List<T> findAll(Pagination<T> vo) {
 		Sort sort = SortList.sort(vo.getSortList());
@@ -280,9 +280,9 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 				return baseDao.findAll(example);
 			}
 		}
-
+		
 	}
-
+	
 	/**
 	 * 方法名 ： page
 	 * 功 能 ： 分页查询
@@ -291,7 +291,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * 参 考 ： @see org.danyuan.application.common.base.BaseService#page(org.danyuan.application.common.base.Pagination)
 	 * 作 者 ： wang
 	 */
-
+	
 	@Override
 	public Page<T> page(Pagination<T> vo) {
 		Sort sort = SortList.sort(vo.getSortList());
@@ -301,7 +301,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 				 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
 				 */
 				private static final long serialVersionUID = 1L;
-
+				
 				@Override
 				public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 					List<Predicate> list = new ArrayList<>();
@@ -335,7 +335,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 			}
 		} else {
 			Example<T> example = Example.of(vo.getInfo());
-
+			
 			if (sort != null) {
 				PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
 				return baseDao.findAll(example, request);
@@ -344,9 +344,9 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 				return baseDao.findAll(example, request);
 			}
 		}
-
+		
 	}
-
+	
 	/**
 	 * 方法名： paramterPredicate
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -374,20 +374,20 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 					predicate = criteriaBuilder.and(p1);
 					break;
 			}
-			
+
 			if ((parameter.getSubParameters() != null && parameter.getSubParameters().size() > 0) && (parameter.getSubParameters() != null)) {
 				List<Predicate> list = new ArrayList<>();
 				list.add(predicate);
 				for (SearchParameters parameter2 : parameter.getSubParameters()) {
 					list.add(paramterPredicate(root, query, criteriaBuilder, parameter2));
 				}
-				
+
 				predicate = criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
 			}
 		}
 		return predicate;
 	}
-
+	
 	/**
 	 * 方法名： paramterOperatePredicate
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -448,7 +448,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		}
 		return predicate;
 	}
-
+	
 	/**
 	 * 统计数量
 	 *
@@ -458,7 +458,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	 * @参考 @see org.danyuan.application.common.base.BaseService#count(java.lang.Object)
 	 * @author Administrator
 	 */
-
+	
 	@Override
 	public Long count(T info) {
 		if (info == null) {
@@ -468,5 +468,38 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 			return baseDao.count(example);
 		}
 	}
+	
+	/**
+	 * 方法名 ： pageByInfo
+	 * 功 能 ： TODO(这里用一句话描述这个方法的作用)
+	 * 参 数 ： @param vo
+	 * 参 数 ： @return
+	 * 参 考 ： @see org.chuxue.application.common.base.BaseService#pageByInfo(org.chuxue.application.common.base.Pagination)
+	 * 作 者 ： Administrator
+	 */
 
+	@Override
+	public Page<T> pageByInfo(Pagination<T> vo) {
+		Sort sort = SortList.sort(vo.getSortList());
+		if (vo.getInfo() == null) {
+			if (sort != null) {
+				PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
+				return baseDao.findAll(request);
+			} else {
+				PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize());
+				return baseDao.findAll(request);
+			}
+		} else {
+			Example<T> example = Example.of(vo.getInfo());
+			
+			if (sort != null) {
+				PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize(), sort);
+				return baseDao.findAll(example, request);
+			} else {
+				PageRequest request = PageRequest.of(vo.getPageNumber() - 1, vo.getPageSize());
+				return baseDao.findAll(example, request);
+			}
+		}
+	}
+	
 }

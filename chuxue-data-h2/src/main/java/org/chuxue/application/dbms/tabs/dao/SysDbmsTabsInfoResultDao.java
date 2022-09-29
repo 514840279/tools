@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
 
 /**
@@ -18,9 +19,11 @@ import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
  */
 @Mapper
 public interface SysDbmsTabsInfoResultDao {
-	
-	Long totalAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list);
 
-	List<SysDbmsTabsInfoResult> findAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list, @Param("pageNumber") Integer pageNumber, @Param("pageSize") Integer pageSize);
+	Long totalAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list);
 	
+	List<SysDbmsTabsInfoResult> findAllByJdbcUuid(@Param("jdbcUuid") String jdbcUuid, @Param("tname") String tableName, @Param("list") List<String> list, @Param("pageNumber") Integer pageNumber, @Param("pageSize") Integer pageSize);
+
+	SysDbmsTabsInfoResult findOneByTabsName(@Param("info") SysDbmsTabsTableInfo info);
+
 }

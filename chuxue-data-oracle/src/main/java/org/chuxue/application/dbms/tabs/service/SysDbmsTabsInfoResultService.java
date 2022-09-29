@@ -3,11 +3,16 @@ package org.chuxue.application.dbms.tabs.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo;
 import org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo;
 import org.chuxue.application.common.base.Pagination;
 import org.chuxue.application.common.base.ResultPage;
+import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsColumnResultDao;
+import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsIndexResultDao;
 import org.chuxue.application.dbms.tabs.dao.SysDbmsTabsInfoResultDao;
+import org.chuxue.application.dbms.tabs.po.SysDbmsTabsIndexResult;
 import org.chuxue.application.dbms.tabs.po.SysDbmsTabsInfoResult;
+import org.chuxue.application.dbms.tabs.vo.SysDbmsTabsTableVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +38,12 @@ public class SysDbmsTabsInfoResultService {
 	@Autowired
 	SysDbmsTabsInfoResultDao	sysDbmsTabsInfoResultDao;
 	
+	@Autowired
+	SysDbmsTabsColumnResultDao	sysDbmsTabsColumnResultDao;
+
+	@Autowired
+	SysDbmsTabsIndexResultDao	sysDbmsTabsIndexResultDao;
+
 	/**
 	 * 方法名： findAllByTableUuid
 	 * 功 能： TODO(这里用一句话描述这个方法的作用)
@@ -59,6 +70,26 @@ public class SysDbmsTabsInfoResultService {
 		Long total = sysDbmsTabsInfoResultDao.totalAllByJdbcUuid(vo.getInfo().getJdbcUuid(), tableName, list);
 		
 		return new ResultPage<>(page, total, vo.getPageNumber(), vo.getPageSize());
+	}
+	
+	/**
+	 * 方法名： findOneByTabsName
+	 * 功 能： 单表信息
+	 * 参 数： @param info
+	 * 参 数： @return
+	 * 返 回： ResultPage<SysDbmsTabsInfoResult>
+	 * 作 者 ： Administrator
+	 * @throws
+	 */
+	public SysDbmsTabsTableVo findOneByTabsName(SysDbmsTabsTableInfo info) {
+		SysDbmsTabsTableVo rsult = new SysDbmsTabsTableVo();
+		SysDbmsTabsInfoResult table = sysDbmsTabsInfoResultDao.findOneByTabsName(info);
+		rsult.setInfo(table);
+		List<SysDbmsTabsColsInfo> list = sysDbmsTabsColumnResultDao.findAllByTabsName(info);
+		rsult.setCols(list);
+		List<SysDbmsTabsIndexResult> indexs = sysDbmsTabsIndexResultDao.findAllByTabsName(info);
+		rsult.setIndexs(indexs);
+		return rsult;
 	}
 	
 }

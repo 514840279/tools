@@ -127,5 +127,23 @@
     	</if>
     	limit 0,100
     </select>
+    
+    <select id="findAllByTabsName" parameterType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo" resultType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo">
+     SELECT UUID() AS UUID
+	       ,#{info.uuid} AS TABS_UUID
+	       ,COLUMN_NAME AS COLS_NAME
+	       ,CHARACTER_MAXIMUM_LENGTH AS COLS_LENGTH
+	       ,COLUMN_TYPE AS COLS_TYPE
+ 	       ,IS_NULLABLE AS NULLABLE
+		   ,DATA_TYPE as DATA_TYPE
+ 	       ,COLUMN_COMMENT AS COLS_DESC
+	       ,ORDINAL_POSITION AS SORT  
+       FROM INFORMATION_SCHEMA.COLUMNS C 
+       <where>
+       <if test="info.tabsName!=null and info.tabsName!=''">
+       		and concat('`',TABLE_SCHEMA,'`.`',TABLE_NAME,'`') = #{info.tabsName}
+       </if>
+       </where>
+    </select>
 
 </mapper>

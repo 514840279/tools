@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.chuxue.application.dbms.tabs.dao.SysDbmsTabsIndexResultDao">
+   
+    
+    <select id="findAllByTabsName" parameterType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo" resultType="org.chuxue.application.dbms.tabs.po.SysDbmsTabsIndexResult">
+	    select 
+	    	 i.owner as indexSchema
+	    	,i.index_name
+	    	,i.table_owner as tableSchema
+	    	,i.table_name
+	    	,ic.column_name
+	    	,i.tablespace_name 
+    	from all_indexes i 
+		inner join all_ind_columns ic on i.index_name = ic.index_name and i.owner = ic.index_owner and i.table_name = ic.table_name 
+       <where>
+       <if test="info.tabsName!=null and info.tabsName!=''">
+       		and '"'||i.owner||'"."'||i.table_name||'"' = #{info.tabsName}
+       </if>
+       </where>
+    </select>
+
+</mapper>

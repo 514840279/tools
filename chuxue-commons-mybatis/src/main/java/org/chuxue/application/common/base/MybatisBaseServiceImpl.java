@@ -1,6 +1,5 @@
 package org.chuxue.application.common.base;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
@@ -13,6 +12,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
  * 时 间 ： 2022年7月5日 上午9:48:53
  * 版 本 ： V1.0
  */
-public class MybatisBaseServiceImpl<M extends MybatisBaseDao<T>, T> extends ServiceImpl<M, T> implements IService<T> {
-	
+public class MybatisBaseServiceImpl<M extends MybatisBaseDao<T>, T> extends ServiceImpl<M, T> {
+
 }

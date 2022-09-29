@@ -136,4 +136,23 @@
     	</where>
     </select>
 
+    <select id="findAllByTabsName" parameterType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsTableInfo" resultType="org.chuxue.application.bean.manager.dbms.SysDbmsTabsColsInfo">
+     	select lower(SYS_GUID()) AS UUID
+		,#{info.uuid} AS TABS_UUID
+		,a.COLUMN_NAME as COLS_NAME
+		,c.COMMENTS as COLS_DESC
+		,a.DATA_LENGTH as COLS_LENGTH
+		,a.DATA_TYPE as DATA_TYPE
+		,a.DATA_TYPE as COLS_TYPE
+		,a.NULLABLE as NULLABLE
+		,a.COLUMN_ID as SORT
+		
+		FROM  ALL_TAB_COLUMNS a
+		LEFT JOIN ALL_COL_COMMENTS c  ON a.OWNER = c.OWNER AND a.TABLE_NAME = c.TABLE_NAME AND a.COLUMN_NAME = c.COLUMN_NAME
+       <where>
+       <if test="info.tabsName!=null and info.tabsName!=''">
+       		and '"'||a.OWNER||'"."'||a.TABLE_NAME||'"'  = #{info.tabsName}
+       </if>
+       </where>
+    </select>
 </mapper>

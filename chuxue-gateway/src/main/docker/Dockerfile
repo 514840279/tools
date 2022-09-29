@@ -1,4 +1,4 @@
-FROM openjdk-jre1.8:latest	
+FROM runcare/openjdk-jre1.8:latest
 #设置时区
 #RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 COPY chuxue-gateway-1.0.jar chuxue-gateway-1.0.jar

@@ -64,11 +64,12 @@ public class SysDbmsAdviMessInfo extends BaseEntity implements Serializable {
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
-	public SysDbmsAdviMessInfo(String uuid, String type, String tabsUuid, String jdbcUuid) {
+	public SysDbmsAdviMessInfo(String uuid, String type, String tabsUuid, String jdbcUuid, Integer sort) {
 		this.uuid = uuid;
 		this.type = type;
 		this.tabsUuid = tabsUuid;
 		this.jdbcUuid = jdbcUuid;
+		this.sort = sort;
 	}
 
 	/**
