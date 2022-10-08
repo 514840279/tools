@@ -55,6 +55,7 @@
 		<jsoup.version>1.14.1</jsoup.version>
 		<json.version>20210307</json.version>
 		<lombok.version>1.18.6</lombok.version>
+		<h2.version>2.1.214</h2.version>
 		<docker.host>http://192.168.0.103:2375</docker.host>
 		<docker.repository>192.168.0.103:5000</docker.repository>
 	</properties>
@@ -84,6 +85,11 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+	      	<dependency>
+		        <groupId>com.h2database</groupId>
+		        <artifactId>h2</artifactId>
+		        <version>${h2.version}</version>
+	      	</dependency>
 			<!--支持Word文档的操作 -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
@@ -107,6 +113,7 @@
 				<artifactId>poi-ooxml-schemas</artifactId>
 				<version>${poi.version}</version>
 			</dependency>
+			
 			<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
@@ -173,7 +180,7 @@
 			<dependency>
 		        <groupId>com.baomidou</groupId>
 		        <artifactId>mybatis-plus-boot-starter</artifactId>
-		        <version>3.5.1</version>
+		        <version>3.5.2</version>
 		    </dependency>
 			<dependency>
 				<groupId>io.lettuce</groupId>
@@ -199,7 +206,7 @@
 			<dependency>
 				<groupId>com.thoughtworks.xstream</groupId>
 				<artifactId>xstream</artifactId>
-				<version>1.4.18</version>
+				<version>1.4.19</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-fileupload</groupId>
