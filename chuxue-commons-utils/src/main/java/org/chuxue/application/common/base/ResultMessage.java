@@ -37,6 +37,7 @@ public abstract class ResultMessage {
 	
 	/* 业务错误 */
 	public static final String	NO_PERMISSION				= "没有权限";
+	
 	// 没有数据
 	public static final String	NO_DATA						= "没有数据";
 
@@ -47,5 +48,9 @@ public abstract class ResultMessage {
 	public static final String	NOT_FIND_EXCEPTION			= "未找到异常";
 	// 类型转化
 	public static final String	DATA_TRANC_EXCEPTION		= "数据类型转化异常";
+	// 字段异常
+	public static final String	NO_SUCH_FIELD_EXCEPTION		= "没有字段异常";
+	// 字段安全异常
+	public static final String	SECURITY_EXCEPTION			= "安全异常";
 
 }

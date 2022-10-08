@@ -13,13 +13,8 @@ import org.slf4j.LoggerFactory;
  * @author Administrator
  */
 public class OracleConnUtils {
-	private static final Logger	logger		= LoggerFactory.getLogger(OracleConnUtils.class);
-
-	// jdbc:oracle:thin
-	private static final String	URL			= "jdbc:oracle:thin:@localhost:1521:ORCL";
-	private static final String	USER		= "wth";
-	private static final String	PASSWORD	= "tiger";
-
+	private static final Logger logger = LoggerFactory.getLogger(OracleConnUtils.class);
+	
 	// 1
 	static {
 		try {
@@ -29,16 +24,12 @@ public class OracleConnUtils {
 			logger.error("驱动错误:{}", e.getMessage());
 		}
 	}
-
-	public static Connection getConnection() {
-		try {
-			return DriverManager.getConnection(URL, USER, PASSWORD);
-		} catch (SQLException e) {
-			logger.error("错误:{}", e.getMessage());
-		}
-		return null;
-	}
-
+	
+	/*
+	 * 	URL			= "jdbc:oracle:thin:@localhost:1521:ORCL";
+	 *	USER		= "wth";
+	 *  PASSWORD	= "tiger";
+	 */
 	public static Connection getConnection(String url, String user, String password) {
 		try {
 			return DriverManager.getConnection(url, user, password);
@@ -47,7 +38,7 @@ public class OracleConnUtils {
 		}
 		return null;
 	}
-
+	
 	public static void close(Connection conn) {
 		try {
 			if (conn != null && !conn.isClosed()) {
@@ -57,7 +48,7 @@ public class OracleConnUtils {
 			logger.error("错误:{}", e.getMessage());
 		}
 	}
-
+	
 	public static void close(Statement state) {
 		try {
 			if (state != null) {
@@ -67,7 +58,7 @@ public class OracleConnUtils {
 			logger.error("错误:{}", e.getMessage());
 		}
 	}
-
+	
 	public static void close(ResultSet rs) {
 		try {
 			if (rs != null) {

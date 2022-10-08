@@ -11,6 +11,7 @@ import org.chuxue.application.po.Jijin;
 import org.chuxue.application.service.JijinService;
 import org.chuxue.application.vo.JijinVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,38 +29,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/jijin")
 public class JijinController extends MybatisBaseConrollerImpl<JijinService, JijinDao, Jijin> {
-
+	
 	@Autowired
 	JijinService jijinService;
-	
-	@RequestMapping("create")
+
+	@PostMapping("create")
 	public BaseResult<String> create(@RequestBody JijinVo info) {
 		jijinService.create(info);
 		return ResultUtil.success();
 	}
-	
-	@RequestMapping("search")
+
+	@PostMapping("search")
 	public BaseResult<List<JijinVo>> search(@RequestBody Jijin info) {
 		List<JijinVo> list = jijinService.search(info);
 		return ResultUtil.success(list);
 	}
-	
-	@RequestMapping("mairu")
+
+	@PostMapping("mairu")
 	public BaseResult<List<JijinVo>> mairu(@RequestBody Flow info) {
 		jijinService.goumai(info);
 		return ResultUtil.success();
 	}
-	
-	@RequestMapping("maichu")
+
+	@PostMapping("maichu")
 	public BaseResult<List<JijinVo>> maichu(@RequestBody Flow info) {
 		jijinService.maichu(info);
 		return ResultUtil.success();
 	}
-	
-	@RequestMapping("deleteJi")
+
+	@PostMapping("deleteJi")
 	public BaseResult<String> delete(@RequestBody JijinVo info) {
 		jijinService.delete(info);
 		return ResultUtil.success();
 	}
-	
+
 }

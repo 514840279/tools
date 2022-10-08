@@ -16,9 +16,7 @@ import org.slf4j.LoggerFactory;
  * @Description: 工具类
  */
 public class AccessConnUtils {
-	private static final Logger	logger	= LoggerFactory.getLogger(AccessConnUtils.class);
-	
-	private static final String	dbURL	= "jdbc:ucanaccess://" + "F:\\data\\Database2.mdb";
+	private static final Logger logger = LoggerFactory.getLogger(AccessConnUtils.class);
 	
 	/*
 	 * 加载驱动
@@ -32,18 +30,6 @@ public class AccessConnUtils {
 		}
 	}
 	
-	// 建立连接
-	public static Connection getConnection() {
-		try {
-			// Step 2: Opening database connection
-			// Step 2.A: Create and get connection using DriverManager class
-			return DriverManager.getConnection(dbURL);
-		} catch (Exception e) {
-			logger.error("AccessDB connection fail:{}", e.getMessage());
-		}
-		return null;
-	}
-	
 	public static Connection getConnection(String filepath) {
 		try {
 			return DriverManager.getConnection("jdbc:ucanaccess://" + filepath);
@@ -52,7 +38,7 @@ public class AccessConnUtils {
 		}
 		return null;
 	}
-	
+
 	// 关闭资源
 	public static void close(Connection con, PreparedStatement ps, ResultSet rs) {
 		try {

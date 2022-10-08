@@ -41,6 +41,7 @@ import com.alibaba.fastjson.JSON;
  * 版 本 ： V1.0
  */
 @Service
+@Transactional
 public class SysDbmsAdviMessInfoService extends BaseServiceImpl<SysDbmsAdviMessInfo> implements BaseService<SysDbmsAdviMessInfo> {
 	@Autowired
 	SysDbmsAdviMessInfoDao	sysDbmsAdviMessInfoDao;
@@ -87,7 +88,6 @@ public class SysDbmsAdviMessInfoService extends BaseServiceImpl<SysDbmsAdviMessI
 	 * @throws
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Transactional
 	public void generateSql(SysDbmsAdviMessInfo info) {
 		deleteAll(findAll(info));
 		SysDbmsTabsTableInfo tabs = new SysDbmsTabsTableInfo();
@@ -315,11 +315,11 @@ public class SysDbmsAdviMessInfoService extends BaseServiceImpl<SysDbmsAdviMessI
 			tabs.setTabsDesc(result.getTabsDesc());
 			up = true;
 		}
-		if (tabs.getTabsRows() == null || result.getTabsRows() != tabs.getTabsRows()) {
+		if (tabs.getTabsRows() == null || !tabs.getTabsRows().equals(result.getTabsRows())) {
 			tabs.setTabsRows(result.getTabsRows());
 			up = true;
 		}
-		if (tabs.getTabsSpace() == null || result.getTabsSpace() != tabs.getTabsSpace()) {
+		if (tabs.getTabsSpace() == null || !tabs.getTabsSpace().equals(result.getTabsSpace())) {
 			tabs.setTabsSpace(result.getTabsSpace());
 			up = true;
 		}
@@ -377,6 +377,7 @@ public class SysDbmsAdviMessInfoService extends BaseServiceImpl<SysDbmsAdviMessI
 	 * 作 者 ： Administrator
 	 * @throws
 	 */
+	@Transactional
 	public String findOneText(SysDbmsAdviMessInfo info) {
 		List<SysDbmsAdviMessInfo> list = findAllByTable(info);
 		StringBuilder sbBuilder = new StringBuilder();
