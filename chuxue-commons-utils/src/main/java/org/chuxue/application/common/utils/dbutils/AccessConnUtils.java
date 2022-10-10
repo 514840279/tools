@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AccessConnUtils {
 	private static final Logger logger = LoggerFactory.getLogger(AccessConnUtils.class);
-	
+
 	/*
 	 * 加载驱动
 	 */
@@ -29,7 +29,10 @@ public class AccessConnUtils {
 			logger.error("Problem in loading or registering MS Access JDBC driver:{}", cnfex.getMessage());
 		}
 	}
-	
+
+	/**
+	 * filepath: dbfile path
+	 */
 	public static Connection getConnection(String filepath) {
 		try {
 			return DriverManager.getConnection("jdbc:ucanaccess://" + filepath);
@@ -38,7 +41,7 @@ public class AccessConnUtils {
 		}
 		return null;
 	}
-
+	
 	// 关闭资源
 	public static void close(Connection con, PreparedStatement ps, ResultSet rs) {
 		try {

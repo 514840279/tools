@@ -32,22 +32,22 @@ import org.tools.rollcall.po.Person;
 @Service
 public class LoadData {
 	private static final Logger	logger	= LoggerFactory.getLogger(LoadData.class);
-
+	
 	@Autowired
 	ClassRoomDao				classRoomDao;
-
+	
 	@Autowired
 	PersonDao					personDao;
-
+	
 	@Transactional
 	public Boolean loadData(String path) throws IOException {
-
+		
 		File file = new File(path);
-
+		
 		if (!file.exists()) {
 			return false;
 		}
-		
+
 		FileInputStream fileInputStream = null;
 		Workbook wb = null;
 		try {
@@ -60,17 +60,17 @@ public class LoadData {
 				String sheetName = wb.getSheetName(i);
 				String id = UUID.randomUUID().toString().replace("-", "");
 				ClassRoom room = new ClassRoom(id, sheetName);
-				
+
 				// excel 文件内容读取
 				List<Person> list = readExcel(wb, sheetName, id);
-				
+
 				classRoomDao.save(room);
 				personDao.saveAll(list);
 				personDao.flush();
 			}
 			wb.close();
 			fileInputStream.close();
-
+			
 		} catch (Exception e) {
 			return false;
 		} finally {
@@ -83,7 +83,7 @@ public class LoadData {
 		}
 		return true;
 	}
-
+	
 	// excel 文件内容读取
 	private List<Person> readExcel(Workbook wb, String sheetName, String pid) {
 		Sheet sheet = wb.getSheet(sheetName);
@@ -106,12 +106,12 @@ public class LoadData {
 		}
 		return list;
 	}
-
+	
 	// xlsx 读取方法
-	private void parseExcel(File file) throws IOException {
+	public void parseExcel(File file) throws IOException {
 		OPCPackage xlsxPackage = null;
 		PrintStream output = System.out;
-
+		
 		try {
 			xlsxPackage = OPCPackage.open(file.getAbsolutePath(), PackageAccess.READ);
 			XSSFReader xssfReader = new XSSFReader(xlsxPackage);
@@ -133,5 +133,5 @@ public class LoadData {
 			logger.error(e.getMessage());
 		}
 	}
-
+	
 }

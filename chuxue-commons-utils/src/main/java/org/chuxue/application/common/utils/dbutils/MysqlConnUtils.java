@@ -14,23 +14,21 @@ import org.slf4j.LoggerFactory;
  */
 public class MysqlConnUtils {
 	private static final Logger logger = LoggerFactory.getLogger(MysqlConnUtils.class);
-	
-	// 1
+
 	static {
 		try {
 //			Class.forName("com.mysql.jdbc.Driver");
 			Class.forName("com.mysql.cj.jdbc.Driver");
-
+			
 		} catch (ClassNotFoundException e) {
 			logger.error("驱动错误:{}", e.getMessage());
 		}
 	}
-	
-	/*
-	 * URL		= "jdbc:mysql:///application?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false";
-	 * USER		= "root";
-	 * PASSWORD	= "514840279@qq.com";
 
+	/**
+	 * URL = "jdbc:mysql:///application?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false";
+	 * USER = "root";
+	 * PASSWORD = "514840279@qq.com";
 	 */
 	public static Connection getConnection(String url, String user, String password) {
 		try {
@@ -40,7 +38,7 @@ public class MysqlConnUtils {
 		}
 		return null;
 	}
-
+	
 	public static void close(Connection conn) {
 		try {
 			if (conn != null && !conn.isClosed()) {
@@ -50,7 +48,7 @@ public class MysqlConnUtils {
 			logger.error("错误:{}", e.getMessage());
 		}
 	}
-
+	
 	public static void close(Statement state) {
 		try {
 			if (state != null) {
@@ -60,7 +58,7 @@ public class MysqlConnUtils {
 			logger.error("错误:{}", e.getMessage());
 		}
 	}
-
+	
 	public static void close(ResultSet rs) {
 		try {
 			if (rs != null) {

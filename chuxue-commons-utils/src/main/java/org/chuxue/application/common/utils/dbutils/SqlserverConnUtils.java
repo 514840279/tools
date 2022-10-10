@@ -13,10 +13,9 @@ import org.slf4j.LoggerFactory;
  * @author Administrator
  */
 public class SqlserverConnUtils {
-
-	private static final Logger logger = LoggerFactory.getLogger(SqlserverConnUtils.class);
 	
-	// 1
+	private static final Logger logger = LoggerFactory.getLogger(SqlserverConnUtils.class);
+
 	static {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -24,12 +23,11 @@ public class SqlserverConnUtils {
 			logger.error("驱动错误:{}", e.getMessage());
 		}
 	}
-	
-	/*
-	 * 	URL			= "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=jsp";
-	 *	USER		= "sa";
-	 *	PASSWORD	= ".";
-	 *
+
+	/**
+	 * URL = "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=jsp";
+	 * USER = "sa";
+	 * PASSWORD = ".";
 	 */
 	public static Connection getConnection(String url, String user, String password) {
 		try {
@@ -39,7 +37,7 @@ public class SqlserverConnUtils {
 		}
 		return null;
 	}
-	
+
 	public static void close(Connection conn) {
 		try {
 			if (conn != null && !conn.isClosed()) {
@@ -49,7 +47,7 @@ public class SqlserverConnUtils {
 			logger.error("错误:{}", e.getMessage());
 		}
 	}
-	
+
 	public static void close(Statement state) {
 		try {
 			if (state != null) {
@@ -59,7 +57,7 @@ public class SqlserverConnUtils {
 			logger.error("错误:{}", e.getMessage());
 		}
 	}
-	
+
 	public static void close(ResultSet rs) {
 		try {
 			if (rs != null) {

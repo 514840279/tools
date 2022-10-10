@@ -24,30 +24,30 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
-
-	private static final Logger	logger		= LoggerFactory.getLogger(ItemWriterToOracle.class);
 	
+	private static final Logger	logger		= LoggerFactory.getLogger(ItemWriterToOracle.class);
+
 	private String				tableName	= "qy法人单位1";
 	private long				size		= 0;
 	private String				idName		= "id";
-	
+
 	@Override
 	public void write(List<? extends Map<String, Object>> items) throws Exception {
-		
+
 //		JdbcBatchItemWriter<Map<String, Object>> writer = new JdbcBatchItemWriter<>();
 //		DataSource dataSource = DataSourceBuilder.create().driverClassName("com.mysql.cj.jdbc.Driver").url("jdbc:mysql:///application?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false").username("root").password("514840279@qq.com").build();
-	
+
 //		writer.setDataSource(dataSource);
 		Connection conn = null;
 		Statement statement = null;
 		try {
-			conn = OracleConnUtils.getConnection();
+			conn = OracleConnUtils.getConnection(idName, idName, idName);
 //		Connection conn = MysqlConnUtils.getConnection();
 			statement = conn.createStatement();
 			//
 			Iterator<? extends Map<String, Object>> map = items.iterator();
 			while (map.hasNext()) {
-				
+
 				StringBuilder stringBuilder = new StringBuilder();
 				Map<String, Object> row = map.next();
 				Set<String> set = row.keySet();
@@ -110,7 +110,7 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 						}
 						stringBuilder.append("')");
 						statement.execute(stringBuilder.toString());
-						
+
 						// 更新语句
 						columns = set.iterator();
 						StringBuilder updateBuilder = null;
@@ -132,23 +132,23 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 										if (ex.getErrorCode() == 1704) {
 											/* 修改原字段名name为name_tmp */
 											statement.execute("alter table " + tableName + " rename column " + columnName + " to name_tmp");
-											
+
 											/* 增加一个和原字段名同名的字段name */
 											statement.execute("alter table " + tableName + " add " + columnName + " clob");
-											
+
 											/* 方式二: */
 											statement.execute("update " + tableName + " set " + columnName + " =trim(name_tmp)");
-											
+
 											/* 更新完，删除原字段name_tmp */
 											statement.execute("alter table " + tableName + "  drop column name_tmp");
-											
+
 											statement.execute(updateBuilder.toString());
 										}
 									}
 								}
 							}
 						}
-						
+
 					} else
 					// 表创建
 					if (e.getErrorCode() == 942) {
@@ -168,7 +168,7 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 					} else {
 						logger.error(e.getMessage());
 					}
-					
+
 				} catch (Exception e2) {
 					logger.error(e2.getMessage());
 				}
@@ -185,5 +185,5 @@ public class ItemWriterToOracle implements ItemWriter<Map<String, Object>> {
 			}
 		}
 	}
-	
+
 }
